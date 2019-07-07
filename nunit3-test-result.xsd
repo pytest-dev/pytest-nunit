@@ -37,13 +37,7 @@
                                                  <xs:element name="failure">
                                                         <xs:complexType>
                                                                <xs:sequence>
-                                                                      <xs:element name="message" type="xs:string">
-                                                                             <xs:complexType>
-                                                                                    <xs:sequence>
-                                                                                           <xs:element name="#cdata-section"></xs:element>
-                                                                                       </xs:sequence>
-                                                                                </xs:complexType>
-                                                                         </xs:element>
+                                                                      <xs:element name="message" type="xs:string"></xs:element>
                                                                   </xs:sequence>
                                                            </xs:complexType>
                                                     </xs:element>
@@ -65,13 +59,7 @@
                                                                       <xs:element name="failure">
                                                                              <xs:complexType>
                                                                                     <xs:sequence>
-                                                                                           <xs:element name="message" type="xs:string">
-                                                                                                  <xs:complexType>
-                                                                                                         <xs:sequence>
-                                                                                                                <xs:element name="#cdata-section"></xs:element>
-                                                                                                            </xs:sequence>
-                                                                                                     </xs:complexType>
-                                                                                              </xs:element>
+                                                                                           <xs:element name="message" type="xs:string"></xs:element>
                                                                                        </xs:sequence>
                                                                                 </xs:complexType>
                                                                          </xs:element>
@@ -81,20 +69,8 @@
                                                                                            <xs:element name="failure">
                                                                                                   <xs:complexType>
                                                                                                          <xs:sequence>
-                                                                                                                <xs:element name="message" type="xs:string">
-                                                                                                                       <xs:complexType>
-                                                                                                                              <xs:sequence>
-                                                                                                                                     <xs:element name="#cdata-section"></xs:element>
-                                                                                                                                 </xs:sequence>
-                                                                                                                          </xs:complexType>
-                                                                                                                   </xs:element>
-                                                                                                                <xs:element name="stack-trace" type="xs:string">
-                                                                                                                       <xs:complexType>
-                                                                                                                              <xs:sequence>
-                                                                                                                                     <xs:element name="#cdata-section"></xs:element>
-                                                                                                                                 </xs:sequence>
-                                                                                                                          </xs:complexType>
-                                                                                                                   </xs:element>
+                                                                                                                <xs:element name="message" type="xs:string"></xs:element>
+                                                                                                                <xs:element name="stack-trace" type="xs:string"></xs:element>
                                                                                                             </xs:sequence>
                                                                                                      </xs:complexType>
                                                                                               </xs:element>
