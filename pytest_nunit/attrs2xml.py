@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-
+import enum
 
 class AttrsXmlRenderer(object):
 
@@ -9,7 +9,10 @@ class AttrsXmlRenderer(object):
         if hasattr(i, '__attrs_attrs__'):
             for a in i.__attrs_attrs__:
                 if a.metadata['type'] == 'attrib' and getattr(i, a.name) is not None:
-                    el.set(a.metadata['name'], str(getattr(i, a.name)))
+                    if isinstance(getattr(i, a.name), enum.Enum):
+                        el.set(a.metadata['name'], getattr(i, a.name).name)
+                    else:
+                        el.set(a.metadata['name'], str(getattr(i, a.name)))
                 if a.metadata['type'] == 'element' and getattr(i, a.name) is not None:
                     # If subtype is an attrs instance, recurse
                     if hasattr(a.type, '__attrs_attrs__'):

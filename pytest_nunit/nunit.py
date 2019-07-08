@@ -33,4 +33,4 @@ class NunitTestRun(object):
 
     def generate_xml(self):
         tr = self.as_test_run()
-        return AttrsXmlRenderer.render(tr, 'test-result')
+        return AttrsXmlRenderer.render(tr, 'test-run')
