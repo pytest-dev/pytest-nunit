@@ -9,13 +9,14 @@ Written by Anthony Shaw.
 
 import click
 import xmlschema
+import xmlschema.qnames
 
 
 XS_ATOMIC_MAP = {
-    '{http://www.w3.org/2001/XMLSchema}string': 'str',
-    '{http://www.w3.org/2001/XMLSchema}int': 'int',
-    '{http://www.w3.org/2001/XMLSchema}boolean': 'bool',
-    '{http://www.w3.org/2001/XMLSchema}decimal': 'float'
+    xmlschema.qnames.XSD_STRING: 'str',
+    xmlschema.qnames.XSD_INTEGER: 'int',
+    xmlschema.qnames.XSD_BOOLEAN: 'bool',
+    xmlschema.qnames.XSD_DECIMAL: 'float'
 }
 
 
@@ -52,7 +53,8 @@ def make_attrib(attrib):
 @click.argument('output_path', type=click.Path(exists=False))
 def main(xsd_path, output_path):
     xsd = xmlschema.XMLSchema(xsd_path)
-    out = "import attr\n\n"
+    out = "import attr\n" \
+          "import enum\n\n\n"
     for name, type_ in xsd.types.items():
 
         has_parts = False
@@ -60,11 +62,21 @@ def main(xsd_path, output_path):
         if isinstance(type_, xmlschema.validators.XsdComplexType):
             out += "@attr.s\nclass {0}(object):\n".format(name)
 
-            for name, attrib in type_.attributes.items():
+            for attrib in type_.attributes.values():
                 out += "    {0}\n".format(make_attrib(attrib))
                 has_parts = True
         elif isinstance(type_, xmlschema.validators.XsdAtomicRestriction):
-            out += "@attr.s\nclass {0}({1}):\n".format(name, XS_ATOMIC_MAP.get(type_.base_type.name, 'object'))
+            is_enum_type = (type_.facets and xmlschema.qnames.XSD_ENUMERATION in type_.facets)
+
+            if is_enum_type:
+                out += "class {0}(enum.Enum):\n".format(name)
+                enums = type_.facets[xmlschema.qnames.XSD_ENUMERATION].enumeration
+                for e in enums:
+                    out += "    {0} = '{0}'\n".format(e)
+                has_parts = True
+            else:
+                out += "@attr.s\n"
+                out += "class {0}({1}):\n".format(name, XS_ATOMIC_MAP.get(type_.base_type.name, 'object'))
 
         if not has_parts:
             out += "    pass\n"  # avoid having empty class

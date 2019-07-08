@@ -1,12 +1,22 @@
 import attr
+import enum
+
 
 @attr.s
 class TestDurationType(float):
     pass
 
 
+class TestResultType(enum.Enum):
+    Inconclusive = 'Inconclusive'
+    Skipped = 'Skipped'
+    Passed = 'Passed'
+    Warning = 'Warning'
+    Failed = 'Failed'
+
+
 @attr.s
-class NonnegativeInt32(int):
+class NonnegativeInt32(object):
     pass
 
 
@@ -16,7 +26,7 @@ class TestRunType(object):
     name = attr.ib(metadata={"name": 'name'}, type=str, validator=attr.validators.instance_of(str))
     fullname = attr.ib(metadata={"name": 'fullname'}, type=str, validator=attr.validators.instance_of(str))
     testcasecount = attr.ib(metadata={"name": 'testcasecount'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    result = attr.ib(metadata={"name": 'result'}, validator=attr.validators.instance_of(None))
+    result = attr.ib(metadata={"name": 'result'}, validator=attr.validators.instance_of(TestResultType))
     label = attr.ib(metadata={"name": 'label'}, type=str, default=attr.NOTHING)
     start_time = attr.ib(metadata={"name": 'start-time'}, type=str, default=attr.NOTHING)
     end_time = attr.ib(metadata={"name": 'end-time'}, type=str, default=attr.NOTHING)
@@ -27,7 +37,7 @@ class TestRunType(object):
     inconclusive = attr.ib(metadata={"name": 'inconclusive'}, validator=attr.validators.instance_of(NonnegativeInt32))
     skipped = attr.ib(metadata={"name": 'skipped'}, validator=attr.validators.instance_of(NonnegativeInt32))
     asserts = attr.ib(metadata={"name": 'asserts'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    random_seed = attr.ib(metadata={"name": 'random-seed'}, type=int, validator=attr.validators.instance_of(int))
+    random_seed = attr.ib(metadata={"name": 'random-seed'}, type=object, validator=attr.validators.instance_of(object))
 
 
 @attr.s
