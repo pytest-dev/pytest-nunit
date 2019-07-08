@@ -3,6 +3,10 @@ import enum
 
 
 @attr.s
+class TestFilterType(object):
+    pass
+
+
 class TestDurationType(float):
     pass
 
@@ -15,34 +19,30 @@ class TestResultType(enum.Enum):
     Failed = 'Failed'
 
 
-@attr.s
-class NonnegativeInt32(object):
+class NonnegativeInt32(int):
     pass
 
 
 @attr.s
 class TestRunType(object):
-    id = attr.ib(metadata={"name": 'id'}, type=str, validator=attr.validators.instance_of(str))
-    name = attr.ib(metadata={"name": 'name'}, type=str, validator=attr.validators.instance_of(str))
-    fullname = attr.ib(metadata={"name": 'fullname'}, type=str, validator=attr.validators.instance_of(str))
-    testcasecount = attr.ib(metadata={"name": 'testcasecount'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    result = attr.ib(metadata={"name": 'result'}, validator=attr.validators.instance_of(TestResultType))
-    label = attr.ib(metadata={"name": 'label'}, type=str, default=attr.NOTHING)
-    start_time = attr.ib(metadata={"name": 'start-time'}, type=str, default=attr.NOTHING)
-    end_time = attr.ib(metadata={"name": 'end-time'}, type=str, default=attr.NOTHING)
-    duration = attr.ib(metadata={"name": 'duration'}, default=attr.NOTHING)
-    total = attr.ib(metadata={"name": 'total'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    passed = attr.ib(metadata={"name": 'passed'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    failed = attr.ib(metadata={"name": 'failed'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    inconclusive = attr.ib(metadata={"name": 'inconclusive'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    skipped = attr.ib(metadata={"name": 'skipped'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    asserts = attr.ib(metadata={"name": 'asserts'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    random_seed = attr.ib(metadata={"name": 'random-seed'}, type=object, validator=attr.validators.instance_of(object))
-
-
-@attr.s
-class TestFilterType(object):
-    pass
+    command_line = attr.ib(metadata={"name": 'command-line', "type": 'element'}, type=str)
+    filter = attr.ib(metadata={"name": 'filter', "type": 'element'}, type=TestFilterType, validator=attr.validators.instance_of(TestFilterType))
+    id_ = attr.ib(metadata={"name": 'id', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    name = attr.ib(metadata={"name": 'name', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    fullname = attr.ib(metadata={"name": 'fullname', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    testcasecount = attr.ib(metadata={"name": 'testcasecount', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    result = attr.ib(metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestResultType))
+    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    start_time = attr.ib(metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    end_time = attr.ib(metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    total = attr.ib(metadata={"name": 'total', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    passed = attr.ib(metadata={"name": 'passed', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    failed = attr.ib(metadata={"name": 'failed', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    inconclusive = attr.ib(metadata={"name": 'inconclusive', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    skipped = attr.ib(metadata={"name": 'skipped', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    asserts = attr.ib(metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    random_seed = attr.ib(metadata={"name": 'random-seed', "type": 'attrib'}, type=int, validator=attr.validators.instance_of(int))
 
 
 @attr.s
@@ -52,49 +52,49 @@ class CompositeFilterType(object):
 
 @attr.s
 class ValueMatchFilterType(object):
-    re = attr.ib(metadata={"name": 're'}, type=bool, default=attr.NOTHING)
+    re = attr.ib(metadata={"name": 're', "type": 'attrib'}, type=bool, default=attr.NOTHING)
 
 
 @attr.s
 class TestCaseElementType(object):
-    id = attr.ib(metadata={"name": 'id'}, type=str, validator=attr.validators.instance_of(str))
-    name = attr.ib(metadata={"name": 'name'}, type=str, validator=attr.validators.instance_of(str))
-    fullname = attr.ib(metadata={"name": 'fullname'}, type=str, validator=attr.validators.instance_of(str))
-    methodname = attr.ib(metadata={"name": 'methodname'}, type=str, default=attr.NOTHING)
-    classname = attr.ib(metadata={"name": 'classname'}, type=str, default=attr.NOTHING)
-    runstate = attr.ib(metadata={"name": 'runstate'}, validator=attr.validators.instance_of(None))
-    seed = attr.ib(metadata={"name": 'seed'}, type=str, validator=attr.validators.instance_of(str))
-    result = attr.ib(metadata={"name": 'result'}, validator=attr.validators.instance_of(None))
-    label = attr.ib(metadata={"name": 'label'}, type=str, default=attr.NOTHING)
-    site = attr.ib(metadata={"name": 'site'}, default=attr.NOTHING)
-    start_time = attr.ib(metadata={"name": 'start-time'}, type=str, default=attr.NOTHING)
-    end_time = attr.ib(metadata={"name": 'end-time'}, type=str, default=attr.NOTHING)
-    duration = attr.ib(metadata={"name": 'duration'}, default=attr.NOTHING)
-    asserts = attr.ib(metadata={"name": 'asserts'}, validator=attr.validators.instance_of(NonnegativeInt32))
+    id_ = attr.ib(metadata={"name": 'id', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    name = attr.ib(metadata={"name": 'name', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    fullname = attr.ib(metadata={"name": 'fullname', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    methodname = attr.ib(metadata={"name": 'methodname', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    classname = attr.ib(metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    runstate = attr.ib(metadata={"name": 'runstate', "type": 'attrib'}, validator=attr.validators.in_(None))
+    seed = attr.ib(metadata={"name": 'seed', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    result = attr.ib(metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(None))
+    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)
+    start_time = attr.ib(metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    end_time = attr.ib(metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    asserts = attr.ib(metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int))
 
 
 @attr.s
 class TestSuiteElementType(object):
-    id = attr.ib(metadata={"name": 'id'}, type=str, validator=attr.validators.instance_of(str))
-    name = attr.ib(metadata={"name": 'name'}, type=str, validator=attr.validators.instance_of(str))
-    fullname = attr.ib(metadata={"name": 'fullname'}, type=str, validator=attr.validators.instance_of(str))
-    methodname = attr.ib(metadata={"name": 'methodname'}, type=str, default=attr.NOTHING)
-    classname = attr.ib(metadata={"name": 'classname'}, type=str, default=attr.NOTHING)
-    runstate = attr.ib(metadata={"name": 'runstate'}, validator=attr.validators.instance_of(None))
-    type = attr.ib(metadata={"name": 'type'}, validator=attr.validators.instance_of(None))
-    testcasecount = attr.ib(metadata={"name": 'testcasecount'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    result = attr.ib(metadata={"name": 'result'}, validator=attr.validators.instance_of(None))
-    label = attr.ib(metadata={"name": 'label'}, type=str, default=attr.NOTHING)
-    site = attr.ib(metadata={"name": 'site'}, default=attr.NOTHING)
-    start_time = attr.ib(metadata={"name": 'start-time'}, type=str, default=attr.NOTHING)
-    end_time = attr.ib(metadata={"name": 'end-time'}, type=str, default=attr.NOTHING)
-    duration = attr.ib(metadata={"name": 'duration'}, default=attr.NOTHING)
-    asserts = attr.ib(metadata={"name": 'asserts'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    total = attr.ib(metadata={"name": 'total'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    passed = attr.ib(metadata={"name": 'passed'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    failed = attr.ib(metadata={"name": 'failed'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    warnings = attr.ib(metadata={"name": 'warnings'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    inconclusive = attr.ib(metadata={"name": 'inconclusive'}, validator=attr.validators.instance_of(NonnegativeInt32))
-    skipped = attr.ib(metadata={"name": 'skipped'}, validator=attr.validators.instance_of(NonnegativeInt32))
+    id_ = attr.ib(metadata={"name": 'id', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    name = attr.ib(metadata={"name": 'name', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    fullname = attr.ib(metadata={"name": 'fullname', "type": 'attrib'}, type=str, validator=attr.validators.instance_of(str))
+    methodname = attr.ib(metadata={"name": 'methodname', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    classname = attr.ib(metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    runstate = attr.ib(metadata={"name": 'runstate', "type": 'attrib'}, validator=attr.validators.in_(None))
+    type_ = attr.ib(metadata={"name": 'type', "type": 'attrib'}, validator=attr.validators.in_(None))
+    testcasecount = attr.ib(metadata={"name": 'testcasecount', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    result = attr.ib(metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(None))
+    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)
+    start_time = attr.ib(metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    end_time = attr.ib(metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    asserts = attr.ib(metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    total = attr.ib(metadata={"name": 'total', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    passed = attr.ib(metadata={"name": 'passed', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    failed = attr.ib(metadata={"name": 'failed', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    warnings = attr.ib(metadata={"name": 'warnings', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    inconclusive = attr.ib(metadata={"name": 'inconclusive', "type": 'attrib'}, validator=attr.validators.instance_of(int))
+    skipped = attr.ib(metadata={"name": 'skipped', "type": 'attrib'}, validator=attr.validators.instance_of(int))
 
 

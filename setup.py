@@ -11,11 +11,13 @@ def read(fname):
     file_path = os.path.join(os.path.dirname(__file__), fname)
     return codecs.open(file_path, encoding='utf-8').read()
 
+
 def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
         return __version__
+
 
 setup(
     name='pytest-nunit',
@@ -30,7 +32,7 @@ setup(
     long_description=read('README.rst'),
     py_modules=['pytest_nunit'],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=['pytest>=3.5.0,enum34==1.1.6,attrs'],
+    install_requires=['pytest>=3.5.0', 'enum34==1.1.6', 'attrs'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Pytest',

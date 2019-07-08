@@ -5,12 +5,13 @@ Based (loosely) on the Junit XML output.
 
 Shares the same pattern of CLI options for ease of use.
 """
-import pytest
 from _pytest.config import filename_arg
 
 import os
 import time
 import functools
+
+from .nunit import NunitTestRun
 
 
 def pytest_addoption(parser):
@@ -65,7 +66,6 @@ def pytest_configure(config):
             config.getini("nunit_suite_name"),
             config.getini("nunit_logging"),
             config.getini("nunit_duration_report"),
-            config.getini("nunit_family"),
             config.getini("nunit_log_passing_tests"),
         )
         config.pluginmanager.register(config._nunitxml)
@@ -82,15 +82,13 @@ class _NunitNodeReporter:
     def __init__(self, nodeid, nunit_xml):
         self.id = nodeid
         self.nunit_xml = nunit_xml
+        self.duration = 0.0
 
     def append(self, node):
         self.nunit_xml.add_stats(type(node).__name__)
         self.nodes.append(node)
 
     def record_testreport(self, testreport):
-        pass
-
-    def to_xml(self):
         pass
 
     def write_captured_output(self, report):
@@ -302,7 +300,13 @@ class NunitXML:
         )
         logfile.write('<?xml version="1.0" encoding="utf-8"?>')
 
+        result = NunitTestRun(self).generate_xml()
+
+        logfile.write(result)
+
         logfile.close()
 
     def pytest_terminal_summary(self, terminalreporter):
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))
+
+
