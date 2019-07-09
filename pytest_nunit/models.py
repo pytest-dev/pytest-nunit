@@ -14,8 +14,53 @@ class TestResultType(enum.Enum):
     Failed = 'Failed'
 
 
+class FailureSiteType(enum.Enum):
+    Test = 'Test'
+    SetUp = 'SetUp'
+    TearDown = 'TearDown'
+    Parent = 'Parent'
+    Child = 'Child'
+
+
+class TestStatusType(enum.Enum):
+    Inconclusive = 'Inconclusive'
+    Skipped = 'Skipped'
+    Passed = 'Passed'
+    Warning = 'Warning'
+    Failed = 'Failed'
+
+
+class AssertionStatusType(enum.Enum):
+    Inconclusive = 'Inconclusive'
+    Passed = 'Passed'
+    Warning = 'Warning'
+    Failed = 'Failed'
+    Error = 'Error'
+
+
 class NonnegativeInt32(int):
     pass
+
+
+class TestRunStateType(enum.Enum):
+    NotRunnable = 'NotRunnable'
+    Runnable = 'Runnable'
+    Explicit = 'Explicit'
+    Skipped = 'Skipped'
+    Ignored = 'Ignored'
+
+
+class TestSuiteTypeType(enum.Enum):
+    GenericFixture = 'GenericFixture'
+    ParameterizedFixture = 'ParameterizedFixture'
+    Theory = 'Theory'
+    GenericMethod = 'GenericMethod'
+    ParameterizedMethod = 'ParameterizedMethod'
+    Assembly = 'Assembly'
+    SetUpFixture = 'SetUpFixture'
+    TestFixture = 'TestFixture'
+    TestMethod = 'TestMethod'
+    TestSuite = 'TestSuite'
 
 
 @attr.s
@@ -207,7 +252,8 @@ class TestCaseElementType(object):
         metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING
     )
     runstate = attr.ib(
-        metadata={"name": 'runstate', "type": 'attrib'}, validator=attr.validators.in_(None)
+        metadata={"name": 'runstate', "type": 'attrib'},
+        validator=attr.validators.in_(TestRunStateType),
     )
     seed = attr.ib(
         metadata={"name": 'seed', "type": 'attrib'},
@@ -215,7 +261,7 @@ class TestCaseElementType(object):
         validator=attr.validators.instance_of(str),
     )
     result = attr.ib(
-        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(None)
+        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestStatusType)
     )
     label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
     site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)
@@ -285,15 +331,18 @@ class TestSuiteElementType(object):
         metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING
     )
     runstate = attr.ib(
-        metadata={"name": 'runstate', "type": 'attrib'}, validator=attr.validators.in_(None)
+        metadata={"name": 'runstate', "type": 'attrib'},
+        validator=attr.validators.in_(TestRunStateType),
     )
-    type_ = attr.ib(metadata={"name": 'type', "type": 'attrib'}, validator=attr.validators.in_(None))
+    type_ = attr.ib(
+        metadata={"name": 'type', "type": 'attrib'}, validator=attr.validators.in_(TestSuiteTypeType)
+    )
     testcasecount = attr.ib(
         metadata={"name": 'testcasecount', "type": 'attrib'},
         validator=attr.validators.instance_of(int),
     )
     result = attr.ib(
-        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(None)
+        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestStatusType)
     )
     label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
     site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)

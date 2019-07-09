@@ -1,5 +1,5 @@
 import sys
-from .models import TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType
+from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType)
 from .attrs2xml import AttrsXmlRenderer
 
 
@@ -28,10 +28,10 @@ class NunitTestRun(object):
                 classname="testClass",
                 test_suite=None,
                 test_case=None,
-                runstate=None,
-                type_=None,
+                runstate=TestRunStateType.Runnable,
+                type_=TestSuiteTypeType.TestSuite,
                 testcasecount=0,
-                result=TestResultType.Passed,
+                result=TestStatusType.Passed,
                 label="",
                 site=None,
                 start_time=0,
@@ -44,7 +44,7 @@ class NunitTestRun(object):
                 warnings=0,
                 inconclusive=0,
                 skipped=0
-        )
+            )
         ]
 
     def as_test_run(self):

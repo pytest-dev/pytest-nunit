@@ -28,18 +28,7 @@
     <xs:attribute name="fullname" type="xs:string" use="required" />
     <xs:attribute name="methodname" type="xs:string" />
     <xs:attribute name="classname" type="xs:string" />
-    <xs:attribute name="runstate" use="required" >
-      <xs:simpleType>
-        <!-- NUnit.Framework.Interfaces.RunState -->
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="NotRunnable" />
-          <xs:enumeration value="Runnable" />
-          <xs:enumeration value="Explicit" />
-          <xs:enumeration value="Skipped" />
-          <xs:enumeration value="Ignored" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="runstate" use="required" type="TestRunStateType"/>
   </xs:attributeGroup>
 
   <!-- NUnit.Framework.Internal.TestMethod.AddToXml -->
@@ -62,8 +51,33 @@
   </xs:complexType>
   <xs:attributeGroup name="TestSuiteAttributeGroup">
     <xs:attributeGroup ref="TestBaseAttributeGroup" />
-    <xs:attribute name="type" use="required">
-      <xs:simpleType>
+    <xs:attribute name="type" use="required" type="TestSuiteTypeType"/>
+    <xs:attribute name="testcasecount" type="NonnegativeInt32" use="required" />
+  </xs:attributeGroup>
+
+  <xs:group name="ContainedTestGroup">
+    <xs:choice>
+      <xs:element name="test-suite" type="TestSuiteElementType" />
+      <xs:element name="test-case" type="TestCaseElementType" />
+    </xs:choice>
+  </xs:group>
+
+  <xs:simpleType name="NonnegativeInt32">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+<xs:simpleType name="TestRunStateType">
+        <!-- NUnit.Framework.Interfaces.RunState -->
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NotRunnable" />
+          <xs:enumeration value="Runnable" />
+          <xs:enumeration value="Explicit" />
+          <xs:enumeration value="Skipped" />
+          <xs:enumeration value="Ignored" />
+        </xs:restriction>
+      </xs:simpleType>
+  <xs:simpleType name="TestSuiteTypeType">
         <!-- Implementations of NUnit.Framework.Internal.Test.TestType -->
         <xs:restriction base="xs:string">
           <!-- NUnit.Framework.Internal.ParameterizedFixtureSuite.TestType -->
@@ -82,21 +96,4 @@
           <xs:enumeration value="TestSuite" />
         </xs:restriction>
       </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="testcasecount" type="NonnegativeInt32" use="required" />
-  </xs:attributeGroup>
-
-  <xs:group name="ContainedTestGroup">
-    <xs:choice>
-      <xs:element name="test-suite" type="TestSuiteElementType" />
-      <xs:element name="test-case" type="TestCaseElementType" />
-    </xs:choice>
-  </xs:group>
-
-  <xs:simpleType name="NonnegativeInt32">
-    <xs:restriction base="xs:int">
-      <xs:minInclusive value="0" />
-    </xs:restriction>
-  </xs:simpleType>
-
 </xs:schema>

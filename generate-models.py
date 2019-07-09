@@ -52,9 +52,11 @@ def make_attrib(attrib, type_="attrib", optional=False):
 
     elif isinstance(attrib.type, xmlschema.validators.XsdAtomicRestriction):
         if hasattr(attrib, "use") and attrib.use == "required":
+            # If type is an enumeration facet
             if (
                 attrib.type.facets
                 and xmlschema.qnames.XSD_ENUMERATION in attrib.type.facets
+                and attrib.type.name
             ):
                 args.append(
                     "validator=attr.validators.in_({0})".format(attrib.type.name)

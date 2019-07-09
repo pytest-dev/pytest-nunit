@@ -1,8 +1,8 @@
 import xml.etree.ElementTree as ET
 import enum
 
-class AttrsXmlRenderer(object):
 
+class AttrsXmlRenderer(object):
     @staticmethod
     def as_element(i, name):
         el = ET.Element(name)
@@ -14,11 +14,16 @@ class AttrsXmlRenderer(object):
                     else:
                         el.set(a.metadata['name'], str(getattr(i, a.name)))
                 if a.metadata['type'] == 'element' and getattr(i, a.name) is not None:
-                    # If subtype is an attrs instance, recurse
-                    if hasattr(a.type, '__attrs_attrs__'):
-                        el.append(AttrsXmlRenderer.as_element(getattr(i, a.name), a.metadata['name']))
-                    else:
-                        ET.SubElement(el, a.metadata['name']).text = str(getattr(i, a.name))
+                    attrib = getattr(i, a.name)
+                    if not isinstance(attrib, list):
+                        attrib = [attrib]
+
+                    for item in attrib:
+                        # If subtype is an attrs instance, recurse
+                        if hasattr(item, '__attrs_attrs__'):
+                            el.append(AttrsXmlRenderer.as_element(item, a.metadata['name']))
+                        else:
+                            ET.SubElement(el, a.metadata['name']).text = str(item)
 
         return el
 

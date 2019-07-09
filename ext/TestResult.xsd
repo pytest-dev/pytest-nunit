@@ -67,18 +67,7 @@
                   <xs:element name="message" minOccurs="0" type="xs:string" />
                   <xs:element name="stack-trace" minOccurs="0" type="xs:string" />
                 </xs:all>
-                <xs:attribute name="result">
-                  <xs:simpleType>
-                    <!-- NUnit.Framework.Interfaces.AssertionStatus -->
-                    <xs:restriction base="xs:string">
-                      <xs:enumeration value="Inconclusive" />
-                      <xs:enumeration value="Passed" />
-                      <xs:enumeration value="Warning" />
-                      <xs:enumeration value="Failed" />
-                      <xs:enumeration value="Error" />
-                    </xs:restriction>
-                  </xs:simpleType>
-                </xs:attribute>
+                <xs:attribute name="result" type="AssertionStatusType" />
               </xs:complexType>
             </xs:element>
             <!-- NUnit.Framework.Internal.TestResult.AddAttachmentsElement -->
@@ -102,31 +91,9 @@
     </xs:sequence>
   </xs:group>
   <xs:attributeGroup name="TestResultBaseAttributeGroup">
-    <xs:attribute name="result" use="required">
-      <xs:simpleType>
-        <!-- NUnit.Framework.Interfaces.TestStatus -->
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="Inconclusive" />
-          <xs:enumeration value="Skipped" />
-          <xs:enumeration value="Passed" />
-          <xs:enumeration value="Warning" />
-          <xs:enumeration value="Failed" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="result" use="required" type="TestStatusType" />
     <xs:attribute name="label" type="xs:string" />
-    <xs:attribute name="site">
-      <xs:simpleType>
-        <!-- NUnit.Framework.Interfaces.FailureSite -->
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="Test" />
-          <xs:enumeration value="SetUp" />
-          <xs:enumeration value="TearDown" />
-          <xs:enumeration value="Parent" />
-          <xs:enumeration value="Child" />
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="site" type="FailureSiteType" />
     <xs:attribute name="start-time" type="xs:string"/>
     <xs:attribute name="end-time" type="xs:string" />
     <xs:attribute name="duration" type="TestDurationType" />
@@ -227,4 +194,34 @@
       <xs:enumeration value="Failed" />
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="FailureSiteType">
+        <!-- NUnit.Framework.Interfaces.FailureSite -->
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Test" />
+          <xs:enumeration value="SetUp" />
+          <xs:enumeration value="TearDown" />
+          <xs:enumeration value="Parent" />
+          <xs:enumeration value="Child" />
+        </xs:restriction>
+      </xs:simpleType>
+  <xs:simpleType name="TestStatusType">
+        <!-- NUnit.Framework.Interfaces.TestStatus -->
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Inconclusive" />
+          <xs:enumeration value="Skipped" />
+          <xs:enumeration value="Passed" />
+          <xs:enumeration value="Warning" />
+          <xs:enumeration value="Failed" />
+        </xs:restriction>
+      </xs:simpleType>
+  <xs:simpleType name="AssertionStatusType">
+      <!-- NUnit.Framework.Interfaces.AssertionStatus -->
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Inconclusive" />
+        <xs:enumeration value="Passed" />
+        <xs:enumeration value="Warning" />
+        <xs:enumeration value="Failed" />
+        <xs:enumeration value="Error" />
+      </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
