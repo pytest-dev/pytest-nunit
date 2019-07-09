@@ -1,5 +1,5 @@
 import sys
-from .models import TestRunType, TestResultType, NonnegativeInt32, TestFilterType
+from .models import TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType
 from .attrs2xml import AttrsXmlRenderer
 
 
@@ -9,6 +9,43 @@ class NunitTestRun(object):
     """
     def __init__(self, nunitxml):
         self.nunitxml = nunitxml
+
+    @property
+    def test_cases(self):
+        return [TestCaseElementType(
+            id_="test_case",
+            )
+        ]
+
+    @property
+    def test_suites(self):
+        return [
+            TestSuiteElementType(
+                id_="",
+                name="example",
+                fullname="example",
+                methodname="test",
+                classname="testClass",
+                test_suite=None,
+                test_case=None,
+                runstate=None,
+                type_=None,
+                testcasecount=0,
+                result=TestResultType.Passed,
+                label="",
+                site=None,
+                start_time=0,
+                end_time=0,
+                duration=0,
+                asserts=0,
+                total=0,
+                passed=0,
+                failed=0,
+                warnings=0,
+                inconclusive=0,
+                skipped=0
+        )
+        ]
 
     def as_test_run(self):
         return TestRunType(
@@ -29,7 +66,9 @@ class NunitTestRun(object):
             asserts=1,
             random_seed=sys.flags.hash_randomization,
             command_line=' '.join(sys.argv),
-            filter=TestFilterType())
+            filter=None,
+            test_case=None,
+            test_suite=self.test_suites)
 
     def generate_xml(self):
         tr = self.as_test_run()

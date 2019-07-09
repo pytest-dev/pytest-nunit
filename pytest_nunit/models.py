@@ -23,10 +23,14 @@ class TestRunType(object):
     command_line = attr.ib(metadata={"name": 'command-line', "type": 'element'}, type=str)
     filter = attr.ib(metadata={"name": 'filter', "type": 'element'}, type='TestFilterType')
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+        metadata={"name": 'test-suite', "type": 'element'},
+        type='TestSuiteElementType',
+        default=attr.NOTHING,
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+        metadata={"name": 'test-case', "type": 'element'},
+        type='TestCaseElementType',
+        default=attr.NOTHING,
     )
     id_ = attr.ib(
         metadata={"name": 'id', "type": 'attrib'},
@@ -86,36 +90,92 @@ class TestRunType(object):
 
 @attr.s
 class TestFilterType(object):
-    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None')
-    and_ = attr.ib(metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType')
-    or_ = attr.ib(metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType')
-    cat = attr.ib(metadata={"name": 'cat', "type": 'element'}, type='ValueMatchFilterType')
-    class_ = attr.ib(metadata={"name": 'class', "type": 'element'}, type='ValueMatchFilterType')
-    test = attr.ib(metadata={"name": 'test', "type": 'element'}, type='ValueMatchFilterType')
-    id_ = attr.ib(metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType')
-    method = attr.ib(metadata={"name": 'method', "type": 'element'}, type='ValueMatchFilterType')
-    namespace = attr.ib(
-        metadata={"name": 'namespace', "type": 'element'}, type='ValueMatchFilterType'
+    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None', default=attr.NOTHING)
+    and_ = attr.ib(
+        metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
     )
-    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None')
-    name = attr.ib(metadata={"name": 'name', "type": 'element'}, type='ValueMatchFilterType')
+    or_ = attr.ib(
+        metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+    )
+    cat = attr.ib(
+        metadata={"name": 'cat', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    class_ = attr.ib(
+        metadata={"name": 'class', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    test = attr.ib(
+        metadata={"name": 'test', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    id_ = attr.ib(
+        metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType', default=attr.NOTHING
+    )
+    method = attr.ib(
+        metadata={"name": 'method', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    namespace = attr.ib(
+        metadata={"name": 'namespace', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None', default=attr.NOTHING)
+    name = attr.ib(
+        metadata={"name": 'name', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
 
 
 @attr.s
 class CompositeFilterType(object):
-    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None')
-    and_ = attr.ib(metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType')
-    or_ = attr.ib(metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType')
-    cat = attr.ib(metadata={"name": 'cat', "type": 'element'}, type='ValueMatchFilterType')
-    class_ = attr.ib(metadata={"name": 'class', "type": 'element'}, type='ValueMatchFilterType')
-    test = attr.ib(metadata={"name": 'test', "type": 'element'}, type='ValueMatchFilterType')
-    id_ = attr.ib(metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType')
-    method = attr.ib(metadata={"name": 'method', "type": 'element'}, type='ValueMatchFilterType')
-    namespace = attr.ib(
-        metadata={"name": 'namespace', "type": 'element'}, type='ValueMatchFilterType'
+    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None', default=attr.NOTHING)
+    and_ = attr.ib(
+        metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
     )
-    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None')
-    name = attr.ib(metadata={"name": 'name', "type": 'element'}, type='ValueMatchFilterType')
+    or_ = attr.ib(
+        metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+    )
+    cat = attr.ib(
+        metadata={"name": 'cat', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    class_ = attr.ib(
+        metadata={"name": 'class', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    test = attr.ib(
+        metadata={"name": 'test', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    id_ = attr.ib(
+        metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType', default=attr.NOTHING
+    )
+    method = attr.ib(
+        metadata={"name": 'method', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    namespace = attr.ib(
+        metadata={"name": 'namespace', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
+    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None', default=attr.NOTHING)
+    name = attr.ib(
+        metadata={"name": 'name', "type": 'element'},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
 
 
 @attr.s
@@ -174,22 +234,34 @@ class TestCaseElementType(object):
 @attr.s
 class TestSuiteElementType(object):
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+        metadata={"name": 'test-suite', "type": 'element'},
+        type='TestSuiteElementType',
+        default=attr.NOTHING,
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+        metadata={"name": 'test-case', "type": 'element'},
+        type='TestCaseElementType',
+        default=attr.NOTHING,
     )
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+        metadata={"name": 'test-suite', "type": 'element'},
+        type='TestSuiteElementType',
+        default=attr.NOTHING,
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+        metadata={"name": 'test-case', "type": 'element'},
+        type='TestCaseElementType',
+        default=attr.NOTHING,
     )
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+        metadata={"name": 'test-suite', "type": 'element'},
+        type='TestSuiteElementType',
+        default=attr.NOTHING,
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+        metadata={"name": 'test-case', "type": 'element'},
+        type='TestCaseElementType',
+        default=attr.NOTHING,
     )
     id_ = attr.ib(
         metadata={"name": 'id', "type": 'attrib'},

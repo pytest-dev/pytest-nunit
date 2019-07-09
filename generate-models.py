@@ -18,8 +18,11 @@ logging.basicConfig()
 log = logging.getLogger("__name__")
 log.setLevel(logging.DEBUG)
 
+# Python reserved keywords. TODO : Sure this is in stdlib somewhere? maybe tokens
 KEYWORDS = ["id", "type", "class", "if", "else", "and", "for", "not", "or"]
 
+
+# Map XML atomic builtin types to Python std types
 XS_ATOMIC_MAP = {
     xmlschema.qnames.XSD_STRING: "str",
     xmlschema.qnames.XSD_INTEGER: "int",
@@ -29,6 +32,7 @@ XS_ATOMIC_MAP = {
 }
 
 
+# Make an Attrs attr.ib from an Element.
 def make_attrib(attrib, type_="attrib", optional=False):
     """
     Make attrs attribute from XmlAttribute
@@ -73,11 +77,11 @@ def make_attrib(attrib, type_="attrib", optional=False):
         args.append("type='{0}'".format(attrib.type.name))
         # args.append('validator=attr.validators.instance_of({0})'.format(attrib.type.name))
 
-    if hasattr(attrib, "use"):
-        # Set default value to none for optional args
-        if attrib.use == "optional":
-            # Set all args to optional
-            args.append("default=attr.NOTHING")
+    if hasattr(attrib, "use") and attrib.use == "optional":
+        optional = True
+
+    if optional:
+        args.append("default=attr.NOTHING")
 
     name = attrib.name.replace("-", "_")
     if name in KEYWORDS:
