@@ -9,10 +9,17 @@ from _pytest.config import filename_arg
 
 import os
 import time
+from datetime import datetime, timedelta
 import functools
 
 from .nunit import NunitTestRun
 
+import logging
+
+logging.basicConfig()
+log = logging.getLogger("__name__")
+
+log.setLevel(logging.DEBUG)
 
 def pytest_addoption(parser):
     group = parser.getgroup("terminal reporting")
@@ -35,7 +42,9 @@ def pytest_addoption(parser):
         help="prepend prefix to classnames in nunit-xml output",
     )
     parser.addini(
-        "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
+        "nunit_suite_name", 
+        "Test suite name for NUnit report", 
+        default="pytest"
     )
     parser.addini(
         "nunit_logging",
@@ -89,7 +98,7 @@ class _NunitNodeReporter:
         self.nodes.append(node)
 
     def record_testreport(self, testreport):
-        pass
+        log.debug("record_test_report:{0}".format(testreport))
 
     def write_captured_output(self, report):
         if not self.nunit_xml.log_passing_tests and report.passed:
@@ -100,25 +109,25 @@ class _NunitNodeReporter:
         content_err = report.capstderr
 
     def append_pass(self, report):
-        pass
+        log.debug("append_pass:{0}".format(report))
 
     def append_failure(self, report):
-        pass
+        log.debug("append_failure:{0}".format(report))
 
     def append_collect_error(self, report):
-        pass
+        log.debug("append_error:{0}".format(report))
 
     def append_collect_skipped(self, report):
-        pass
+        log.debug("append_skipped:{0}".format(report))
 
     def append_error(self, report):
-        pass
+        log.debug("append_collect_error:{0}".format(report))
 
     def append_skipped(self, report):
-        pass
+        log.debug("append_skipped:{0}".format(report))
 
     def finalize(self):
-        pass
+        log.debug("finalize")
 
 
 class NunitXML:
@@ -138,7 +147,7 @@ class NunitXML:
         self.logging = logging
         self.log_passing_tests = log_passing_tests
         self.report_duration = report_duration
-        self.stats = dict.fromkeys(["error", "passed", "failure", "skipped"], 0)
+        self.stats = dict.fromkeys(["error", "passed", "failure", "skipped", "total", "asserts"], 0)
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.global_properties = []
@@ -281,30 +290,19 @@ class NunitXML:
         reporter = self.node_reporter("internal")
 
     def pytest_sessionstart(self):
-        self.suite_start_time = time.time()
+        self.suite_start_time = datetime.now()
 
     def pytest_sessionfinish(self):
+        # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
-        logfile = open(self.logfile, "w", encoding="utf-8")
-        suite_stop_time = time.time()
-        suite_time_delta = suite_stop_time - self.suite_start_time
-
-        numtests = (
-            self.stats["passed"]
-            + self.stats["failure"]
-            + self.stats["skipped"]
-            + self.stats["error"]
-            - self.cnt_double_fail_tests
-        )
-        logfile.write('<?xml version="1.0" encoding="utf-8"?>')
-
-        result = NunitTestRun(self).generate_xml()
-
-        logfile.write(result)
-
-        logfile.close()
+        self.suite_stop_time = datetime.now()
+        self.suite_time_delta = (self.suite_stop_time-self.suite_start_time).total_seconds()
+        with open(self.logfile, "w", encoding="utf-8") as logfile:
+            logfile.write('<?xml version="1.0" encoding="utf-8"?>')
+            result = NunitTestRun(self).generate_xml()
+            logfile.write(result)
 
     def pytest_terminal_summary(self, terminalreporter):
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))
