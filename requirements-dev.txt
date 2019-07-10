@@ -1,3 +1,4 @@
 # Special requirements for using generate-models.py
 xmlschema==1.0.13
 click>=7.0.0
+black>=19.3b0
