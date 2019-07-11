@@ -13,22 +13,22 @@ class NunitTestRun(object):
     @property
     def test_cases(self):
         return [TestCaseElementType(
-            id_=case.nodeid,
-            name=case.nodeid, 
-            fullname=case.nodeid, 
-            methodname=case.head_line, 
+            id_=nodeid,
+            name=nodeid, 
+            fullname=nodeid, 
+            methodname=case['report'].head_line, 
             classname="TestFoo", 
             runstate=TestRunStateType.Runnable, 
             seed=str(sys.flags.hash_randomization), 
             result=TestStatusType.Passed, # TODO 
             label="test_label", 
             site=None, 
-            start_time=None, 
-            end_time=None, 
-            duration=case.duration, 
+            start_time=case['start'], 
+            end_time=case['stop'], 
+            duration=case['duration'], 
             asserts=0
             )
-            for case in self.nunitxml.cases
+            for nodeid, case in self.nunitxml.cases.items()
         ]
 
     @property

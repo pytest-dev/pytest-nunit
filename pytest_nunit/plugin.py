@@ -11,6 +11,7 @@ import os
 import time
 from datetime import datetime, timedelta
 import functools
+from collections import defaultdict
 
 from .nunit import NunitTestRun
 
@@ -99,8 +100,17 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
-        if testreport.when == 'call':
-            self.nunit_xml.cases.append(testreport)
+        if testreport.when == 'setup':
+            self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport }
+        elif testreport.when == 'call':
+            r = self.nunit_xml.cases[testreport.nodeid]
+            r['start'] = datetime.now()
+            # TODO : Extra data
+        elif testreport.when == 'teardown':
+            r = self.nunit_xml.cases[testreport.nodeid]
+            r['stop'] = datetime.now()
+            r['duration'] = (r['stop']-r['start']).total_seconds()
+            r['result'] = testreport.outcome
 
     def finalize(self):
         log.debug("finalize")
@@ -127,7 +137,7 @@ class NunitXML:
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.global_properties = []
-        self.cases = []
+        self.cases = dict()
 
         # List of reports that failed on call but teardown is pending.
         self.open_reports = []
@@ -194,7 +204,7 @@ class NunitXML:
         self.suite_time_delta = (self.suite_stop_time-self.suite_start_time).total_seconds()
 
         self.stats['total'] = len(self.cases)
-        self.stats['passed'] = len(list(case for case in self.cases if case.outcome == 'passed'))
+        self.stats['passed'] = len(list(case for case in self.cases.values() if case['report'].outcome == 'passed'))
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             logfile.write('<?xml version="1.0" encoding="utf-8"?>')
