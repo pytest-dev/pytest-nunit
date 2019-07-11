@@ -36,13 +36,18 @@ stages:
       - script: |
           python -m pytest tests/unit -v --nunit-xml=test-results.xml
         displayName: 'pytest with nunit-xml flag - passes'
-      
+      - task: CopyFiles@2
+        inputs:
+          contents: '**/test*.xml'
+          targetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathToPublish: $(Build.ArtifactStagingDirectory)
+          artifactName: TestOutput
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: NUnit
-          testResultsFiles: '**/test-results.xml'
-          testRunTitle: "Unit test basic Nunit response."
-          publishRunAttachments: true
+          testResultsFiles: '**/*.xml'
   - stage: Integration_Test
     jobs:
 
