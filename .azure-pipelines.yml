@@ -34,8 +34,8 @@ stages:
         displayName: 'Install package'
 
       - script: |
-          python -m pytest tests -v -m "not testfail" --nunit-xml=test-results.xml
-        displayName: 'pytest with junitxml flag - passes'
+          python -m pytest tests/unit -v --nunit-xml=test-results.xml
+        displayName: 'pytest with nunit-xml flag - passes'
       
       - task: PublishTestResults@2
         inputs:
