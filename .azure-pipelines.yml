@@ -39,6 +39,40 @@ stages:
       
       - task: PublishTestResults@2
         inputs:
-          testResultsFormat: Nunit
+          testResultsFormat: NUnit
           testResultsFiles: '**/test-results.xml'
           testRunTitle: "Unit test basic Nunit response."
+          publishRunAttachments: true
+  - stage: Integration_Test
+    jobs:
+
+    - job: 'Test_Linux'
+      pool:
+        vmImage: 'Ubuntu-16.04'
+      strategy:
+        matrix:
+          Python37:
+            python.version: '3.7'
+            pytest_version: '>=4.1.0'
+        maxParallel: 8
+
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+
+      - script: |
+          echo "Installing Pytest - $PYTEST_VERSION"
+          python -m pip install --upgrade pip
+          pip install pytest$PYTEST_VERSION
+        env:
+          PYTEST_VERSION: $(pytest_version)
+      - script: |
+          pip install -e .
+          pip install -r requirements_dev.txt
+        displayName: 'Install package and dependencies'
+
+      - script: |
+          python -m pytest tests/integration -v
+        displayName: 'pytest with XSD validation'
