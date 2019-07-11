@@ -64,339 +64,527 @@ class TestSuiteTypeType(enum.Enum):
 
 
 @attr.s
+class SettingsType(object):
+    setting = attr.ib(
+        metadata={"name": 'setting', "type": 'element', "optional": True},
+        type='SettingType',
+        default=attr.NOTHING,
+    )
+
+
+@attr.s
+class KeyValuePairType(object):
+    key = attr.ib(
+        metadata={"name": 'key', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    value = attr.ib(
+        metadata={"name": 'value', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+
+
+@attr.s
+class SettingType(object):
+    item = attr.ib(
+        metadata={"name": 'item', "type": 'element', "optional": True},
+        type='KeyValuePairType',
+        default=attr.NOTHING,
+    )
+    name = attr.ib(
+        metadata={"name": 'name', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    value = attr.ib(
+        metadata={"name": 'value', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+
+
+@attr.s
+class EnvironmentType(object):
+    framework_version = attr.ib(
+        metadata={"name": 'framework-version', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    clr_version = attr.ib(
+        metadata={"name": 'clr-version', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    os_version = attr.ib(
+        metadata={"name": 'os-version', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    platform = attr.ib(
+        metadata={"name": 'platform', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    cwd = attr.ib(
+        metadata={"name": 'cwd', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    machine_name = attr.ib(
+        metadata={"name": 'machine-name', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    user = attr.ib(
+        metadata={"name": 'user', "type": 'attrib', "optional": True}, type=str, default=attr.NOTHING
+    )
+    user_domain = attr.ib(
+        metadata={"name": 'user-domain', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    culture = attr.ib(
+        metadata={"name": 'culture', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    uiculture = attr.ib(
+        metadata={"name": 'uiculture', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    os_architecture = attr.ib(
+        metadata={"name": 'os-architecture', "type": 'attrib', "optional": False},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+
+
+@attr.s
 class TestRunType(object):
-    command_line = attr.ib(metadata={"name": 'command-line', "type": 'element'}, type=str)
-    filter = attr.ib(metadata={"name": 'filter', "type": 'element'}, type='TestFilterType')
-    test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+    command_line = attr.ib(
+        metadata={"name": 'command-line', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
-    test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+    filter = attr.ib(
+        metadata={"name": 'filter', "type": 'element', "optional": True},
+        type='TestFilterType',
+        default=attr.NOTHING,
     )
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'},
+        metadata={"name": 'test-suite', "type": 'element', "optional": False},
         type='TestSuiteElementType',
-        default=attr.NOTHING,
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'},
+        metadata={"name": 'test-case', "type": 'element', "optional": False},
         type='TestCaseElementType',
-        default=attr.NOTHING,
     )
     id_ = attr.ib(
-        metadata={"name": 'id', "type": 'attrib'},
+        metadata={"name": 'id', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     name = attr.ib(
-        metadata={"name": 'name', "type": 'attrib'},
+        metadata={"name": 'name', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     fullname = attr.ib(
-        metadata={"name": 'fullname', "type": 'attrib'},
+        metadata={"name": 'fullname', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     testcasecount = attr.ib(
-        metadata={"name": 'testcasecount', "type": 'attrib'},
+        metadata={"name": 'testcasecount', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
     )
     result = attr.ib(
-        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestResultType)
+        metadata={"name": 'result', "type": 'attrib', "optional": False},
+        validator=attr.validators.in_(TestResultType),
     )
-    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
+    label = attr.ib(
+        metadata={"name": 'label', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
     start_time = attr.ib(
-        metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'start-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     end_time = attr.ib(
-        metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'end-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
-    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    duration = attr.ib(
+        metadata={"name": 'duration', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
     total = attr.ib(
-        metadata={"name": 'total', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'total', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     passed = attr.ib(
-        metadata={"name": 'passed', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'passed', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     failed = attr.ib(
-        metadata={"name": 'failed', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'failed', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     inconclusive = attr.ib(
-        metadata={"name": 'inconclusive', "type": 'attrib'},
+        metadata={"name": 'inconclusive', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
     )
     skipped = attr.ib(
-        metadata={"name": 'skipped', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'skipped', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     asserts = attr.ib(
-        metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'asserts', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     random_seed = attr.ib(
-        metadata={"name": 'random-seed', "type": 'attrib'},
+        metadata={"name": 'random-seed', "type": 'attrib', "optional": False},
         type=int,
         validator=attr.validators.instance_of(int),
     )
 
 
 @attr.s
+class ReasonType(object):
+    message = attr.ib(metadata={"name": 'message', "type": 'element', "optional": False}, type=str)
+
+
+@attr.s
 class TestFilterType(object):
-    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None', default=attr.NOTHING)
+    not_ = attr.ib(metadata={"name": 'not', "type": 'element', "optional": False}, type='None')
     and_ = attr.ib(
-        metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+        metadata={"name": 'and', "type": 'element', "optional": False}, type='CompositeFilterType'
     )
     or_ = attr.ib(
-        metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+        metadata={"name": 'or', "type": 'element', "optional": False}, type='CompositeFilterType'
     )
     cat = attr.ib(
-        metadata={"name": 'cat', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'cat', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     class_ = attr.ib(
-        metadata={"name": 'class', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'class', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     test = attr.ib(
-        metadata={"name": 'test', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'test', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     id_ = attr.ib(
-        metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType', default=attr.NOTHING
+        metadata={"name": 'id', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     method = attr.ib(
-        metadata={"name": 'method', "type": 'element'},
+        metadata={"name": 'method', "type": 'element', "optional": False},
         type='ValueMatchFilterType',
-        default=attr.NOTHING,
     )
     namespace = attr.ib(
-        metadata={"name": 'namespace', "type": 'element'},
+        metadata={"name": 'namespace', "type": 'element', "optional": False},
         type='ValueMatchFilterType',
-        default=attr.NOTHING,
     )
-    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None', default=attr.NOTHING)
+    prop = attr.ib(metadata={"name": 'prop', "type": 'element', "optional": False}, type='None')
     name = attr.ib(
-        metadata={"name": 'name', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'name', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
 
 
 @attr.s
 class CompositeFilterType(object):
-    not_ = attr.ib(metadata={"name": 'not', "type": 'element'}, type='None', default=attr.NOTHING)
+    not_ = attr.ib(metadata={"name": 'not', "type": 'element', "optional": False}, type='None')
     and_ = attr.ib(
-        metadata={"name": 'and', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+        metadata={"name": 'and', "type": 'element', "optional": False}, type='CompositeFilterType'
     )
     or_ = attr.ib(
-        metadata={"name": 'or', "type": 'element'}, type='CompositeFilterType', default=attr.NOTHING
+        metadata={"name": 'or', "type": 'element', "optional": False}, type='CompositeFilterType'
     )
     cat = attr.ib(
-        metadata={"name": 'cat', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'cat', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     class_ = attr.ib(
-        metadata={"name": 'class', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'class', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     test = attr.ib(
-        metadata={"name": 'test', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'test', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     id_ = attr.ib(
-        metadata={"name": 'id', "type": 'element'}, type='ValueMatchFilterType', default=attr.NOTHING
+        metadata={"name": 'id', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
     method = attr.ib(
-        metadata={"name": 'method', "type": 'element'},
+        metadata={"name": 'method', "type": 'element', "optional": False},
         type='ValueMatchFilterType',
-        default=attr.NOTHING,
     )
     namespace = attr.ib(
-        metadata={"name": 'namespace', "type": 'element'},
+        metadata={"name": 'namespace', "type": 'element', "optional": False},
         type='ValueMatchFilterType',
-        default=attr.NOTHING,
     )
-    prop = attr.ib(metadata={"name": 'prop', "type": 'element'}, type='None', default=attr.NOTHING)
+    prop = attr.ib(metadata={"name": 'prop', "type": 'element', "optional": False}, type='None')
     name = attr.ib(
-        metadata={"name": 'name', "type": 'element'},
-        type='ValueMatchFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'name', "type": 'element', "optional": False}, type='ValueMatchFilterType'
     )
 
 
 @attr.s
 class ValueMatchFilterType(object):
-    re = attr.ib(metadata={"name": 're', "type": 'attrib'}, type=bool, default=attr.NOTHING)
+    re = attr.ib(
+        metadata={"name": 're', "type": 'attrib', "optional": True}, type=bool, default=attr.NOTHING
+    )
 
 
 @attr.s
 class TestCaseElementType(object):
-    properties = attr.ib(metadata={"name": 'properties', "type": 'element'}, type='PropertyBagType')
-    environment = attr.ib(metadata={"name": 'environment', "type": 'element'}, type='None')
-    settings = attr.ib(metadata={"name": 'settings', "type": 'element'}, type='None')
-    failure = attr.ib(metadata={"name": 'failure', "type": 'element'}, type='None')
-    reason = attr.ib(metadata={"name": 'reason', "type": 'element'}, type='None')
-    output = attr.ib(metadata={"name": 'output', "type": 'element'}, type=str)
-    assertions = attr.ib(metadata={"name": 'assertions', "type": 'element'}, type='None')
+    properties = attr.ib(
+        metadata={"name": 'properties', "type": 'element', "optional": False}, type='PropertyBagType'
+    )
+    environment = attr.ib(
+        metadata={"name": 'environment', "type": 'element', "optional": True},
+        type='EnvironmentType',
+    )
+    settings = attr.ib(
+        metadata={"name": 'settings', "type": 'element', "optional": True},
+        type='SettingsType',
+        default=attr.NOTHING,
+    )
+    failure = attr.ib(
+        metadata={"name": 'failure', "type": 'element', "optional": True},
+        type='None',
+        default=attr.NOTHING,
+    )
+    reason = attr.ib(
+        metadata={"name": 'reason', "type": 'element', "optional": True},
+        type='ReasonType',
+        default=attr.NOTHING,
+    )
+    output = attr.ib(
+        metadata={"name": 'output', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    assertions = attr.ib(
+        metadata={"name": 'assertions', "type": 'element', "optional": True},
+        type='None',
+        default=attr.NOTHING,
+    )
     id_ = attr.ib(
-        metadata={"name": 'id', "type": 'attrib'},
+        metadata={"name": 'id', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     name = attr.ib(
-        metadata={"name": 'name', "type": 'attrib'},
+        metadata={"name": 'name', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     fullname = attr.ib(
-        metadata={"name": 'fullname', "type": 'attrib'},
+        metadata={"name": 'fullname', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     methodname = attr.ib(
-        metadata={"name": 'methodname', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'methodname', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     classname = attr.ib(
-        metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'classname', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     runstate = attr.ib(
-        metadata={"name": 'runstate', "type": 'attrib'},
+        metadata={"name": 'runstate', "type": 'attrib', "optional": False},
         validator=attr.validators.in_(TestRunStateType),
     )
     seed = attr.ib(
-        metadata={"name": 'seed', "type": 'attrib'},
+        metadata={"name": 'seed', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     result = attr.ib(
-        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestStatusType)
+        metadata={"name": 'result', "type": 'attrib', "optional": False},
+        validator=attr.validators.in_(TestStatusType),
     )
-    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
-    site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)
+    label = attr.ib(
+        metadata={"name": 'label', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    site = attr.ib(
+        metadata={"name": 'site', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
     start_time = attr.ib(
-        metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'start-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     end_time = attr.ib(
-        metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'end-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
-    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    duration = attr.ib(
+        metadata={"name": 'duration', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
     asserts = attr.ib(
-        metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'asserts', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
 
 
 @attr.s
 class TestSuiteElementType(object):
-    properties = attr.ib(metadata={"name": 'properties', "type": 'element'}, type='PropertyBagType')
+    properties = attr.ib(
+        metadata={"name": 'properties', "type": 'element', "optional": False}, type='PropertyBagType'
+    )
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+        metadata={"name": 'test-suite', "type": 'element', "optional": True},
+        type='TestSuiteElementType',
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+        metadata={"name": 'test-case', "type": 'element', "optional": False},
+        type='TestCaseElementType',
     )
-    environment = attr.ib(metadata={"name": 'environment', "type": 'element'}, type='None')
-    settings = attr.ib(metadata={"name": 'settings', "type": 'element'}, type='None')
-    failure = attr.ib(metadata={"name": 'failure', "type": 'element'}, type='None')
-    reason = attr.ib(metadata={"name": 'reason', "type": 'element'}, type='None')
-    output = attr.ib(metadata={"name": 'output', "type": 'element'}, type=str)
-    assertions = attr.ib(metadata={"name": 'assertions', "type": 'element'}, type='None')
-    test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'},
-        type='TestSuiteElementType',
+    environment = attr.ib(
+        metadata={"name": 'environment', "type": 'element', "optional": False},
+        type='EnvironmentType',
+    )
+    settings = attr.ib(
+        metadata={"name": 'settings', "type": 'element', "optional": True},
+        type='SettingsType',
         default=attr.NOTHING,
     )
-    test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'},
-        type='TestCaseElementType',
+    failure = attr.ib(
+        metadata={"name": 'failure', "type": 'element', "optional": True},
+        type='None',
+        default=attr.NOTHING,
+    )
+    reason = attr.ib(
+        metadata={"name": 'reason', "type": 'element', "optional": True},
+        type='ReasonType',
+        default=attr.NOTHING,
+    )
+    output = attr.ib(
+        metadata={"name": 'output', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    assertions = attr.ib(
+        metadata={"name": 'assertions', "type": 'element', "optional": True},
+        type='None',
         default=attr.NOTHING,
     )
     id_ = attr.ib(
-        metadata={"name": 'id', "type": 'attrib'},
+        metadata={"name": 'id', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     name = attr.ib(
-        metadata={"name": 'name', "type": 'attrib'},
+        metadata={"name": 'name', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     fullname = attr.ib(
-        metadata={"name": 'fullname', "type": 'attrib'},
+        metadata={"name": 'fullname', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     methodname = attr.ib(
-        metadata={"name": 'methodname', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'methodname', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     classname = attr.ib(
-        metadata={"name": 'classname', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'classname', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     runstate = attr.ib(
-        metadata={"name": 'runstate', "type": 'attrib'},
+        metadata={"name": 'runstate', "type": 'attrib', "optional": False},
         validator=attr.validators.in_(TestRunStateType),
     )
     type_ = attr.ib(
-        metadata={"name": 'type', "type": 'attrib'}, validator=attr.validators.in_(TestSuiteTypeType)
+        metadata={"name": 'type', "type": 'attrib', "optional": False},
+        validator=attr.validators.in_(TestSuiteTypeType),
     )
     testcasecount = attr.ib(
-        metadata={"name": 'testcasecount', "type": 'attrib'},
+        metadata={"name": 'testcasecount', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
     )
     result = attr.ib(
-        metadata={"name": 'result', "type": 'attrib'}, validator=attr.validators.in_(TestStatusType)
+        metadata={"name": 'result', "type": 'attrib', "optional": False},
+        validator=attr.validators.in_(TestStatusType),
     )
-    label = attr.ib(metadata={"name": 'label', "type": 'attrib'}, type=str, default=attr.NOTHING)
-    site = attr.ib(metadata={"name": 'site', "type": 'attrib'}, default=attr.NOTHING)
+    label = attr.ib(
+        metadata={"name": 'label', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    site = attr.ib(
+        metadata={"name": 'site', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
     start_time = attr.ib(
-        metadata={"name": 'start-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'start-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
     end_time = attr.ib(
-        metadata={"name": 'end-time', "type": 'attrib'}, type=str, default=attr.NOTHING
+        metadata={"name": 'end-time', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
-    duration = attr.ib(metadata={"name": 'duration', "type": 'attrib'}, default=attr.NOTHING)
+    duration = attr.ib(
+        metadata={"name": 'duration', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
     asserts = attr.ib(
-        metadata={"name": 'asserts', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'asserts', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     total = attr.ib(
-        metadata={"name": 'total', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'total', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     passed = attr.ib(
-        metadata={"name": 'passed', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'passed', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     failed = attr.ib(
-        metadata={"name": 'failed', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'failed', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     warnings = attr.ib(
-        metadata={"name": 'warnings', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'warnings', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
     inconclusive = attr.ib(
-        metadata={"name": 'inconclusive', "type": 'attrib'},
+        metadata={"name": 'inconclusive', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
     )
     skipped = attr.ib(
-        metadata={"name": 'skipped', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+        metadata={"name": 'skipped', "type": 'attrib', "optional": False},
+        validator=attr.validators.instance_of(int),
     )
 
 
 @attr.s
 class PropertyBagType(object):
-    property = attr.ib(metadata={"name": 'property', "type": 'element'}, type='PropertyType')
+    property = attr.ib(
+        metadata={"name": 'property', "type": 'element', "optional": False}, type='PropertyType'
+    )
 
 
 @attr.s
 class PropertyType(object):
     name = attr.ib(
-        metadata={"name": 'name', "type": 'attrib'},
+        metadata={"name": 'name', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )
     value = attr.ib(
-        metadata={"name": 'value', "type": 'attrib'},
+        metadata={"name": 'value', "type": 'attrib', "optional": False},
         type=str,
         validator=attr.validators.instance_of(str),
     )

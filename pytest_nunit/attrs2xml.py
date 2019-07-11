@@ -13,8 +13,13 @@ class AttrsXmlRenderer(object):
                         el.set(a.metadata['name'], getattr(i, a.name).name)
                     else:
                         el.set(a.metadata['name'], str(getattr(i, a.name)))
-                if a.metadata['type'] == 'element' and getattr(i, a.name) is not None:
+                if a.metadata['type'] == 'element':
                     attrib = getattr(i, a.name)
+                    if attrib is None and not a.metadata['optional']:
+                        ET.SubElement(el, a.metadata['name'])
+                        continue
+                    elif attrib is None and a.metadata['optional']:
+                        continue
                     if not isinstance(attrib, list):
                         attrib = [attrib]
 

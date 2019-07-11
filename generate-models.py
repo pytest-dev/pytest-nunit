@@ -33,12 +33,12 @@ XS_ATOMIC_MAP = {
 
 
 # Make an Attrs attr.ib from an Element.
-def make_attrib(attrib, type_="attrib", optional=False):
+def make_attrib(attrib, type_, optional=False):
     """
     Make attrs attribute from XmlAttribute
     :return: `str`
     """
-    args = ["metadata={\"name\": '%s', \"type\": '%s'}" % (attrib.name, type_)]
+    args = ["metadata={\"name\": '%s', \"type\": '%s', \"optional\": %s}" % (attrib.name, type_, optional)]
 
     # Put type hints on XSD atomic types
     if isinstance(attrib.type, xmlschema.validators.XsdAtomicBuiltin):
@@ -129,21 +129,22 @@ def main(xsd_path, output_path):
                 log.info("Suite %s : %s" % (name, group))
                 if group.model == "sequence":
                     for elem in group.iter_elements():
-                        at = "    {0}\n".format(make_attrib(elem, "element"))
+                        at = "    {0}\n".format(make_attrib(elem, "element", optional=elem.min_occurs == 0))
                         if at not in attribs:
                             attribs.append(at)
                 else:
                     for nested_elem in group.iter_elements():
                         log.info(nested_elem)
+
                         at = "    {0}\n".format(
-                            make_attrib(nested_elem, "element", optional=True)
+                            make_attrib(nested_elem, "element", optional=nested_elem.min_occurs == 0)
                         )
                         if at not in attribs:
                             attribs.append(at)
 
             # Write element attributes
             for attrib in type_.attributes.values():
-                attribs.append("    {0}\n".format(make_attrib(attrib)))
+                attribs.append("    {0}\n".format(make_attrib(attrib, "attrib", attrib.use == "optional")))
 
             for attrib in attribs:
                 out += attrib

@@ -1,5 +1,8 @@
 import sys
-from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType)
+import os
+import locale
+import platform
+from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType, EnvironmentType)
 from .attrs2xml import AttrsXmlRenderer
 
 
@@ -9,6 +12,22 @@ class NunitTestRun(object):
     """
     def __init__(self, nunitxml):
         self.nunitxml = nunitxml
+
+    @property
+    def environment(self):
+        return EnvironmentType(
+            framework_version=sys.version,
+            clr_version=sys.version,  # Using Python as NUnit spec is for .NET
+            os_version=platform.release(),
+            platform=platform.system(),
+            cwd=os.getcwd(),
+            machine_name=platform.machine(),
+            user='',  # TODO: Get sys user but only with a toggle to hide this
+            user_domain='',  # TODO: Get sys user but only with a toggle to hide this
+            culture=locale.getlocale()[0],
+            uiculture=locale.getlocale()[0],  # TODO: Get UI? Locale
+            os_architecture=platform.architecture()[0],
+        )
 
     @property
     def test_cases(self):
@@ -27,7 +46,7 @@ class NunitTestRun(object):
             classname="TestFoo", 
             runstate=TestRunStateType.Runnable, 
             seed=str(sys.flags.hash_randomization), 
-            result=TestStatusType.Passed, # TODO 
+            result=TestStatusType.Passed,  # TODO
             label="test_label", 
             site=None, 
             start_time=case['start'], 
@@ -49,7 +68,7 @@ class NunitTestRun(object):
                 classname="testClass",
                 test_suite=None,
                 properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
-                environment=None, 
+                environment=self.environment,
                 settings=None, 
                 failure=None, 
                 reason=None, 
