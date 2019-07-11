@@ -126,6 +126,7 @@ def main(xsd_path, output_path):
 
             # Write element groups and sequences
             for group in type_.iter_components(xmlschema.validators.XsdGroup):
+                log.info("Suite %s : %s" % (name, group))
                 if group.model == "sequence":
                     for elem in group.iter_components(xmlschema.validators.XsdElement):
                         out += "    {0}\n".format(make_attrib(elem, "element"))
