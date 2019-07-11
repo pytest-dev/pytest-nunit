@@ -99,6 +99,7 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
+        self.nunit_xml.cases.append(testreport)
 
     def write_captured_output(self, report):
         if not self.nunit_xml.log_passing_tests and report.passed:
@@ -151,6 +152,7 @@ class NunitXML:
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.global_properties = []
+        self.cases = []
 
         # List of reports that failed on call but teardown is pending.
         self.open_reports = []

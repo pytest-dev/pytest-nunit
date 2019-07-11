@@ -13,8 +13,22 @@ class NunitTestRun(object):
     @property
     def test_cases(self):
         return [TestCaseElementType(
-            id_="test_case",
+            id_=case.nodeid,
+            name=case.nodeid, 
+            fullname=case.nodeid, 
+            methodname=case.head_line, 
+            classname="TestFoo", 
+            runstate=TestRunStateType.Runnable, 
+            seed=str(sys.flags.hash_randomization), 
+            result=TestStatusType.Passed, # TODO 
+            label="test_label", 
+            site=None, 
+            start_time=None, 
+            end_time=None, 
+            duration=case.duration, 
+            asserts=0
             )
+            for case in self.nunitxml.cases
         ]
 
     @property
@@ -27,7 +41,7 @@ class NunitTestRun(object):
                 methodname="test",
                 classname="testClass",
                 test_suite=None,
-                test_case=None,
+                test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.TestSuite,
                 testcasecount=0,
