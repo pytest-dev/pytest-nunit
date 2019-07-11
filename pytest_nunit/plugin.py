@@ -11,7 +11,7 @@ import os
 import time
 from datetime import datetime, timedelta
 import functools
-from collections import defaultdict
+from collections import namedtuple
 
 from .nunit import NunitTestRun
 
@@ -21,6 +21,7 @@ logging.basicConfig()
 log = logging.getLogger("__name__")
 
 log.setLevel(logging.DEBUG)
+
 
 def pytest_addoption(parser):
     group = parser.getgroup("terminal reporting")
