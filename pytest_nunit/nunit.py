@@ -1,5 +1,5 @@
 import sys
-from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType)
+from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType)
 from .attrs2xml import AttrsXmlRenderer
 
 
@@ -16,7 +16,14 @@ class NunitTestRun(object):
             id_=nodeid,
             name=nodeid, 
             fullname=nodeid, 
-            methodname=case['report'].head_line, 
+            methodname=case['report'].head_line,
+            properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+            environment=None, 
+            settings=None, 
+            failure=None, 
+            reason=None, 
+            output='test output',
+            assertions=None,
             classname="TestFoo", 
             runstate=TestRunStateType.Runnable, 
             seed=str(sys.flags.hash_randomization), 
@@ -41,6 +48,13 @@ class NunitTestRun(object):
                 methodname="test",
                 classname="testClass",
                 test_suite=None,
+                properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+                environment=None, 
+                settings=None, 
+                failure=None, 
+                reason=None, 
+                output='test output',
+                assertions=None,
                 test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.TestSuite,

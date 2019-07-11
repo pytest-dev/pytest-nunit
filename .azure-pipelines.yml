@@ -70,7 +70,7 @@ stages:
           PYTEST_VERSION: $(pytest_version)
       - script: |
           pip install -e .
-          pip install -r requirements_dev.txt
+          pip install -r requirements-dev.txt
         displayName: 'Install package and dependencies'
 
       - script: |
