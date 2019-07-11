@@ -30,6 +30,7 @@ def test_basic_schema(testdir, tmpdir):
     # ensure the output file exists
     os.path.exists(outfile)
 
-    xs = xmlschema.XMLSchema('/Users/anthonyshaw/repo/pytest-nunit/ext/TestResult.xsd')  # TODO: !!!!
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    xs = xmlschema.XMLSchema(os.path.join(my_path, '../../ext/TestResult.xsd'))
     xt = ElementTree.parse(outfile)
     assert xs.is_valid(xt), xs.validate(xt)
