@@ -32,11 +32,11 @@ class NunitTestRun(object):
     @property
     def test_cases(self):
         return [TestCaseElementType(
-            id_=nodeid,
+            id_="2",
             name=nodeid, 
             fullname=nodeid, 
             methodname=case['report'].head_line,
-            properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+            properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]),
             environment=None, 
             settings=None, 
             failure=None, 
@@ -49,9 +49,9 @@ class NunitTestRun(object):
             result=TestStatusType.Passed,  # TODO
             label="test_label", 
             site=None, 
-            start_time=case['start'], 
-            end_time=case['stop'], 
-            duration=case['duration'], 
+            start_time=case['start'].strftime("%Y-%m-%d %H:%M:%S"),
+            end_time=case['stop'].strftime("%Y-%m-%d %H:%M:%S"),
+            duration=int(case['duration']),
             asserts=0
             )
             for nodeid, case in self.nunitxml.cases.items()
@@ -81,9 +81,9 @@ class NunitTestRun(object):
                 result=TestStatusType.Passed,
                 label="",
                 site=None,
-                start_time=self.nunitxml.suite_start_time,
-                end_time=self.nunitxml.suite_stop_time,
-                duration=self.nunitxml.suite_time_delta,
+                start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+                end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
+                duration=int(self.nunitxml.suite_time_delta),
                 asserts=self.nunitxml.stats['asserts'],
                 total=self.nunitxml.stats['total'],
                 passed=self.nunitxml.stats['passed'],
@@ -102,9 +102,9 @@ class NunitTestRun(object):
             testcasecount=self.nunitxml.stats['total'],
             result=TestResultType.Passed,
             label="",
-            start_time=self.nunitxml.suite_start_time,
-            end_time=self.nunitxml.suite_stop_time,
-            duration=self.nunitxml.suite_time_delta,
+            start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
+            duration=int(self.nunitxml.suite_time_delta),
             total=self.nunitxml.stats['total'],
             passed=self.nunitxml.stats['passed'],
             failed=self.nunitxml.stats['failure'],

@@ -8,10 +8,8 @@ Shares the same pattern of CLI options for ease of use.
 from _pytest.config import filename_arg
 
 import os
-import time
-from datetime import datetime, timedelta
+from datetime import datetime
 import functools
-from collections import namedtuple
 
 from .nunit import NunitTestRun
 
@@ -105,11 +103,11 @@ class _NunitNodeReporter:
             self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport }
         elif testreport.when == 'call':
             r = self.nunit_xml.cases[testreport.nodeid]
-            r['start'] = datetime.now()
+            r['start'] = datetime.utcnow()
             # TODO : Extra data
         elif testreport.when == 'teardown':
             r = self.nunit_xml.cases[testreport.nodeid]
-            r['stop'] = datetime.now()
+            r['stop'] = datetime.utcnow()
             r['duration'] = (r['stop']-r['start']).total_seconds()
             r['result'] = testreport.outcome
 
@@ -194,14 +192,14 @@ class NunitXML:
 
 
     def pytest_sessionstart(self):
-        self.suite_start_time = datetime.now()
+        self.suite_start_time = datetime.utcnow()
 
     def pytest_sessionfinish(self):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
-        self.suite_stop_time = datetime.now()
+        self.suite_stop_time = datetime.utcnow()
         self.suite_time_delta = (self.suite_stop_time-self.suite_start_time).total_seconds()
 
         self.stats['total'] = len(self.cases)

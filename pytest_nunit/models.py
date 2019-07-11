@@ -339,7 +339,7 @@ class ValueMatchFilterType(object):
 @attr.s
 class TestCaseElementType(object):
     properties = attr.ib(
-        metadata={"name": 'properties', "type": 'element', "optional": False}, type='PropertyBagType'
+        metadata={"name": 'properties', "type": 'element', "optional": True}, type='PropertyBagType'
     )
     environment = attr.ib(
         metadata={"name": 'environment', "type": 'element', "optional": True},
