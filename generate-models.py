@@ -123,26 +123,31 @@ def main(xsd_path, output_path):
         elif isinstance(type_, xmlschema.validators.XsdComplexType):
             log.info("Name %s" % name)
             out += "@attr.s\nclass {0}(object):\n".format(name)
-
+            attribs = []
             # Write element groups and sequences
             for group in type_.iter_components(xmlschema.validators.XsdGroup):
                 log.info("Suite %s : %s" % (name, group))
                 if group.model == "sequence":
-                    for elem in group.iter_components(xmlschema.validators.XsdElement):
-                        out += "    {0}\n".format(make_attrib(elem, "element"))
-                        has_parts = True
+                    for elem in group.iter_elements():
+                        at = "    {0}\n".format(make_attrib(elem, "element"))
+                        if at not in attribs:
+                            attribs.append(at)
                 else:
                     for nested_elem in group.iter_elements():
                         log.info(nested_elem)
-                        out += "    {0}\n".format(
+                        at = "    {0}\n".format(
                             make_attrib(nested_elem, "element", optional=True)
                         )
-                        has_parts = True
+                        if at not in attribs:
+                            attribs.append(at)
 
             # Write element attributes
             for attrib in type_.attributes.values():
-                out += "    {0}\n".format(make_attrib(attrib))
-                has_parts = True
+                attribs.append("    {0}\n".format(make_attrib(attrib)))
+
+            for attrib in attribs:
+                out += attrib
+            has_parts = (len(attribs) > 0)
 
         if not has_parts:
             out += "    pass\n"  # avoid having empty class

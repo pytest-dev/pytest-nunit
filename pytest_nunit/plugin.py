@@ -9,9 +9,18 @@ from _pytest.config import filename_arg
 
 import os
 import time
+from datetime import datetime, timedelta
 import functools
+from collections import namedtuple
 
 from .nunit import NunitTestRun
+
+import logging
+
+logging.basicConfig()
+log = logging.getLogger("__name__")
+
+log.setLevel(logging.DEBUG)
 
 
 def pytest_addoption(parser):
@@ -35,7 +44,9 @@ def pytest_addoption(parser):
         help="prepend prefix to classnames in nunit-xml output",
     )
     parser.addini(
-        "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
+        "nunit_suite_name", 
+        "Test suite name for NUnit report", 
+        default="pytest"
     )
     parser.addini(
         "nunit_logging",
@@ -89,36 +100,21 @@ class _NunitNodeReporter:
         self.nodes.append(node)
 
     def record_testreport(self, testreport):
-        pass
-
-    def write_captured_output(self, report):
-        if not self.nunit_xml.log_passing_tests and report.passed:
-            return
-
-        content_out = report.capstdout
-        content_log = report.caplog
-        content_err = report.capstderr
-
-    def append_pass(self, report):
-        pass
-
-    def append_failure(self, report):
-        pass
-
-    def append_collect_error(self, report):
-        pass
-
-    def append_collect_skipped(self, report):
-        pass
-
-    def append_error(self, report):
-        pass
-
-    def append_skipped(self, report):
-        pass
+        log.debug("record_test_report:{0}".format(testreport))
+        if testreport.when == 'setup':
+            self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport }
+        elif testreport.when == 'call':
+            r = self.nunit_xml.cases[testreport.nodeid]
+            r['start'] = datetime.now()
+            # TODO : Extra data
+        elif testreport.when == 'teardown':
+            r = self.nunit_xml.cases[testreport.nodeid]
+            r['stop'] = datetime.now()
+            r['duration'] = (r['stop']-r['start']).total_seconds()
+            r['result'] = testreport.outcome
 
     def finalize(self):
-        pass
+        log.debug("finalize")
 
 
 class NunitXML:
@@ -138,10 +134,11 @@ class NunitXML:
         self.logging = logging
         self.log_passing_tests = log_passing_tests
         self.report_duration = report_duration
-        self.stats = dict.fromkeys(["error", "passed", "failure", "skipped"], 0)
+        self.stats = dict.fromkeys(["error", "passed", "failure", "skipped", "total", "asserts"], 0)
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.global_properties = []
+        self.cases = dict()
 
         # List of reports that failed on call but teardown is pending.
         self.open_reports = []
@@ -179,87 +176,7 @@ class NunitXML:
         return reporter
 
     def pytest_runtest_logreport(self, report):
-        """handle a setup/call/teardown report, generating the appropriate
-        xml tags as necessary.
-        note: due to plugins like xdist, this hook may be called in interlaced
-        order with reports from other nodes. for example:
-        usual call order:
-            -> setup node1
-            -> call node1
-            -> teardown node1
-            -> setup node2
-            -> call node2
-            -> teardown node2
-        possible call order in xdist:
-            -> setup node1
-            -> call node1
-            -> setup node2
-            -> call node2
-            -> teardown node2
-            -> teardown node1
-        """
-        close_report = None
-        if report.passed:
-            if report.when == "call":  # ignore setup/teardown
-                reporter = self._opentestcase(report)
-                reporter.append_pass(report)
-        elif report.failed:
-            if report.when == "teardown":
-                # The following vars are needed when xdist plugin is used
-                report_wid = getattr(report, "worker_id", None)
-                report_ii = getattr(report, "item_index", None)
-                close_report = next(
-                    (
-                        rep
-                        for rep in self.open_reports
-                        if (
-                            rep.nodeid == report.nodeid
-                            and getattr(rep, "item_index", None) == report_ii
-                            and getattr(rep, "worker_id", None) == report_wid
-                        )
-                    ),
-                    None,
-                )
-                if close_report:
-                    # We need to open new testcase in case we have failure in
-                    # call and error in teardown in order to follow junit
-                    # schema
-                    self.finalize(close_report)
-                    self.cnt_double_fail_tests += 1
-            reporter = self._opentestcase(report)
-            if report.when == "call":
-                reporter.append_failure(report)
-                self.open_reports.append(report)
-            else:
-                reporter.append_error(report)
-        elif report.skipped:
-            reporter = self._opentestcase(report)
-            reporter.append_skipped(report)
-        self.update_testcase_duration(report)
-        if report.when == "teardown":
-            reporter = self._opentestcase(report)
-            reporter.write_captured_output(report)
-
-            for propname, propvalue in report.user_properties:
-                reporter.add_property(propname, propvalue)
-
-            self.finalize(report)
-            report_wid = getattr(report, "worker_id", None)
-            report_ii = getattr(report, "item_index", None)
-            close_report = next(
-                (
-                    rep
-                    for rep in self.open_reports
-                    if (
-                        rep.nodeid == report.nodeid
-                        and getattr(rep, "item_index", None) == report_ii
-                        and getattr(rep, "worker_id", None) == report_wid
-                    )
-                ),
-                None,
-            )
-            if close_report:
-                self.open_reports.remove(close_report)
+        reporter = self._opentestcase(report)
 
     def update_testcase_duration(self, report):
         """accumulates total duration for nodeid from given report and updates
@@ -270,41 +187,30 @@ class NunitXML:
             reporter.duration += getattr(report, "duration", 0.0)
 
     def pytest_collectreport(self, report):
-        if not report.passed:
-            reporter = self._opentestcase(report)
-            if report.failed:
-                reporter.append_collect_error(report)
-            else:
-                reporter.append_collect_skipped(report)
+        pass
 
     def pytest_internalerror(self, excrepr):
         reporter = self.node_reporter("internal")
 
+
     def pytest_sessionstart(self):
-        self.suite_start_time = time.time()
+        self.suite_start_time = datetime.now()
 
     def pytest_sessionfinish(self):
+        # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
-        logfile = open(self.logfile, "w", encoding="utf-8")
-        suite_stop_time = time.time()
-        suite_time_delta = suite_stop_time - self.suite_start_time
+        self.suite_stop_time = datetime.now()
+        self.suite_time_delta = (self.suite_stop_time-self.suite_start_time).total_seconds()
 
-        numtests = (
-            self.stats["passed"]
-            + self.stats["failure"]
-            + self.stats["skipped"]
-            + self.stats["error"]
-            - self.cnt_double_fail_tests
-        )
-        logfile.write('<?xml version="1.0" encoding="utf-8"?>')
+        self.stats['total'] = len(self.cases)
+        self.stats['passed'] = len(list(case for case in self.cases.values() if case['report'].outcome == 'passed'))
 
-        result = NunitTestRun(self).generate_xml()
-
-        logfile.write(result)
-
-        logfile.close()
+        with open(self.logfile, "w", encoding="utf-8") as logfile:
+            logfile.write('<?xml version="1.0" encoding="utf-8"?>')
+            result = NunitTestRun(self).generate_xml()
+            logfile.write(result)
 
     def pytest_terminal_summary(self, terminalreporter):
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))

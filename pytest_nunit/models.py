@@ -68,6 +68,12 @@ class TestRunType(object):
     command_line = attr.ib(metadata={"name": 'command-line', "type": 'element'}, type=str)
     filter = attr.ib(metadata={"name": 'filter', "type": 'element'}, type='TestFilterType')
     test_suite = attr.ib(
+        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
+    )
+    test_case = attr.ib(
+        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
+    )
+    test_suite = attr.ib(
         metadata={"name": 'test-suite', "type": 'element'},
         type='TestSuiteElementType',
         default=attr.NOTHING,
@@ -230,6 +236,13 @@ class ValueMatchFilterType(object):
 
 @attr.s
 class TestCaseElementType(object):
+    properties = attr.ib(metadata={"name": 'properties', "type": 'element'}, type='PropertyBagType')
+    environment = attr.ib(metadata={"name": 'environment', "type": 'element'}, type='None')
+    settings = attr.ib(metadata={"name": 'settings', "type": 'element'}, type='None')
+    failure = attr.ib(metadata={"name": 'failure', "type": 'element'}, type='None')
+    reason = attr.ib(metadata={"name": 'reason', "type": 'element'}, type='None')
+    output = attr.ib(metadata={"name": 'output', "type": 'element'}, type=str)
+    assertions = attr.ib(metadata={"name": 'assertions', "type": 'element'}, type='None')
     id_ = attr.ib(
         metadata={"name": 'id', "type": 'attrib'},
         type=str,
@@ -279,26 +292,19 @@ class TestCaseElementType(object):
 
 @attr.s
 class TestSuiteElementType(object):
+    properties = attr.ib(metadata={"name": 'properties', "type": 'element'}, type='PropertyBagType')
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'},
-        type='TestSuiteElementType',
-        default=attr.NOTHING,
+        metadata={"name": 'test-suite', "type": 'element'}, type='TestSuiteElementType'
     )
     test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'},
-        type='TestCaseElementType',
-        default=attr.NOTHING,
+        metadata={"name": 'test-case', "type": 'element'}, type='TestCaseElementType'
     )
-    test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element'},
-        type='TestSuiteElementType',
-        default=attr.NOTHING,
-    )
-    test_case = attr.ib(
-        metadata={"name": 'test-case', "type": 'element'},
-        type='TestCaseElementType',
-        default=attr.NOTHING,
-    )
+    environment = attr.ib(metadata={"name": 'environment', "type": 'element'}, type='None')
+    settings = attr.ib(metadata={"name": 'settings', "type": 'element'}, type='None')
+    failure = attr.ib(metadata={"name": 'failure', "type": 'element'}, type='None')
+    reason = attr.ib(metadata={"name": 'reason', "type": 'element'}, type='None')
+    output = attr.ib(metadata={"name": 'output', "type": 'element'}, type=str)
+    assertions = attr.ib(metadata={"name": 'assertions', "type": 'element'}, type='None')
     test_suite = attr.ib(
         metadata={"name": 'test-suite', "type": 'element'},
         type='TestSuiteElementType',
@@ -374,4 +380,23 @@ class TestSuiteElementType(object):
     )
     skipped = attr.ib(
         metadata={"name": 'skipped', "type": 'attrib'}, validator=attr.validators.instance_of(int)
+    )
+
+
+@attr.s
+class PropertyBagType(object):
+    property = attr.ib(metadata={"name": 'property', "type": 'element'}, type='PropertyType')
+
+
+@attr.s
+class PropertyType(object):
+    name = attr.ib(
+        metadata={"name": 'name', "type": 'attrib'},
+        type=str,
+        validator=attr.validators.instance_of(str),
+    )
+    value = attr.ib(
+        metadata={"name": 'value', "type": 'attrib'},
+        type=str,
+        validator=attr.validators.instance_of(str),
     )

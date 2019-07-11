@@ -1,5 +1,5 @@
 import sys
-from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType)
+from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType)
 from .attrs2xml import AttrsXmlRenderer
 
 
@@ -13,37 +13,65 @@ class NunitTestRun(object):
     @property
     def test_cases(self):
         return [TestCaseElementType(
-            id_="test_case",
+            id_=nodeid,
+            name=nodeid, 
+            fullname=nodeid, 
+            methodname=case['report'].head_line,
+            properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+            environment=None, 
+            settings=None, 
+            failure=None, 
+            reason=None, 
+            output='test output',
+            assertions=None,
+            classname="TestFoo", 
+            runstate=TestRunStateType.Runnable, 
+            seed=str(sys.flags.hash_randomization), 
+            result=TestStatusType.Passed, # TODO 
+            label="test_label", 
+            site=None, 
+            start_time=case['start'], 
+            end_time=case['stop'], 
+            duration=case['duration'], 
+            asserts=0
             )
+            for nodeid, case in self.nunitxml.cases.items()
         ]
 
     @property
     def test_suites(self):
         return [
             TestSuiteElementType(
-                id_="",
-                name="example",
+                id_="2",
+                name=self.nunitxml.suite_name,
                 fullname="example",
                 methodname="test",
                 classname="testClass",
                 test_suite=None,
-                test_case=None,
+                properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+                environment=None, 
+                settings=None, 
+                failure=None, 
+                reason=None, 
+                output='test output',
+                assertions=None,
+                test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.TestSuite,
                 testcasecount=0,
                 result=TestStatusType.Passed,
                 label="",
                 site=None,
-                start_time=0,
-                end_time=0,
-                duration=0,
-                asserts=0,
-                total=0,
-                passed=0,
-                failed=0,
+                start_time=self.nunitxml.suite_start_time,
+                end_time=self.nunitxml.suite_stop_time,
+                duration=self.nunitxml.suite_time_delta,
+                asserts=self.nunitxml.stats['asserts'],
+                total=self.nunitxml.stats['total'],
+                passed=self.nunitxml.stats['passed'],
+                failed=self.nunitxml.stats['failure'],
                 warnings=0,
                 inconclusive=0,
-                skipped=0
+                skipped=self.nunitxml.stats['skipped']
             )
         ]
 
@@ -55,15 +83,15 @@ class NunitTestRun(object):
             testcasecount=0,
             result=TestResultType.Passed,
             label="",
-            start_time=0.0,
-            end_time=0.0,
-            duration=0.0,
-            total=1,
-            passed=1,
-            failed=1,
-            inconclusive=1,
-            skipped=1,
-            asserts=1,
+            start_time=self.nunitxml.suite_start_time,
+            end_time=self.nunitxml.suite_stop_time,
+            duration=self.nunitxml.suite_time_delta,
+            total=self.nunitxml.stats['total'],
+            passed=self.nunitxml.stats['passed'],
+            failed=self.nunitxml.stats['failure'],
+            inconclusive=0,
+            skipped=self.nunitxml.stats['skipped'],
+            asserts=self.nunitxml.stats['asserts'],
             random_seed=sys.flags.hash_randomization,
             command_line=' '.join(sys.argv),
             filter=None,

@@ -8,18 +8,7 @@
   <xs:group name="TestBaseElementGroup">
     <xs:sequence>
       <!-- NUnit.Framework.Internal.PropertyBag.AddToXml -->
-      <xs:element name="properties">
-        <xs:complexType>
-          <xs:sequence maxOccurs="unbounded">
-            <xs:element name="property">
-              <xs:complexType>
-                <xs:attribute name="name" type="xs:string" use="required" />
-                <xs:attribute name="value" type="xs:string" use="required" />
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="properties" type="PropertyBagType" />
     </xs:sequence>
   </xs:group>
   <xs:attributeGroup name="TestBaseAttributeGroup">
@@ -96,4 +85,13 @@
           <xs:enumeration value="TestSuite" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="PropertyBagType">
+          <xs:sequence maxOccurs="unbounded">
+            <xs:element name="property" type="PropertyType" />
+          </xs:sequence>
+        </xs:complexType>
+        <xs:complexType name="PropertyType">
+                <xs:attribute name="name" type="xs:string" use="required" />
+                <xs:attribute name="value" type="xs:string" use="required" />
+              </xs:complexType>
 </xs:schema>
