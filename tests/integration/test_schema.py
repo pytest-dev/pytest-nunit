@@ -6,6 +6,13 @@ import xmlschema
 from xml.etree import ElementTree
 
 
+def test_sample_schema(testdir, tmpdir):
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    xs = xmlschema.XMLSchema(os.path.join(my_path, '../../ext/TestResult.xsd'))
+    xt = ElementTree.parse(os.path.join(my_path, '../../example.xml'))
+    assert xs.is_valid(xt), xs.validate(xt)
+
+
 def test_basic_schema(testdir, tmpdir):
     # create a temporary pytest test module
     testdir.makepyfile("""

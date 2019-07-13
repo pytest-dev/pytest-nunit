@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-run id="2" name="mock-assembly.dll" fullname="D:\Dev\NUnit\nunit-3.0\work\bin\vs2008\Debug\mock-assembly.dll" testcasecount="25" result="Failed" time="0.154" total="18" passed="12" failed="2" inconclusive="1" skipped="3" asserts="2" run-date="2011-07-26" start-time="11:34:27">
+<test-run id="2" name="mock-assembly.dll" fullname="D:\Dev\NUnit\nunit-3.0\work\bin\vs2008\Debug\mock-assembly.dll" testcasecount="25" result="Failed" time="0.154" total="18" passed="12" failed="2" inconclusive="1" skipped="3" asserts="2" run-date="2011-07-26" start-time="11:34:27" random-seed="1">
   <environment nunit-version="1.0.0.0" clr-version="2.0.50727.4961" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="D:\Dev\NUnit\nunit-3.0\work\bin\vs2008\Debug" machine-name="CHARLIE-LAPTOP" user="charlie" user-domain="charlie-laptop" culture="en-US" uiculture="en-US" />
   <test-suite type="Assembly" id="1036" name="mock-assembly.dll" fullname="D:\Dev\NUnit\nunit-3.0\work\bin\vs2008\Debug\mock-assembly.dll" testcasecount="25" result="Failed" time="0.154" total="18" passed="12" failed="2" inconclusive="1" skipped="3" asserts="2">
     <properties>
