@@ -105,17 +105,18 @@ class _NunitNodeReporter:
                 "idref": self.nunit_xml.idrefindex,
                 "properties": {"python-version": sys.version},
                 "attachments": None,
-                "error": None,
-                "stack-trace": None
+                "error": '',
+                "stack-trace": ''
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
             if testreport.outcome == 'skipped':
                 log.debug("skipping : {0}".format(testreport.longrepr))
                 if len(testreport.longrepr) > 2:
-                    r['stack-trace'] = testreport.longrepr[2]
+                    r['error'] = testreport.longrepr[2]
+                    r['stack-trace'] = "{0}::{1}".format(testreport.longrepr[0], testreport.longrepr[1])
                 else:
-                    r['stack-trace'] = testreport.longrepr
+                    r['error'] = testreport.longrepr
         elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["start"] = datetime.utcnow()
