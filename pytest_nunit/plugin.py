@@ -89,7 +89,6 @@ class _NunitNodeReporter:
     def __init__(self, nodeid, nunit_xml):
         self.id = nodeid
         self.nunit_xml = nunit_xml
-        self.duration = 0.0
 
     def append(self, node):
         self.nunit_xml.add_stats(type(node).__name__)
@@ -240,13 +239,10 @@ class NunitXML:
 
         return reporter
 
-    def _opentestcase(self, report):
+    def pytest_runtest_logreport(self, report):
         reporter = self.node_reporter(report)
         reporter.record_testreport(report)
         return reporter
-
-    def pytest_runtest_logreport(self, report):
-        reporter = self._opentestcase(report)
 
     def update_testcase_duration(self, report):
         """accumulates total duration for nodeid from given report and updates

@@ -90,12 +90,12 @@ class NunitTestRun(object):
                 environment=self.environment,
                 settings=None,
                 failure=FailureType(message=CdataComment(text="message"), stack_trace=CdataComment(text="stack")),
-                reason=ReasonType(message=CdataComment(text="reason")),
-                output=CdataComment(text="output"),
+                reason=ReasonType(message=CdataComment(text=case['reason'])),
+                output=CdataComment(text=case['reason']),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case),
                 classname="",
-                runstate=TestRunStateType.Runnable,
+                runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
                     case["outcome"], TestStatusType.Inconclusive
