@@ -78,7 +78,7 @@ class NunitTestRun(object):
                 site=None,
                 start_time=case["start"].strftime("%Y-%m-%d %H:%M:%S"),
                 end_time=case["stop"].strftime("%Y-%m-%d %H:%M:%S"),
-                duration=int(case["duration"]),
+                duration=case["duration"],
                 asserts=0,
             )
             for nodeid, case in self.nunitxml.cases.items()
@@ -112,7 +112,7 @@ class NunitTestRun(object):
                 site=None,
                 start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
                 end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
-                duration=int(self.nunitxml.suite_time_delta),
+                duration=self.nunitxml.suite_time_delta,
                 asserts=self.nunitxml.stats["asserts"],
                 total=self.nunitxml.stats["total"],
                 passed=self.nunitxml.stats["passed"],
