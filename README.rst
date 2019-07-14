@@ -26,6 +26,8 @@ A pytest plugin for generating Nunit3 test result XML output
 Fixtures
 --------
 
+The following fixtures are made available by this plugin.
+
 record_nunit_property
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,4 +37,16 @@ Calling `record_nunit_property(key: str, value: str)` will result in `Property` 
 
     def test_basic(record_nunit_property):
         record_nunit_property("test", "value")
+        assert 1 == 1
+
+add_nunit_attachment
+~~~~~~~~~~~~~~~~~~~~
+
+Add an attachment to a node test-case by calling the `add_nunit_attachment()` function with the filepath and a description.
+
+.. code-block:: python
+
+    def test_attachment(add_nunit_attachment):
+        pth = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'fixture.gif')
+        add_nunit_attachment(path, "peanut butter jelly time")
         assert 1 == 1

@@ -65,6 +65,6 @@ def test_attachment(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 0
     assert out['test-suite']['@skipped'] == 0
-    assert out['test-suite']['test-case']['assertions']['attachments']['attachment'][0]['description'] == "desc"
-    assert out['test-suite']['test-case']['assertions']['attachments']['attachment'][0]['filePath'] == "file.pth"
+    assert out['test-suite']['test-case']['attachments']['attachment'][0]['description'] == "desc"
+    assert out['test-suite']['test-case']['attachments']['attachment'][0]['filePath'] == "file.pth"
     
