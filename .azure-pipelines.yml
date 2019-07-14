@@ -34,11 +34,11 @@ stages:
         displayName: 'Install package'
 
       - script: |
-          python -m pytest tests/unit -v --nunit-xml=test-results.xml
+          python -m pytest tests/unit -v --nunit-xml=test-results-unit.xml
         displayName: 'pytest with nunit-xml flag - passes'
       - task: CopyFiles@2
         inputs:
-          contents: '**/test-results.xml'
+          contents: '**/test-results*.xml'
           targetFolder: $(Build.ArtifactStagingDirectory)
       - task: PublishBuildArtifacts@1
         inputs:
@@ -47,7 +47,7 @@ stages:
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: NUnit
-          testResultsFiles: '**/test-results.xml'
+          testResultsFiles: '**/test-results*.xml'
   - stage: Integration_Test
     jobs:
 
@@ -79,5 +79,17 @@ stages:
         displayName: 'Install package and dependencies'
 
       - script: |
-          python -m pytest tests/integration -v
-        displayName: 'pytest with XSD validation'
+          python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml
+        displayName: 'pytest with nunit-xml flag - passes'
+      - task: CopyFiles@2
+        inputs:
+          contents: '**/test-results*.xml'
+          targetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishBuildArtifacts@1
+        inputs:
+          pathToPublish: $(Build.ArtifactStagingDirectory)
+          artifactName: TestOutput
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: NUnit
+          testResultsFiles: '**/test-results*.xml'
