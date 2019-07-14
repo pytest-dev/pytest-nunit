@@ -32,7 +32,7 @@ class NunitTestRun(object):
     @property
     def test_cases(self):
         return [TestCaseElementType(
-            id_="2",
+            id_=str(case['idref']),
             name=nodeid, 
             fullname=nodeid, 
             methodname=case['report'].head_line,
@@ -61,7 +61,7 @@ class NunitTestRun(object):
     def test_suites(self):
         return [
             TestSuiteElementType(
-                id_="2",
+                id_="3",  # TODO : Suite numbers
                 name=self.nunitxml.suite_name,
                 fullname="example",
                 methodname="test",

@@ -170,9 +170,7 @@ class TestRunType(object):
         default=attr.NOTHING,
     )
     filter_ = attr.ib(
-        metadata={"name": 'filter', "type": 'element', "optional": True},
-        type='TestFilterType',
-        default=attr.NOTHING,
+        metadata={"name": 'filter', "type": 'element', "optional": False}, type='TestFilterType'
     )
     test_suite = attr.ib(
         metadata={"name": 'test-suite', "type": 'element', "optional": True},

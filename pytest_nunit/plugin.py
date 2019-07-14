@@ -100,7 +100,8 @@ class _NunitNodeReporter:
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
         if testreport.when == 'setup':
-            self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport }
+            self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport, 'idref': self.nunit_xml.idrefindex }
+            self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
         elif testreport.when == 'call':
             r = self.nunit_xml.cases[testreport.nodeid]
             r['start'] = datetime.utcnow()
@@ -141,6 +142,7 @@ class NunitXML:
         # List of reports that failed on call but teardown is pending.
         self.open_reports = []
         self.cnt_double_fail_tests = 0
+        self.idrefindex = 100  # Create a unique ID counter
 
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)

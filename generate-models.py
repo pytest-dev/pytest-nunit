@@ -129,20 +129,19 @@ def main(xsd_path, output_path):
                 log.info("Suite %s : %s" % (name, group))
                 if group.model == "sequence":
                     for elem in group.iter_elements():
-                        at = "    {0}\n".format(make_attrib(elem, "element", optional=elem.min_occurs == 0))
-                        attribs[elem.name] = at
+                        log.info(elem)
+                        attribs[elem.name] = "    {0}\n".format(make_attrib(elem, "element", optional=elem.min_occurs == 0))
                 elif group.model == "choice":
-                    for elem in group.iter_elements():
-                        at = "    {0}\n".format(make_attrib(elem, "element", optional=True))
-                        attribs[elem.name] = at
+                    for elem in group.iter_elements(): 
+                        log.info(elem)
+                        attribs[elem.name] = "    {0}\n".format(make_attrib(elem, "element", optional=True))
                 else:
                     for elem in group.iter_elements():
                         log.info(elem)
 
-                        at = "    {0}\n".format(
+                        attribs[elem.name] = "    {0}\n".format(
                             make_attrib(elem, "element", optional=elem.min_occurs == 0)
                         )
-                        attribs[elem.name] = at
 
             # Write element attributes
             for attrib in type_.attributes.values():

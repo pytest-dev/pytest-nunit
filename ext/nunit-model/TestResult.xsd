@@ -152,7 +152,7 @@
             <!-- NUnitLite.NUnit3XmlOutputWriter.MakeCommandLineElement -->
             <xs:element name="command-line" minOccurs="0" type="xs:string"/>
             <!-- NUnitLite.NUnit3XmlOutputWriter.MakeTestFilterElement -->
-            <xs:element name="filter" type="TestFilterType" minOccurs="0"/>
+            <xs:element name="filter" type="TestFilterType"/>
             <xs:group ref="ContainedTestGroup" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required"/>
