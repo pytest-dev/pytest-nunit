@@ -96,6 +96,7 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
+        
         if testreport.when == "setup":
             r = self.nunit_xml.cases[testreport.nodeid] = {
                 "setup-report": testreport,
@@ -104,6 +105,8 @@ class _NunitNodeReporter:
                 "idref": self.nunit_xml.idrefindex,
                 "properties": {"python-version": sys.version},
                 "attachments": None,
+                "error": None,
+                "stack-trace": None
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
@@ -111,6 +114,8 @@ class _NunitNodeReporter:
             r = self.nunit_xml.cases[testreport.nodeid]
             r["start"] = datetime.utcnow()
             r["call-report"] = testreport
+            r['error'] = testreport.longreprtext
+            r['stack-trace'] = self.nunit_xml._getcrashline(testreport)
             # TODO : Extra data
         elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
@@ -134,6 +139,8 @@ class _NunitNodeReporter:
             r['stdout'] = testreport.capstdout
             r['stderr'] = testreport.capstderr
             r['reason'] = testreport.caplog
+        else:
+            log.debug(testreport)
 
     def add_property(self, name, value):
         r = self.nunit_xml.cases[self.id]
@@ -244,6 +251,9 @@ class NunitXML:
         reporter.record_testreport(report)
         return reporter
 
+    def pytest_runtest_makereport(self, item, call):
+        log.debug(item, call)
+
     def update_testcase_duration(self, report):
         """accumulates total duration for nodeid from given report and updates
         the Junit.testcase with the new total if already created.
@@ -260,6 +270,15 @@ class NunitXML:
 
     def pytest_sessionstart(self, session):
         self.suite_start_time = datetime.utcnow()
+
+    def _getcrashline(self, rep):
+        try:
+            return str(rep.longrepr.reprcrash)
+        except AttributeError:
+            try:
+                return str(rep.longrepr)[:50]
+            except AttributeError:
+                return ""
 
     def pytest_sessionfinish(self, session, exitstatus):
         # Build output file
@@ -281,6 +300,7 @@ class NunitXML:
         self.stats["skipped"] = len(
             list(case for case in self.cases.values() if case["outcome"] == "skipped")
         )
+
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             logfile.write('<?xml version="1.0" encoding="utf-8"?>')

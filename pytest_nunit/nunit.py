@@ -89,7 +89,7 @@ class NunitTestRun(object):
                 ),
                 environment=self.environment,
                 settings=None,
-                failure=FailureType(message=CdataComment(text="message"), stack_trace=CdataComment(text="stack")),
+                failure=FailureType(message=CdataComment(text=case['error']), stack_trace=CdataComment(text=case['stack-trace'])),
                 reason=ReasonType(message=CdataComment(text=case['reason'])),
                 output=CdataComment(text=case['reason']),
                 assertions=_format_assertions(case),
