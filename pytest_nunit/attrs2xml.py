@@ -2,6 +2,24 @@ import xml.etree.ElementTree as ET
 import enum
 
 
+class CdataComment(ET.Element):
+    def __init__(self, text):
+        self._cdata = '!CDATA'
+        self.text = text
+
+ET._original_serialize_xml = ET._serialize_xml
+
+def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
+    """
+    Custom serializer to handle CdataComment classes
+    """
+    if hasattr(elem, '_cdata'):
+        write("\n<%s%s]]>\n" % (
+                '![CDATA[', elem.text))
+        return
+    return ET._original_serialize_xml(
+        write, elem, qnames, namespaces, *args, **kwargs)
+
 class AttrsXmlRenderer(object):
     @staticmethod
     def as_element(i, name):
@@ -29,6 +47,9 @@ class AttrsXmlRenderer(object):
                             el.append(
                                 AttrsXmlRenderer.as_element(item, a.metadata["name"])
                             )
+                        elif isinstance(item, ET.Element):
+                            item.tag = a.metadata["name"]
+                            el.append(item)
                         else:
                             ET.SubElement(el, a.metadata["name"]).text = str(item)
 
@@ -37,5 +58,6 @@ class AttrsXmlRenderer(object):
     @staticmethod
     def render(instance, node_name):
         root = AttrsXmlRenderer.as_element(instance, node_name)
-
-        return ET.tostring(root, encoding="unicode", method="xml")
+        ET._serialize_xml = ET._serialize['xml'] = _serialize_xml
+        s = ET.tostring(root, encoding="unicode", method="xml")
+        return s

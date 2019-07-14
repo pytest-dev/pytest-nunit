@@ -19,7 +19,7 @@ from .models.nunit import (
     AttachmentsType,
     AttachmentType,
 )
-from .attrs2xml import AttrsXmlRenderer
+from .attrs2xml import AttrsXmlRenderer, CdataComment
 
 FRAMEWORK_VERSION = "3.6.2"  # Nunit version this was based on
 CLR_VERSION = sys.version
@@ -89,7 +89,7 @@ class NunitTestRun(object):
                 settings=None,
                 failure=None,
                 reason=None,
-                output=None,
+                output=CdataComment(text=case['stdout']),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case),
                 classname="TestFoo",

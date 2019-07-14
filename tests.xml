@@ -1,1 +1,152 @@
-<?xml version="1.0" encoding="utf-8"?><test-run asserts="0" clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" duration="2" end-time="2019-07-14 04:40:08" engine-version="3.6.2" failed="0" id="2" inconclusive="0" passed="10" result="Passed" skipped="0" start-time="2019-07-14 04:40:06" testcasecount="10" total="10"><command-line>/Users/anthonyshaw/repo/pytest-nunit/venv/lib/python3.7/site-packages/pytest.py tests --nunit-xml=tests.xml -vv</command-line><filter /><test-suite asserts="0" classname="testClass" duration="2.215413" end-time="2019-07-14 04:40:08" failed="0" fullname="example" id="3" inconclusive="0" label="" methodname="test" name="pytest" passed="10" result="Passed" runstate="Runnable" skipped="0" start-time="2019-07-14 04:40:06" testcasecount="10" total="10" type="Assembly" warnings="0"><properties><property name="pythony_version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><test-case asserts="0" classname="TestFoo" duration="0.000549" end-time="2019-07-14 04:40:07" fullname="tests/integration/test_azure.py::test_attachment" id="100" label="test_label" methodname="test_attachment" name="tests/integration/test_azure.py::test_attachment" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:07"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /><attachments><attachment><filePath>/Users/anthonyshaw/repo/pytest-nunit/tests/integration/fixture.gif</filePath><description>PBJT</description></attachment></attachments></test-case><test-case asserts="0" classname="TestFoo" duration="0.00098" end-time="2019-07-14 04:40:07" fullname="tests/integration/test_properties.py::test_basic_property" id="101" label="test_label" methodname="test_basic_property" name="tests/integration/test_properties.py::test_basic_property" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:07"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.001065" end-time="2019-07-14 04:40:07" fullname="tests/integration/test_properties.py::test_attachment" id="102" label="test_label" methodname="test_attachment" name="tests/integration/test_properties.py::test_attachment" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:07"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.000981" end-time="2019-07-14 04:40:07" fullname="tests/integration/test_schema.py::test_basic_against_reference_schema" id="103" label="test_label" methodname="test_basic_against_reference_schema" name="tests/integration/test_schema.py::test_basic_against_reference_schema" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:07"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.000967" end-time="2019-07-14 04:40:08" fullname="tests/integration/test_tests.py::test_passing_test" id="104" label="test_label" methodname="test_passing_test" name="tests/integration/test_tests.py::test_passing_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.001427" end-time="2019-07-14 04:40:08" fullname="tests/integration/test_tests.py::test_failing_test" id="105" label="test_label" methodname="test_failing_test" name="tests/integration/test_tests.py::test_failing_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.001018" end-time="2019-07-14 04:40:08" fullname="tests/integration/test_tests.py::test_skipped_test" id="106" label="test_label" methodname="test_skipped_test" name="tests/integration/test_tests.py::test_skipped_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.000973" end-time="2019-07-14 04:40:08" fullname="tests/integration/test_tests.py::test_all_outcomes" id="107" label="test_label" methodname="test_all_outcomes" name="tests/integration/test_tests.py::test_all_outcomes" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.000926" end-time="2019-07-14 04:40:08" fullname="tests/integration/test_tests.py::test_error_test" id="108" label="test_label" methodname="test_error_test" name="tests/integration/test_tests.py::test_error_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><test-case asserts="0" classname="TestFoo" duration="0.001052" end-time="2019-07-14 04:40:08" fullname="tests/unit/test_basic.py::test_one_and_one" id="109" label="test_label" methodname="test_one_and_one" name="tests/unit/test_basic.py::test_one_and_one" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 04:40:08"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-case><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-suite></test-run>
+<?xml version="1.0" encoding="utf-8"?><test-run asserts="0" clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" duration="2" end-time="2019-07-14 05:50:49" engine-version="3.6.2" failed="0" id="2" inconclusive="0" passed="11" result="Passed" skipped="0" start-time="2019-07-14 05:50:46" testcasecount="11" total="11"><command-line>/Users/anthonyshaw/repo/pytest-nunit/venv/lib/python3.7/site-packages/pytest.py tests --nunit-xml=tests.xml -vv</command-line><filter /><test-suite asserts="0" classname="testClass" duration="2.414595" end-time="2019-07-14 05:50:49" failed="0" fullname="example" id="3" inconclusive="0" label="" methodname="test" name="pytest" passed="11" result="Passed" runstate="Runnable" skipped="0" start-time="2019-07-14 05:50:46" testcasecount="11" total="11" type="Assembly" warnings="0"><properties><property name="pythony_version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><test-case asserts="0" classname="TestFoo" duration="0.000553" end-time="2019-07-14 05:50:47" fullname="tests/integration/test_azure.py::test_attachment" id="100" label="test_label" methodname="test_attachment" name="tests/integration/test_azure.py::test_attachment" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:47"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[]]>
+<attachments><attachment><filePath>/Users/anthonyshaw/repo/pytest-nunit/tests/integration/fixture.gif</filePath><description>PBJT</description></attachment></attachments></test-case><test-case asserts="0" classname="TestFoo" duration="0.000887" end-time="2019-07-14 05:50:47" fullname="tests/integration/test_azure.py::test_property" id="101" label="test_label" methodname="test_property" name="tests/integration/test_azure.py::test_property" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:47"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /><property name="test" value="value" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001001" end-time="2019-07-14 05:50:47" fullname="tests/integration/test_properties.py::test_basic_property" id="102" label="test_label" methodname="test_basic_property" name="tests/integration/test_properties.py::test_basic_property" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:47"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_basic_property0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_basic_property.py::test_basic PASSED                                [100%]Got cdata
+
+
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_basic_property1/out.xml -
+=========================== 1 passed in 0.07 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001068" end-time="2019-07-14 05:50:47" fullname="tests/integration/test_properties.py::test_attachment" id="103" label="test_label" methodname="test_attachment" name="tests/integration/test_properties.py::test_attachment" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:47"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_attachment0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_attachment.py::test_basic PASSED                                    [100%]Got cdata
+
+
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_attachment1/out.xml -
+=========================== 1 passed in 0.05 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001171" end-time="2019-07-14 05:50:47" fullname="tests/integration/test_schema.py::test_basic_against_reference_schema" id="104" label="test_label" methodname="test_basic_against_reference_schema" name="tests/integration/test_schema.py::test_basic_against_reference_schema" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:47"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_basic_against_reference_schema0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_basic_against_reference_schema.py::test_basic PASSED                [100%]Got cdata
+
+
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_basic_against_reference_s0/out.xml -
+=========================== 1 passed in 0.07 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001232" end-time="2019-07-14 05:50:48" fullname="tests/integration/test_tests.py::test_passing_test" id="105" label="test_label" methodname="test_passing_test" name="tests/integration/test_tests.py::test_passing_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:48"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_passing_test0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_passing_test.py::test_pass PASSED                                   [100%]Got cdata
+
+
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_passing_test1/out.xml -
+=========================== 1 passed in 0.06 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.00129" end-time="2019-07-14 05:50:48" fullname="tests/integration/test_tests.py::test_failing_test" id="106" label="test_label" methodname="test_failing_test" name="tests/integration/test_tests.py::test_failing_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:48"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_failing_test0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_failing_test.py::test_fail FAILED                                   [100%]Got cdata
+
+
+=================================== FAILURES ===================================
+__________________________________ test_fail ___________________________________
+
+    def test_fail():
+>       assert 1 == 0
+E       assert 1 == 0
+E         -1
+E         +0
+
+test_failing_test.py:2: AssertionError
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_failing_test1/out.xml -
+=========================== 1 failed in 0.10 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001003" end-time="2019-07-14 05:50:48" fullname="tests/integration/test_tests.py::test_skipped_test" id="107" label="test_label" methodname="test_skipped_test" name="tests/integration/test_tests.py::test_skipped_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:48"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_skipped_test0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_skipped_test.py::test_skip SKIPPED                                  [100%]Got cdata
+
+
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_skipped_test1/out.xml -
+========================== 1 skipped in 0.06 seconds ===========================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001438" end-time="2019-07-14 05:50:48" fullname="tests/integration/test_tests.py::test_all_outcomes" id="108" label="test_label" methodname="test_all_outcomes" name="tests/integration/test_tests.py::test_all_outcomes" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:48"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_all_outcomes0
+plugins: nunit-0.0.2
+collecting ... collected 3 items
+
+test_all_outcomes.py::test_pass PASSED                                   [ 33%]
+test_all_outcomes.py::test_fail FAILED                                   [ 66%]
+test_all_outcomes.py::test_skip SKIPPED                                  [100%]Got cdata
+Got cdata
+Got cdata
+
+
+=================================== FAILURES ===================================
+__________________________________ test_fail ___________________________________
+
+    def test_fail():
+>       assert 1 == 0
+E       assert 1 == 0
+E         -1
+E         +0
+
+test_all_outcomes.py:7: AssertionError
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_all_outcomes1/out.xml -
+================ 1 failed, 1 passed, 1 skipped in 0.08 seconds =================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001215" end-time="2019-07-14 05:50:49" fullname="tests/integration/test_tests.py::test_error_test" id="109" label="test_label" methodname="test_error_test" name="tests/integration/test_tests.py::test_error_test" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:49"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[============================= test session starts ==============================
+platform darwin -- Python 3.7.1, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/anthonyshaw/repo/pytest-nunit/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_error_test0
+plugins: nunit-0.0.2
+collecting ... collected 1 item
+
+test_error_test.py::test_error ERROR                                     [100%]Got cdata
+
+
+==================================== ERRORS ====================================
+_________________________ ERROR at setup of test_error _________________________
+file /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_error_test0/test_error_test.py, line 1
+  def test_error(test_madeup_fixture):
+E       fixture 'test_madeup_fixture' not found
+>       available fixtures: add_nunit_attachment, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, doctest_namespace, monkeypatch, pytestconfig, record_nunit_property, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_error_test0/test_error_test.py:1
+- generated Nunit xml file: /private/var/folders/3p/ffph9q490876shz82kqxhmhm0000gn/T/pytest-of-anthonyshaw/pytest-158/test_error_test1/out.xml -
+=========================== 1 error in 0.05 seconds ============================
+]]>
+</test-case><test-case asserts="0" classname="TestFoo" duration="0.001095" end-time="2019-07-14 05:50:49" fullname="tests/unit/test_basic.py::test_one_and_one" id="110" label="test_label" methodname="test_one_and_one" name="tests/unit/test_basic.py::test_one_and_one" result="Passed" runstate="Runnable" seed="1" start-time="2019-07-14 05:50:49"><properties><property name="python-version" value="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" /></properties><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" />
+<![CDATA[]]>
+</test-case><environment clr-version="3.7.1 (v3.7.1:260ec2c36a, Oct 20 2018, 03:13:28) &#10;[Clang 6.0 (clang-600.0.57)]" culture="en_AU" cwd="/Users/anthonyshaw/repo/pytest-nunit" framework-version="3.6.2" machine-name="x86_64" os-architecture="64bit" os-version="18.6.0" platform="Darwin" uiculture="en_AU" user="" user-domain="" /></test-suite></test-run>

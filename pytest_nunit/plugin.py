@@ -132,6 +132,7 @@ class _NunitNodeReporter:
                 r["outcome"] = "failed"
             else:
                 r["outcome"] = "passed"
+            r['stdout'] = testreport.capstdout
 
     def add_property(self, name, value):
         r = self.nunit_xml.cases[self.id]
