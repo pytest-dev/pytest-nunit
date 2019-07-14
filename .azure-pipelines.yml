@@ -2,7 +2,7 @@ trigger:
 - master
 name: $(Year:yy)$(DayOfYear)$(Rev:r)
 variables:
-  majorVer: '0.0.1'
+  majorVer: '0.0.4'
 
 stages:
   - stage: Unit_Test
@@ -96,3 +96,65 @@ stages:
         inputs:
           testResultsFormat: NUnit
           testResultsFiles: '**/test-results*.xml'
+
+  - stage: Package_Test
+    jobs:
+    - job: 'Test_Packages'
+      pool:
+        vmImage: 'Ubuntu-16.04'
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.7'
+            architecture: 'x64'
+
+        - script: 'python -m pip install -U pip setuptools wheel twine'
+          displayName: "Install packaging tools"
+        
+        - script: |
+            echo "Building rev $BUILD_VERSION"
+            python setup.py sdist bdist_wheel
+          displayName: "Build package"
+          env:
+            BUILD_VERSION: $(majorVer).dev$(Build.BuildNumber)
+        
+        - task: TwineAuthenticate@0
+          inputs:
+            artifactFeeds: 'test_feed'
+
+        - script: 'python -m twine upload -r test_feed --config-file $(PYPIRC_PATH) dist/*.whl'
+          displayName: "Upload package"
+
+    - job: "Test_suite_Jinja2"
+      dependsOn: "Test_Packages"
+      pool:
+        vmImage: 'Ubuntu-16.04'
+
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.7'
+            architecture: 'x64'
+
+        - script: 'python -m pip install -U pip'
+          displayName: "Update pip"
+
+        - script: 'python -m pip install MarkupSafe>=0.23'
+          displayName: 'Install dependencies'
+
+        - task: PipAuthenticate@0
+          displayName: Authenticate with artifact feed
+          inputs:
+            artifactFeeds: "test_feed"
+
+        - script: "pip install --pre pytest-nunit==$BUILD_VERSION"
+          displayName: "Install pytest-nunit package"
+          env:
+            BUILD_VERSION: $(majorVer).dev$(Build.BuildNumber)
+        
+        - script: |
+            wget https://github.com/pallets/jinja/archive/c4813e51ad664bca17773517462610c1578a6850.zip
+            unzip c4813e51ad664bca17773517462610c1578a6850.zip -d jinja2
+            cd jinja2/jinja-c4813e51ad664bca17773517462610c1578a6850/
+            python -m pytest tests --test-run-title="Jinja2 test suite"
+          displayName: "Test jinja2 pinned revision"

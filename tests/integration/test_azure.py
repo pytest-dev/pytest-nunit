@@ -21,6 +21,7 @@ def test_property(record_nunit_property):
     assert 1 == 1
 
 
+@pytest.mark.xfail
 def test_failure():
     assert 1 == 0
 

@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import codecs
 from setuptools import setup
-from pytest_nunit import __version__
 
 
 def read(fname):
@@ -16,7 +16,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return __version__
+        return "0.0.4"
 
 
 setup(
