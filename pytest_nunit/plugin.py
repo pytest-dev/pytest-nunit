@@ -50,17 +50,6 @@ def pytest_addoption(parser):
         "one of no|system-out|system-err",
         default="no",
     )  # choices=['no', 'stdout', 'stderr'])
-    parser.addini(
-        "nunit_log_passing_tests",
-        "Capture log information for passing tests to NUnit report: ",
-        type="bool",
-        default=True,
-    )
-    parser.addini(
-        "nunit_duration_report",
-        "Duration time to report: one of total|call",
-        default="total",
-    )  # choices=['total', 'call'])
 
 
 def pytest_configure(config):
@@ -258,9 +247,6 @@ class NunitXML:
         reporter.record_testreport(report)
         return reporter
 
-    def pytest_runtest_makereport(self, item, call):
-        log.debug(item, call)
-
     def update_testcase_duration(self, report):
         """accumulates total duration for nodeid from given report and updates
         the Junit.testcase with the new total if already created.
@@ -269,13 +255,11 @@ class NunitXML:
             reporter = self.node_reporter(report)
             reporter.duration += getattr(report, "duration", 0.0)
 
-    def pytest_collectreport(self, report):
-        pass
-
     def pytest_internalerror(self, excrepr):
         reporter = self.node_reporter("internal")
+        # TODO: Mark tests as failed and produce stack
 
-    def pytest_sessionstart(self, session):
+    def pytest_sessionstart(self, *args):
         self.suite_start_time = datetime.utcnow()
 
     def _getcrashline(self, rep):
@@ -287,7 +271,7 @@ class NunitXML:
             except AttributeError:
                 return ""
 
-    def pytest_sessionfinish(self, session, exitstatus):
+    def pytest_sessionfinish(self, session, *args):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
@@ -307,7 +291,6 @@ class NunitXML:
         self.stats["skipped"] = len(
             list(case for case in self.cases.values() if case["outcome"] == "skipped")
         )
-
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             logfile.write('<?xml version="1.0" encoding="utf-8"?>')
