@@ -110,6 +110,12 @@ class _NunitNodeReporter:
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
+            if testreport.outcome == 'skipped':
+                log.debug("skipping : {0}".format(testreport.longrepr))
+                if len(testreport.longrepr) > 2:
+                    r['stack-trace'] = testreport.longrepr[2]
+                else:
+                    r['stack-trace'] = testreport.longrepr
         elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["start"] = datetime.utcnow()
