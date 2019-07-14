@@ -3,7 +3,7 @@ Test things in Azure Pipelines
 """
 
 import os
-
+import pytest
 
 def test_attachment(add_nunit_attachment):
     """
@@ -19,3 +19,12 @@ def test_property(record_nunit_property):
     """
     record_nunit_property("test", "value")
     assert 1 == 1
+
+
+def test_failure():
+    assert 1 == 0
+
+
+@pytest.mark.skip("Example skip")
+def test_skip():
+    assert 1 == 0
