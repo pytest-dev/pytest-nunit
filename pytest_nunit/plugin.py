@@ -103,7 +103,8 @@ class _NunitNodeReporter:
                 "call-report": None,
                 "teardown-report": None,
                 "idref": self.nunit_xml.idrefindex,
-                "properties": {"python-version": sys.version}
+                "properties": {"python-version": sys.version},
+                "attachments": None,
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
@@ -135,6 +136,12 @@ class _NunitNodeReporter:
     def add_property(self, name, value):
         r = self.nunit_xml.cases[self.id]
         r['properties'][name] = value
+    
+    def add_attachment(self, file, description):
+        r = self.nunit_xml.cases[self.id]
+        if r['attachments'] is None:
+            r['attachments'] = {}  
+        r['attachments'][file] = description
 
     def finalize(self):
         log.debug("finalize")
@@ -155,6 +162,25 @@ def record_nunit_property(request):
     if nunitxml is not None:
         node_reporter = nunitxml.node_reporter(request.node.nodeid)
         attr_func = node_reporter.add_property
+
+    return attr_func
+
+
+@pytest.fixture
+def add_nunit_attachment(request):
+    """
+    Add an attachment in Nunit output for the calling test
+    """
+    # Declare noop
+    def add_attachment_noop(file, description):
+        pass
+
+    attr_func = add_attachment_noop
+
+    nunitxml = getattr(request.config, "_nunitxml", None)
+    if nunitxml is not None:
+        node_reporter = nunitxml.node_reporter(request.node.nodeid)
+        attr_func = node_reporter.add_attachment
 
     return attr_func
 

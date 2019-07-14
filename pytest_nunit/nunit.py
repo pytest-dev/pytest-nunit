@@ -13,6 +13,11 @@ from .models.nunit import (
     PropertyBagType,
     PropertyType,
     EnvironmentType,
+    AssertionStatusType,
+    AssertionsType,
+    AssertionType,
+    AttachmentsType,
+    AttachmentType,
 )
 from .attrs2xml import AttrsXmlRenderer
 
@@ -26,6 +31,21 @@ PYTEST_TO_NUNIT = {
     "skipped": TestStatusType.Skipped,
 }
 
+
+def _format_assertions(case):
+    # TODO
+    return None
+
+def _format_attachments(case):
+    if case['attachments']:
+        return AttachmentsType(
+                attachment=[
+                    AttachmentType(filePath=k, description=v)
+                    for k, v in case["attachments"].items()
+                ]
+            )
+    else:
+        return None
 
 class NunitTestRun(object):
     """
@@ -60,14 +80,18 @@ class NunitTestRun(object):
                 fullname=nodeid,
                 methodname=case["setup-report"].head_line,
                 properties=PropertyBagType(
-                    property=[PropertyType(name=k, value=v) for k, v in case['properties'].items()]
+                    property=[
+                        PropertyType(name=k, value=v)
+                        for k, v in case["properties"].items()
+                    ]
                 ),
                 environment=self.environment,
                 settings=None,
                 failure=None,
                 reason=None,
                 output=None,
-                assertions=None,
+                assertions=_format_assertions(case),
+                attachments=_format_attachments(case),
                 classname="TestFoo",
                 runstate=TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
@@ -103,6 +127,7 @@ class NunitTestRun(object):
                 reason=None,
                 output=None,
                 assertions=None,
+                attachments=None,
                 test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.Assembly,

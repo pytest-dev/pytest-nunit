@@ -288,11 +288,6 @@ class AssertionsType(object):
     assertion = attr.ib(
         metadata={"name": 'assertion', "type": 'element', "optional": False}, type='AssertionType'
     )
-    attachments = attr.ib(
-        metadata={"name": 'attachments', "type": 'element', "optional": True},
-        type='AttachmentsType',
-        default=attr.NOTHING,
-    )
 
 
 @attr.s
@@ -468,6 +463,11 @@ class TestCaseElementType(object):
         type='AssertionsType',
         default=attr.NOTHING,
     )
+    attachments = attr.ib(
+        metadata={"name": 'attachments', "type": 'element', "optional": True},
+        type='AttachmentsType',
+        default=attr.NOTHING,
+    )
     id_ = attr.ib(
         metadata={"name": 'id', "type": 'attrib', "optional": False},
         type=str,
@@ -575,6 +575,11 @@ class TestSuiteElementType(object):
     assertions = attr.ib(
         metadata={"name": 'assertions', "type": 'element', "optional": True},
         type='AssertionsType',
+        default=attr.NOTHING,
+    )
+    attachments = attr.ib(
+        metadata={"name": 'attachments', "type": 'element', "optional": True},
+        type='AttachmentsType',
         default=attr.NOTHING,
     )
     id_ = attr.ib(

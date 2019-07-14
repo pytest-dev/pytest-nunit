@@ -51,6 +51,8 @@
 
             <!-- NUnit.Framework.Internal.TestResult.AddAssertionsElement -->
             <xs:element name="assertions" minOccurs="0" type="AssertionsType"/>
+
+            <xs:element name="attachments" minOccurs="0" type="AttachmentsType" />
         </xs:sequence>
     </xs:group>
     <xs:attributeGroup name="TestResultBaseAttributeGroup">
@@ -207,7 +209,7 @@
         <xs:sequence>
             <xs:element name="assertion" maxOccurs="unbounded" type="AssertionType"/>
             <!-- NUnit.Framework.Internal.TestResult.AddAttachmentsElement -->
-            <xs:element name="attachments" minOccurs="0" type="AttachmentsType" />
+            
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="FailureType">
