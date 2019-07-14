@@ -2,7 +2,6 @@
 Test adding properties to tests
 """
 import xmlschema
-import json
 import os
 
 
@@ -25,7 +24,7 @@ def test_basic_property(testdir, tmpdir):
         '*test_basic PASSED*',
     ])
     assert result.ret == 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
@@ -59,7 +58,7 @@ def test_attachment(testdir, tmpdir):
         '*test_basic PASSED*',
     ])
     assert result.ret == 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out

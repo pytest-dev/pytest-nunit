@@ -196,8 +196,6 @@ class NunitXML:
         prefix,
         suite_name="pytest",
         logging="no",
-        report_duration="total",
-        log_passing_tests=True,
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
@@ -286,7 +284,6 @@ class NunitXML:
         )
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
-            logfile.write(u'<?xml version="1.0" encoding="utf-8"?>')
             result = NunitTestRun(self).generate_xml()
             logfile.write(result.decode(encoding="utf-8"))
 

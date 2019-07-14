@@ -6,6 +6,9 @@ class CdataComment(ET.Element):
     def __init__(self, text):
         self._cdata = '!CDATA'
         self.text = text
+        self.attrib = {}
+        self._children = []
+        super(CdataComment)
 
 
 ET._original_serialize_xml = ET._serialize_xml

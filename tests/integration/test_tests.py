@@ -2,7 +2,6 @@
 Test various scenarios
 """
 import xmlschema
-import json
 import os
 
 
@@ -24,7 +23,7 @@ def test_passing_test(testdir, tmpdir):
         '*test_pass PASSED*',
     ])
     assert result.ret == 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1
@@ -54,7 +53,7 @@ def test_failing_test(testdir, tmpdir):
         '*test_fail FAILED*',
     ])
     assert result.ret != 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
@@ -88,7 +87,7 @@ def test_skipped_test(testdir, tmpdir):
         '*test_skip SKIPPED*',
     ])
     assert result.ret == 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
@@ -129,7 +128,7 @@ def test_all_outcomes(testdir, tmpdir):
     result.stdout.fnmatch_lines(['*test_skip SKIPPED*'])
     
     assert result.ret != 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 3, out
@@ -156,7 +155,7 @@ def test_error_test(testdir, tmpdir):
         '*test_error ERROR*',
     ])
     assert result.ret != 0
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
     out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out

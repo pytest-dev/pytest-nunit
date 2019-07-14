@@ -29,7 +29,7 @@ def test_basic_against_reference_schema(testdir, tmpdir):
     ])
 
     # ensure the output file exists
-    os.path.exists(outfile)
+    os.path.exists(outfile_pth)
 
     # make sure that that we get a '0' exit code for the testsuite
     assert result.ret == 0
