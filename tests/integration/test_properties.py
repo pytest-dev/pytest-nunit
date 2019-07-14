@@ -35,8 +35,8 @@ def test_basic_property(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 0
     assert out['test-suite']['@skipped'] == 0
-    assert out['test-suite']['test-case']['properties']['property'][1]['@name'] == "test"
-    assert out['test-suite']['test-case']['properties']['property'][1]['@value'] == "value"
+    assert "test" in [i['@name'] for i in out['test-suite']['test-case']['properties']['property']]
+    assert "value" in [i['@value'] for i in out['test-suite']['test-case']['properties']['property']]
 
 
 def test_attachment(testdir, tmpdir):
