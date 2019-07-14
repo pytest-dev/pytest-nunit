@@ -19,7 +19,7 @@ log = logging.getLogger("__name__")
 log.setLevel(logging.DEBUG)
 
 # Python reserved keywords. TODO : Sure this is in stdlib somewhere? maybe tokens
-KEYWORDS = ["id", "type", "class", "if", "else", "and", "for", "not", "or"]
+KEYWORDS = ["id", "type", "class", "if", "else", "and", "for", "not", "or", "filter"]
 
 
 # Map XML atomic builtin types to Python std types

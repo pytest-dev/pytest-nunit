@@ -169,7 +169,7 @@ class TestRunType(object):
         type=str,
         default=attr.NOTHING,
     )
-    filter = attr.ib(
+    filter_ = attr.ib(
         metadata={"name": 'filter', "type": 'element', "optional": True},
         type='TestFilterType',
         default=attr.NOTHING,
@@ -339,10 +339,10 @@ class ValueMatchFilterType(object):
 @attr.s
 class TestCaseElementType(object):
     properties = attr.ib(
-        metadata={"name": 'properties', "type": 'element', "optional": True}, type='PropertyBagType'
+        metadata={"name": 'properties', "type": 'element', "optional": False}, type='PropertyBagType'
     )
     environment = attr.ib(
-        metadata={"name": 'environment', "type": 'element', "optional": True},
+        metadata={"name": 'environment', "type": 'element', "optional": False},
         type='EnvironmentType',
     )
     settings = attr.ib(
@@ -441,7 +441,7 @@ class TestSuiteElementType(object):
         metadata={"name": 'properties', "type": 'element', "optional": False}, type='PropertyBagType'
     )
     test_suite = attr.ib(
-        metadata={"name": 'test-suite', "type": 'element', "optional": True},
+        metadata={"name": 'test-suite', "type": 'element', "optional": False},
         type='TestSuiteElementType',
     )
     test_case = attr.ib(
