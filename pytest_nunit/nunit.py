@@ -137,7 +137,7 @@ class NunitTestRun(object):
             inconclusive=0,
             skipped=self.nunitxml.stats["skipped"],
             asserts=self.nunitxml.stats["asserts"],
-            command_line=" ".join(sys.argv),
+            command_line="<![CDATA[%s]]>" % (" ".join(sys.argv),)
             filter_=None,
             test_case=None,
             test_suite=self.test_suites,
