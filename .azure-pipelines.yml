@@ -156,5 +156,17 @@ stages:
             wget https://github.com/pallets/jinja/archive/c4813e51ad664bca17773517462610c1578a6850.zip
             unzip c4813e51ad664bca17773517462610c1578a6850.zip -d jinja2
             cd jinja2/jinja-c4813e51ad664bca17773517462610c1578a6850/
-            python -m pytest tests --test-run-title="Jinja2 test suite"
+            python -m pytest tests --nunit-xml=test-results-jinja.xml
           displayName: "Test jinja2 pinned revision"
+        - task: CopyFiles@2
+          inputs:
+            contents: '**/test-results*.xml'
+            targetFolder: $(Build.ArtifactStagingDirectory)
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: $(Build.ArtifactStagingDirectory)
+            artifactName: TestOutput
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: NUnit
+            testResultsFiles: '**/test-results*.xml'
