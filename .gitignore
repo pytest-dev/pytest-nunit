@@ -6,7 +6,8 @@ __pycache__/
 test.xml
 # C extensions
 *.so
-
+.DS_Store
+.vscode/
 # Distribution / packaging
 .Python
 env/
