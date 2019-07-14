@@ -18,6 +18,8 @@ from .models.nunit import (
     AssertionType,
     AttachmentsType,
     AttachmentType,
+    ReasonType,
+    FailureType
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
 
@@ -87,18 +89,18 @@ class NunitTestRun(object):
                 ),
                 environment=self.environment,
                 settings=None,
-                failure=None,
-                reason=None,
+                failure=FailureType(message=CdataComment(text=case['reason']), stack_trace=CdataComment(text=case['stderr'])),
+                reason=ReasonType(message=CdataComment(text=case['reason'])),
                 output=CdataComment(text=case['stdout']),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case),
-                classname="TestFoo",
+                classname="s",
                 runstate=TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
                     case["outcome"], TestStatusType.Inconclusive
                 ),
-                label="test_label",
+                label="",
                 site=None,
                 start_time=case["start"].strftime("%Y-%m-%d %H:%M:%S"),
                 end_time=case["stop"].strftime("%Y-%m-%d %H:%M:%S"),

@@ -133,6 +133,8 @@ class _NunitNodeReporter:
             else:
                 r["outcome"] = "passed"
             r['stdout'] = testreport.capstdout
+            r['stderr'] = testreport.capstderr
+            r['reason'] = testreport.longrepr
 
     def add_property(self, name, value):
         r = self.nunit_xml.cases[self.id]

@@ -14,8 +14,8 @@ def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
     Custom serializer to handle CdataComment classes
     """
     if hasattr(elem, '_cdata'):
-        write("\n<%s%s]]>\n" % (
-                '![CDATA[', elem.text))
+        write("<%s><%s%s]]></%s>" % (
+                elem.tag, '![CDATA[', elem.text, elem.tag))
         return
     return ET._original_serialize_xml(
         write, elem, qnames, namespaces, *args, **kwargs)
