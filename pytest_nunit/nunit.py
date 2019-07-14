@@ -37,7 +37,7 @@ class NunitTestRun(object):
             fullname=nodeid, 
             methodname=case['report'].head_line,
             properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]),
-            environment=None, 
+            environment=self.environment, 
             settings=None, 
             failure=None, 
             reason=None, 
@@ -113,7 +113,7 @@ class NunitTestRun(object):
             asserts=self.nunitxml.stats['asserts'],
             random_seed=sys.flags.hash_randomization,
             command_line=' '.join(sys.argv),
-            filter=None,
+            filter_=None,
             test_case=None,
             test_suite=self.test_suites)
 

@@ -123,30 +123,32 @@ def main(xsd_path, output_path):
         elif isinstance(type_, xmlschema.validators.XsdComplexType):
             log.info("Name %s" % name)
             out += "@attr.s\nclass {0}(object):\n".format(name)
-            attribs = []
+            attribs = {}
             # Write element groups and sequences
             for group in type_.iter_components(xmlschema.validators.XsdGroup):
                 log.info("Suite %s : %s" % (name, group))
                 if group.model == "sequence":
                     for elem in group.iter_elements():
                         at = "    {0}\n".format(make_attrib(elem, "element", optional=elem.min_occurs == 0))
-                        if at not in attribs:
-                            attribs.append(at)
+                        attribs[elem.name] = at
+                elif group.model == "choice":
+                    for elem in group.iter_elements():
+                        at = "    {0}\n".format(make_attrib(elem, "element", optional=True))
+                        attribs[elem.name] = at
                 else:
-                    for nested_elem in group.iter_elements():
-                        log.info(nested_elem)
+                    for elem in group.iter_elements():
+                        log.info(elem)
 
                         at = "    {0}\n".format(
-                            make_attrib(nested_elem, "element", optional=nested_elem.min_occurs == 0)
+                            make_attrib(elem, "element", optional=elem.min_occurs == 0)
                         )
-                        if at not in attribs:
-                            attribs.append(at)
+                        attribs[elem.name] = at
 
             # Write element attributes
             for attrib in type_.attributes.values():
-                attribs.append("    {0}\n".format(make_attrib(attrib, "attrib", attrib.use == "optional")))
+                attribs[attrib.name] = "    {0}\n".format(make_attrib(attrib, "attrib", attrib.use == "optional"))
 
-            for attrib in attribs:
+            for attrib in attribs.values():
                 out += attrib
             has_parts = (len(attribs) > 0)
 
