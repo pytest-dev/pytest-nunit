@@ -8,12 +8,14 @@ Shares the same pattern of CLI options for ease of use.
 from _pytest.config import filename_arg
 
 import os
+import sys
 from datetime import datetime
 import functools
 
 from .nunit import NunitTestRun
 
 import logging
+import pytest
 
 logging.basicConfig()
 log = logging.getLogger("__name__")
@@ -101,6 +103,7 @@ class _NunitNodeReporter:
                 "call-report": None,
                 "teardown-report": None,
                 "idref": self.nunit_xml.idrefindex,
+                "properties": {"python-version": sys.version}
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
@@ -119,8 +122,9 @@ class _NunitNodeReporter:
 
             if r["setup-report"].outcome == "skipped":
                 r["outcome"] = "skipped"
+            elif r["setup-report"].outcome == "failed":
+                r["outcome"] = "failed" 
             elif "failed" in [
-                r["setup-report"].outcome,
                 r["call-report"].outcome,
                 testreport.outcome,
             ]:
@@ -128,8 +132,31 @@ class _NunitNodeReporter:
             else:
                 r["outcome"] = "passed"
 
+    def add_property(self, name, value):
+        r = self.nunit_xml.cases[self.id]
+        r['properties'][name] = value
+
     def finalize(self):
         log.debug("finalize")
+
+
+@pytest.fixture
+def record_nunit_property(request):
+    """
+    Add extra properties in the Nunit output for the calling test
+    """
+    # Declare noop
+    def add_attr_noop(name, value):
+        pass
+
+    attr_func = add_attr_noop
+
+    nunitxml = getattr(request.config, "_nunitxml", None)
+    if nunitxml is not None:
+        node_reporter = nunitxml.node_reporter(request.node.nodeid)
+        attr_func = node_reporter.add_property
+
+    return attr_func
 
 
 class NunitXML:

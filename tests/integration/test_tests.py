@@ -127,3 +127,32 @@ def test_all_outcomes(testdir, tmpdir):
     assert out['@passed'] == 1, out
     assert out['@failed'] == 1, out
     assert out['@skipped'] == 1, out
+
+
+def test_error_test(testdir, tmpdir):
+    """
+    Test a test that fails
+    """
+    testdir.makepyfile("""
+        def test_error(test_madeup_fixture):
+            assert 1 == 1
+    """)
+    outfile=os.path.join(tmpdir, 'out.xml')
+    result = testdir.runpytest(
+        '-v', '--nunit-xml='+outfile
+    )
+    result.stdout.fnmatch_lines([
+        '*test_error ERROR*',
+    ])
+    assert result.ret != 0
+    os.path.exists(outfile)
+    xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
+    out = xs.to_dict(outfile)
+    assert out['@total'] == 1, out
+    assert out['@passed'] == 0, out
+    assert out['@failed'] == 1, out
+    assert out['@skipped'] == 0, out
+    assert out['test-suite']['@total'] == 1
+    assert out['test-suite']['@passed'] == 0
+    assert out['test-suite']['@failed'] == 1
+    assert out['test-suite']['@skipped'] == 0

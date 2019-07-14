@@ -20,3 +20,19 @@ pytest-nunit
 
 
 A pytest plugin for generating Nunit3 test result XML output
+
+
+
+Fixtures
+--------
+
+record_nunit_property
+~~~~~~~~~~~~~~~~~~~~~
+
+Calling `record_nunit_property(key: str, value: str)` will result in `Property` tags being added to the `test-case` for the related node. 
+
+.. code-block:: python
+
+    def test_basic(record_nunit_property):
+        record_nunit_property("test", "value")
+        assert 1 == 1

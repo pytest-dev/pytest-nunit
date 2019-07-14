@@ -60,7 +60,7 @@ class NunitTestRun(object):
                 fullname=nodeid,
                 methodname=case["setup-report"].head_line,
                 properties=PropertyBagType(
-                    property=[PropertyType(name="test_property", value="test value")]
+                    property=[PropertyType(name=k, value=v) for k, v in case['properties'].items()]
                 ),
                 environment=self.environment,
                 settings=None,
