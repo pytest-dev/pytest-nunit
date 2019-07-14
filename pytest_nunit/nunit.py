@@ -76,7 +76,7 @@ class NunitTestRun(object):
                 assertions=None,
                 test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
-                type_=TestSuiteTypeType.TestSuite,
+                type_=TestSuiteTypeType.Assembly,
                 testcasecount=self.nunitxml.stats['total'],
                 result=TestStatusType.Passed,
                 label="",
