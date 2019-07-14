@@ -122,7 +122,7 @@ stages:
           inputs:
             artifactFeeds: 'nunit_test_feed'
 
-        - script: 'python -m twine upload -r nunit_test_feed --config-file $(PYPIRC_PATH) dist/*.whl'
+        - script: 'python -m twine upload -r nunit_test_feed --config-file $(PYPIRC_PATH) dist/*.tar.gz'
           displayName: "Upload package"
 
     - job: "Test_suite_Jinja2"
