@@ -7,6 +7,7 @@ Shares the same pattern of CLI options for ease of use.
 """
 from _pytest.config import filename_arg
 
+from io import open
 import os
 import sys
 from datetime import datetime
@@ -61,8 +62,6 @@ def pytest_configure(config):
             config.option.nunitprefix,
             config.getini("nunit_suite_name"),
             config.getini("nunit_logging"),
-            config.getini("nunit_duration_report"),
-            config.getini("nunit_log_passing_tests"),
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -205,8 +204,6 @@ class NunitXML:
         self.prefix = prefix
         self.suite_name = suite_name
         self.logging = logging
-        self.log_passing_tests = log_passing_tests
-        self.report_duration = report_duration
         self.stats = dict.fromkeys(
             ["error", "passed", "failure", "skipped", "total", "asserts"], 0
         )
@@ -248,12 +245,8 @@ class NunitXML:
         return reporter
 
     def update_testcase_duration(self, report):
-        """accumulates total duration for nodeid from given report and updates
-        the Junit.testcase with the new total if already created.
-        """
-        if self.report_duration == "total" or report.when == self.report_duration:
-            reporter = self.node_reporter(report)
-            reporter.duration += getattr(report, "duration", 0.0)
+        reporter = self.node_reporter(report)
+        reporter.duration += getattr(report, "duration", 0.0)
 
     def pytest_internalerror(self, excrepr):
         reporter = self.node_reporter("internal")
@@ -293,9 +286,9 @@ class NunitXML:
         )
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
-            logfile.write('<?xml version="1.0" encoding="utf-8"?>')
+            logfile.write(u'<?xml version="1.0" encoding="utf-8"?>')
             result = NunitTestRun(self).generate_xml()
-            logfile.write(result)
+            logfile.write(result.decode(encoding="utf-8"))
 
     def pytest_terminal_summary(self, terminalreporter):
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))

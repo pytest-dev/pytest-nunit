@@ -14,9 +14,11 @@ def test_passing_test(testdir, tmpdir):
         def test_pass():
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_pass PASSED*',
@@ -24,7 +26,7 @@ def test_passing_test(testdir, tmpdir):
     assert result.ret == 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1
     assert out['@passed'] == 1
     assert out['@failed'] == 0
@@ -42,9 +44,11 @@ def test_failing_test(testdir, tmpdir):
         def test_fail():
             assert 1 == 0
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_fail FAILED*',
@@ -52,7 +56,7 @@ def test_failing_test(testdir, tmpdir):
     assert result.ret != 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
     assert out['@passed'] == 0, out
     assert out['@failed'] == 1, out
@@ -61,6 +65,7 @@ def test_failing_test(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 0
     assert out['test-suite']['@failed'] == 1
     assert out['test-suite']['@skipped'] == 0
+
 
 def test_skipped_test(testdir, tmpdir):
     """
@@ -73,9 +78,11 @@ def test_skipped_test(testdir, tmpdir):
         def test_skip():
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_skip SKIPPED*',
@@ -83,7 +90,7 @@ def test_skipped_test(testdir, tmpdir):
     assert result.ret == 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
     assert out['@passed'] == 0, out
     assert out['@failed'] == 0, out
@@ -111,9 +118,11 @@ def test_all_outcomes(testdir, tmpdir):
         def test_skip():
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines(['*test_pass PASSED*'])
     result.stdout.fnmatch_lines(['*test_fail FAILED*'])
@@ -122,7 +131,7 @@ def test_all_outcomes(testdir, tmpdir):
     assert result.ret != 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 3, out
     assert out['@passed'] == 1, out
     assert out['@failed'] == 1, out
@@ -137,9 +146,11 @@ def test_error_test(testdir, tmpdir):
         def test_error(test_madeup_fixture):
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_error ERROR*',
@@ -147,7 +158,7 @@ def test_error_test(testdir, tmpdir):
     assert result.ret != 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
     assert out['@passed'] == 0, out
     assert out['@failed'] == 1, out

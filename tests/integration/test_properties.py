@@ -5,6 +5,7 @@ import xmlschema
 import json
 import os
 
+
 def test_basic_property(testdir, tmpdir):
     """
     Test a basic test with an additional property
@@ -14,9 +15,11 @@ def test_basic_property(testdir, tmpdir):
             record_nunit_property("test", "value")
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_basic PASSED*',
@@ -24,7 +27,7 @@ def test_basic_property(testdir, tmpdir):
     assert result.ret == 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
     assert out['@passed'] == 1, out
     assert out['@failed'] == 0, out
@@ -46,9 +49,11 @@ def test_attachment(testdir, tmpdir):
             add_nunit_attachment("file.pth", "desc")
             assert 1 == 1
     """)
-    outfile=os.path.join(tmpdir, 'out.xml')
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
     result = testdir.runpytest(
-        '-v', '--nunit-xml='+outfile
+        '-v', '--nunit-xml='+outfile_pth
     )
     result.stdout.fnmatch_lines([
         '*test_basic PASSED*',
@@ -56,7 +61,7 @@ def test_attachment(testdir, tmpdir):
     assert result.ret == 0
     os.path.exists(outfile)
     xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
-    out = xs.to_dict(outfile)
+    out = xs.to_dict(outfile_pth)
     assert out['@total'] == 1, out
     assert out['@passed'] == 1, out
     assert out['@failed'] == 0, out
@@ -67,4 +72,3 @@ def test_attachment(testdir, tmpdir):
     assert out['test-suite']['@skipped'] == 0
     assert out['test-suite']['test-case']['attachments']['attachment'][0]['description'] == "desc"
     assert out['test-suite']['test-case']['attachments']['attachment'][0]['filePath'] == "file.pth"
-    

@@ -7,7 +7,9 @@ class CdataComment(ET.Element):
         self._cdata = '!CDATA'
         self.text = text
 
+
 ET._original_serialize_xml = ET._serialize_xml
+
 
 def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
     """
@@ -19,6 +21,7 @@ def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
         return
     return ET._original_serialize_xml(
         write, elem, qnames, namespaces, *args, **kwargs)
+
 
 class AttrsXmlRenderer(object):
     @staticmethod
@@ -59,5 +62,5 @@ class AttrsXmlRenderer(object):
     def render(instance, node_name):
         root = AttrsXmlRenderer.as_element(instance, node_name)
         ET._serialize_xml = ET._serialize['xml'] = _serialize_xml
-        s = ET.tostring(root, encoding="unicode", method="xml")
+        s = ET.tostring(root, encoding="UTF-8", method="xml")
         return s

@@ -38,6 +38,7 @@ def _format_assertions(case):
     # TODO
     return None
 
+
 def _format_attachments(case):
     if case['attachments']:
         return AttachmentsType(
@@ -48,6 +49,12 @@ def _format_attachments(case):
             )
     else:
         return None
+
+
+def _getlocale():
+    # TODO: Come up with a Python 2/3 friendly way of doing this
+    return 'en-US'
+
 
 class NunitTestRun(object):
     """
@@ -68,8 +75,8 @@ class NunitTestRun(object):
             machine_name=platform.machine(),
             user="",  # TODO: Get sys user but only with a toggle to hide this
             user_domain="",  # TODO: Get sys user but only with a toggle to hide this
-            culture=locale.getlocale()[0],
-            uiculture=locale.getlocale()[0],  # TODO: Get UI? Locale
+            culture=_getlocale(),
+            uiculture=_getlocale(),  # TODO: Get UI? Locale
             os_architecture=platform.architecture()[0],
         )
 
