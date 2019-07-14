@@ -38,7 +38,7 @@ stages:
         displayName: 'pytest with nunit-xml flag - passes'
       - task: CopyFiles@2
         inputs:
-          contents: '**/test*.xml'
+          contents: '**/test-results.xml'
           targetFolder: $(Build.ArtifactStagingDirectory)
       - task: PublishBuildArtifacts@1
         inputs:
@@ -47,7 +47,7 @@ stages:
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: NUnit
-          testResultsFiles: '**/*.xml'
+          testResultsFiles: '**/test-results.xml'
   - stage: Integration_Test
     jobs:
 
