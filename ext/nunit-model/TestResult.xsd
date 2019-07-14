@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="qualified" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation>This is document is descriptive, rather than a guarantee of future decisions.
         </xs:documentation>
@@ -40,50 +41,16 @@
             <xs:group ref="RootResultElementGroup" minOccurs="0"/>
             <xs:group ref="TestBaseElementGroup"/>
             <!-- NUnit.Framework.Internal.TestResult.AddFailureElement -->
-            <xs:element name="failure" minOccurs="0">
-                <xs:complexType>
-                    <xs:all>
-                        <xs:element name="message" minOccurs="0" type="xs:string"/>
-                        <xs:element name="stack-trace" minOccurs="0" type="xs:string"/>
-                    </xs:all>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="failure" minOccurs="0" type="FailureType" />
+
             <!-- NUnit.Framework.Internal.TestResult.AddReasonElement -->
             <xs:element name="reason" minOccurs="0" type="ReasonType" />
 
             <!-- NUnit.Framework.Internal.TestResult.AddOutputElement -->
             <xs:element name="output" minOccurs="0" type="xs:string"/>
+
             <!-- NUnit.Framework.Internal.TestResult.AddAssertionsElement -->
-            <xs:element name="assertions" minOccurs="0">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="assertion" maxOccurs="unbounded">
-                            <xs:complexType>
-                                <xs:all>
-                                    <xs:element name="message" minOccurs="0" type="xs:string"/>
-                                    <xs:element name="stack-trace" minOccurs="0" type="xs:string"/>
-                                </xs:all>
-                                <xs:attribute name="result" type="AssertionStatusType"/>
-                            </xs:complexType>
-                        </xs:element>
-                        <!-- NUnit.Framework.Internal.TestResult.AddAttachmentsElement -->
-                        <xs:element name="attachments" minOccurs="0">
-                            <xs:complexType>
-                                <xs:sequence>
-                                    <xs:element name="attachment" maxOccurs="unbounded">
-                                        <xs:complexType>
-                                            <xs:all>
-                                                <xs:element name="filePath" type="xs:string"/>
-                                                <xs:element name="description" minOccurs="0" type="xs:string"/>
-                                            </xs:all>
-                                        </xs:complexType>
-                                    </xs:element>
-                                </xs:sequence>
-                            </xs:complexType>
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="assertions" minOccurs="0" type="AssertionsType"/>
         </xs:sequence>
     </xs:group>
     <xs:attributeGroup name="TestResultBaseAttributeGroup">
@@ -102,9 +69,7 @@
             <!-- NUnit.Framework.Api.FrameworkController.InsertEnvironmentElement -->
             <xs:element name="environment" type="EnvironmentType"/>
             <!-- NUnit.Framework.Api.FrameworkController.InsertSettingsElement -->
-            <xs:element name="settings" minOccurs="0" type="SettingsType">
-
-            </xs:element>
+            <xs:element name="settings" minOccurs="0" type="SettingsType" />
         </xs:sequence>
     </xs:group>
 
@@ -216,8 +181,39 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="ReasonType">
-                    <xs:all>
-                        <xs:element name="message" type="xs:string"/>
-                    </xs:all>
-                </xs:complexType>
+        <xs:all>
+            <xs:element name="message" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="AssertionType">
+        <xs:all>
+            <xs:element name="message" minOccurs="0" type="xs:string"/>
+            <xs:element name="stack-trace" minOccurs="0" type="xs:string"/>
+        </xs:all>
+        <xs:attribute name="result" type="AssertionStatusType"/>
+    </xs:complexType>
+    <xs:complexType name="AttachmentType">
+        <xs:all>
+            <xs:element name="filePath" type="xs:string"/>
+            <xs:element name="description" minOccurs="0" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="AttachmentsType">
+        <xs:sequence>
+            <xs:element name="attachment" maxOccurs="unbounded" type="AttachmentType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AssertionsType">
+        <xs:sequence>
+            <xs:element name="assertion" maxOccurs="unbounded" type="AssertionType"/>
+            <!-- NUnit.Framework.Internal.TestResult.AddAttachmentsElement -->
+            <xs:element name="attachments" minOccurs="0" type="AttachmentsType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FailureType">
+        <xs:all>
+            <xs:element name="message" minOccurs="0" type="xs:string"/>
+            <xs:element name="stack-trace" minOccurs="0" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
 </xs:schema>

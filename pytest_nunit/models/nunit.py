@@ -250,6 +250,66 @@ class ReasonType(object):
 
 
 @attr.s
+class AssertionType(object):
+    message = attr.ib(
+        metadata={"name": 'message', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    stack_trace = attr.ib(
+        metadata={"name": 'stack-trace', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    result = attr.ib(
+        metadata={"name": 'result', "type": 'attrib', "optional": True}, default=attr.NOTHING
+    )
+
+
+@attr.s
+class AttachmentType(object):
+    filePath = attr.ib(metadata={"name": 'filePath', "type": 'element', "optional": False}, type=str)
+    description = attr.ib(
+        metadata={"name": 'description', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+
+
+@attr.s
+class AttachmentsType(object):
+    attachment = attr.ib(
+        metadata={"name": 'attachment', "type": 'element', "optional": False}, type='AttachmentType'
+    )
+
+
+@attr.s
+class AssertionsType(object):
+    assertion = attr.ib(
+        metadata={"name": 'assertion', "type": 'element', "optional": False}, type='AssertionType'
+    )
+    attachments = attr.ib(
+        metadata={"name": 'attachments', "type": 'element', "optional": True},
+        type='AttachmentsType',
+        default=attr.NOTHING,
+    )
+
+
+@attr.s
+class FailureType(object):
+    message = attr.ib(
+        metadata={"name": 'message', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    stack_trace = attr.ib(
+        metadata={"name": 'stack-trace', "type": 'element', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+
+
+@attr.s
 class TestFilterType(object):
     not_ = attr.ib(
         metadata={"name": 'not', "type": 'element', "optional": True},
@@ -390,7 +450,7 @@ class TestCaseElementType(object):
     )
     failure = attr.ib(
         metadata={"name": 'failure', "type": 'element', "optional": True},
-        type='None',
+        type='FailureType',
         default=attr.NOTHING,
     )
     reason = attr.ib(
@@ -405,7 +465,7 @@ class TestCaseElementType(object):
     )
     assertions = attr.ib(
         metadata={"name": 'assertions', "type": 'element', "optional": True},
-        type='None',
+        type='AssertionsType',
         default=attr.NOTHING,
     )
     id_ = attr.ib(
@@ -499,7 +559,7 @@ class TestSuiteElementType(object):
     )
     failure = attr.ib(
         metadata={"name": 'failure', "type": 'element', "optional": True},
-        type='None',
+        type='FailureType',
         default=attr.NOTHING,
     )
     reason = attr.ib(
@@ -514,7 +574,7 @@ class TestSuiteElementType(object):
     )
     assertions = attr.ib(
         metadata={"name": 'assertions', "type": 'element', "optional": True},
-        type='None',
+        type='AssertionsType',
         default=attr.NOTHING,
     )
     id_ = attr.ib(
