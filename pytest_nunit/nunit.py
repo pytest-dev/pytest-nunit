@@ -95,7 +95,7 @@ class NunitTestRun(object):
                 classname="testClass",
                 test_suite=None,
                 properties=PropertyBagType(
-                    property=[PropertyType(name="test_property", value="test value")]
+                    property=[PropertyType(name="pythony_version", value=sys.version)]
                 ),
                 environment=self.environment,
                 settings=None,
@@ -137,7 +137,7 @@ class NunitTestRun(object):
             inconclusive=0,
             skipped=self.nunitxml.stats["skipped"],
             asserts=self.nunitxml.stats["asserts"],
-            command_line="<![CDATA[%s]]>" % (" ".join(sys.argv),)
+            command_line=" ".join(sys.argv),
             filter_=None,
             test_case=None,
             test_suite=self.test_suites,
