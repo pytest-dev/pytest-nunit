@@ -187,16 +187,6 @@ class TestRunType(object):
         type=str,
         validator=attr.validators.instance_of(str),
     )
-    name = attr.ib(
-        metadata={"name": 'name', "type": 'attrib', "optional": False},
-        type=str,
-        validator=attr.validators.instance_of(str),
-    )
-    fullname = attr.ib(
-        metadata={"name": 'fullname', "type": 'attrib', "optional": False},
-        type=str,
-        validator=attr.validators.instance_of(str),
-    )
     testcasecount = attr.ib(
         metadata={"name": 'testcasecount', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
@@ -204,11 +194,6 @@ class TestRunType(object):
     result = attr.ib(
         metadata={"name": 'result', "type": 'attrib', "optional": False},
         validator=attr.validators.in_(TestResultType),
-    )
-    label = attr.ib(
-        metadata={"name": 'label', "type": 'attrib', "optional": True},
-        type=str,
-        default=attr.NOTHING,
     )
     start_time = attr.ib(
         metadata={"name": 'start-time', "type": 'attrib', "optional": True},
@@ -247,10 +232,15 @@ class TestRunType(object):
         metadata={"name": 'asserts', "type": 'attrib', "optional": False},
         validator=attr.validators.instance_of(int),
     )
-    random_seed = attr.ib(
-        metadata={"name": 'random-seed', "type": 'attrib', "optional": False},
-        type=int,
-        validator=attr.validators.instance_of(int),
+    clr_version = attr.ib(
+        metadata={"name": 'clr-version', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
+    )
+    engine_version = attr.ib(
+        metadata={"name": 'engine-version', "type": 'attrib', "optional": True},
+        type=str,
+        default=attr.NOTHING,
     )
 
 

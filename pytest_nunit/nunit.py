@@ -97,11 +97,8 @@ class NunitTestRun(object):
     def as_test_run(self):
         return TestRunType(
             id_="2",
-            name=self.nunitxml.suite_name,
-            fullname="Pytest Nunit plugin test",
             testcasecount=self.nunitxml.stats['total'],
             result=TestResultType.Passed,
-            label="",
             start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
             end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
             duration=int(self.nunitxml.suite_time_delta),
@@ -111,11 +108,12 @@ class NunitTestRun(object):
             inconclusive=0,
             skipped=self.nunitxml.stats['skipped'],
             asserts=self.nunitxml.stats['asserts'],
-            random_seed=sys.flags.hash_randomization,
             command_line=' '.join(sys.argv),
             filter_=None,
             test_case=None,
-            test_suite=self.test_suites)
+            test_suite=self.test_suites,
+            engine_version="3.6.2",  # Nunit version this was based on 
+            clr_version="4.5.1")  # Equivalent .NET CLR runtime version
 
     def generate_xml(self):
         tr = self.as_test_run()

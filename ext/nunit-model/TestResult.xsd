@@ -156,11 +156,8 @@
             <xs:group ref="ContainedTestGroup" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required"/>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="fullname" type="xs:string" use="required"/>
         <xs:attribute name="testcasecount" type="NonnegativeInt32" use="required"/>
         <xs:attribute name="result" use="required" type="TestResultType"/>
-        <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="start-time" type="xs:string"/>
         <xs:attribute name="end-time" type="xs:string"/>
         <xs:attribute name="duration" type="TestDurationType"/>
@@ -170,7 +167,8 @@
         <xs:attribute name="inconclusive" type="NonnegativeInt32" use="required"/>
         <xs:attribute name="skipped" type="NonnegativeInt32" use="required"/>
         <xs:attribute name="asserts" type="NonnegativeInt32" use="required"/>
-        <xs:attribute name="random-seed" type="xs:int" use="required"/>
+        <xs:attribute name="clr-version" type="xs:string"/>
+        <xs:attribute name="engine-version" type="xs:string"/>
     </xs:complexType>
     <xs:simpleType name="TestDurationType">
         <xs:restriction base="xs:decimal">
