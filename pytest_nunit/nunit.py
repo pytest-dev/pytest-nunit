@@ -2,7 +2,7 @@ import sys
 import os
 import locale
 import platform
-from .models import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType, EnvironmentType)
+from .models.nunit import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType, EnvironmentType)
 from .attrs2xml import AttrsXmlRenderer
 
 
