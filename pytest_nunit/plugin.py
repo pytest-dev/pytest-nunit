@@ -18,8 +18,6 @@ import logging
 logging.basicConfig()
 log = logging.getLogger("__name__")
 
-log.setLevel(logging.DEBUG)
-
 
 def pytest_addoption(parser):
     group = parser.getgroup("terminal reporting")
@@ -42,9 +40,7 @@ def pytest_addoption(parser):
         help="prepend prefix to classnames in nunit-xml output",
     )
     parser.addini(
-        "nunit_suite_name", 
-        "Test suite name for NUnit report", 
-        default="pytest"
+        "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
     )
     parser.addini(
         "nunit_logging",
@@ -99,18 +95,38 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
-        if testreport.when == 'setup':
-            self.nunit_xml.cases[testreport.nodeid] = { 'report': testreport, 'idref': self.nunit_xml.idrefindex }
+        if testreport.when == "setup":
+            r = self.nunit_xml.cases[testreport.nodeid] = {
+                "setup-report": testreport,
+                "call-report": None,
+                "teardown-report": None,
+                "idref": self.nunit_xml.idrefindex,
+            }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
-        elif testreport.when == 'call':
+            r["start"] = datetime.utcnow()  # Will be overridden if called
+        elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
-            r['start'] = datetime.utcnow()
+            r["start"] = datetime.utcnow()
+            r["call-report"] = testreport
             # TODO : Extra data
-        elif testreport.when == 'teardown':
+        elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
-            r['stop'] = datetime.utcnow()
-            r['duration'] = (r['stop']-r['start']).total_seconds()
-            r['result'] = testreport.outcome
+            r["stop"] = datetime.utcnow()
+            r["duration"] = (
+                (r["stop"] - r["start"]).total_seconds() if r["call-report"] else 0
+            )  # skipped.
+            r["teardown-report"] = testreport
+
+            if r["setup-report"].outcome == "skipped":
+                r["outcome"] = "skipped"
+            elif "failed" in [
+                r["setup-report"].outcome,
+                r["call-report"].outcome,
+                testreport.outcome,
+            ]:
+                r["outcome"] = "failed"
+            else:
+                r["outcome"] = "passed"
 
     def finalize(self):
         log.debug("finalize")
@@ -133,15 +149,13 @@ class NunitXML:
         self.logging = logging
         self.log_passing_tests = log_passing_tests
         self.report_duration = report_duration
-        self.stats = dict.fromkeys(["error", "passed", "failure", "skipped", "total", "asserts"], 0)
+        self.stats = dict.fromkeys(
+            ["error", "passed", "failure", "skipped", "total", "asserts"], 0
+        )
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
-        self.global_properties = []
         self.cases = dict()
 
-        # List of reports that failed on call but teardown is pending.
-        self.open_reports = []
-        self.cnt_double_fail_tests = 0
         self.idrefindex = 100  # Create a unique ID counter
 
     def finalize(self, report):
@@ -192,20 +206,29 @@ class NunitXML:
     def pytest_internalerror(self, excrepr):
         reporter = self.node_reporter("internal")
 
-
-    def pytest_sessionstart(self):
+    def pytest_sessionstart(self, session):
         self.suite_start_time = datetime.utcnow()
 
-    def pytest_sessionfinish(self):
+    def pytest_sessionfinish(self, session, exitstatus):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
         self.suite_stop_time = datetime.utcnow()
-        self.suite_time_delta = (self.suite_stop_time-self.suite_start_time).total_seconds()
+        self.suite_time_delta = (
+            self.suite_stop_time - self.suite_start_time
+        ).total_seconds()
 
-        self.stats['total'] = len(self.cases)
-        self.stats['passed'] = len(list(case for case in self.cases.values() if case['report'].outcome == 'passed'))
+        self.stats["total"] = session.testscollected
+        self.stats["passed"] = len(
+            list(case for case in self.cases.values() if case["outcome"] == "passed")
+        )
+        self.stats["failure"] = len(
+            list(case for case in self.cases.values() if case["outcome"] == "failed")
+        )
+        self.stats["skipped"] = len(
+            list(case for case in self.cases.values() if case["outcome"] == "skipped")
+        )
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             logfile.write('<?xml version="1.0" encoding="utf-8"?>')
@@ -214,5 +237,3 @@ class NunitXML:
 
     def pytest_terminal_summary(self, terminalreporter):
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))
-
-

@@ -2,28 +2,50 @@ import sys
 import os
 import locale
 import platform
-from .models.nunit import (TestRunType, TestResultType, TestCaseElementType, TestSuiteElementType, TestStatusType, TestRunStateType, TestSuiteTypeType, PropertyBagType, PropertyType, EnvironmentType)
+from .models.nunit import (
+    TestRunType,
+    TestResultType,
+    TestCaseElementType,
+    TestSuiteElementType,
+    TestStatusType,
+    TestRunStateType,
+    TestSuiteTypeType,
+    PropertyBagType,
+    PropertyType,
+    EnvironmentType,
+)
 from .attrs2xml import AttrsXmlRenderer
+
+FRAMEWORK_VERSION = "3.6.2"  # Nunit version this was based on
+CLR_VERSION = sys.version
+
+
+PYTEST_TO_NUNIT = {
+    "passed": TestStatusType.Passed,
+    "failed": TestStatusType.Failed,
+    "skipped": TestStatusType.Skipped,
+}
 
 
 class NunitTestRun(object):
     """
     Convert a test report into a Nunit Test Run
     """
+
     def __init__(self, nunitxml):
         self.nunitxml = nunitxml
 
     @property
     def environment(self):
         return EnvironmentType(
-            framework_version=sys.version,
-            clr_version=sys.version,  # Using Python as NUnit spec is for .NET
+            framework_version=FRAMEWORK_VERSION,
+            clr_version=CLR_VERSION,
             os_version=platform.release(),
             platform=platform.system(),
             cwd=os.getcwd(),
             machine_name=platform.machine(),
-            user='',  # TODO: Get sys user but only with a toggle to hide this
-            user_domain='',  # TODO: Get sys user but only with a toggle to hide this
+            user="",  # TODO: Get sys user but only with a toggle to hide this
+            user_domain="",  # TODO: Get sys user but only with a toggle to hide this
             culture=locale.getlocale()[0],
             uiculture=locale.getlocale()[0],  # TODO: Get UI? Locale
             os_architecture=platform.architecture()[0],
@@ -31,28 +53,33 @@ class NunitTestRun(object):
 
     @property
     def test_cases(self):
-        return [TestCaseElementType(
-            id_=str(case['idref']),
-            name=nodeid, 
-            fullname=nodeid, 
-            methodname=case['report'].head_line,
-            properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]),
-            environment=self.environment, 
-            settings=None, 
-            failure=None, 
-            reason=None, 
-            output=None,
-            assertions=None,
-            classname="TestFoo", 
-            runstate=TestRunStateType.Runnable, 
-            seed=str(sys.flags.hash_randomization), 
-            result=TestStatusType.Passed,  # TODO
-            label="test_label", 
-            site=None, 
-            start_time=case['start'].strftime("%Y-%m-%d %H:%M:%S"),
-            end_time=case['stop'].strftime("%Y-%m-%d %H:%M:%S"),
-            duration=int(case['duration']),
-            asserts=0
+        return [
+            TestCaseElementType(
+                id_=str(case["idref"]),
+                name=nodeid,
+                fullname=nodeid,
+                methodname=case["setup-report"].head_line,
+                properties=PropertyBagType(
+                    property=[PropertyType(name="test_property", value="test value")]
+                ),
+                environment=self.environment,
+                settings=None,
+                failure=None,
+                reason=None,
+                output=None,
+                assertions=None,
+                classname="TestFoo",
+                runstate=TestRunStateType.Runnable,
+                seed=str(sys.flags.hash_randomization),
+                result=PYTEST_TO_NUNIT.get(
+                    case["outcome"], TestStatusType.Inconclusive
+                ),
+                label="test_label",
+                site=None,
+                start_time=case["start"].strftime("%Y-%m-%d %H:%M:%S"),
+                end_time=case["stop"].strftime("%Y-%m-%d %H:%M:%S"),
+                duration=int(case["duration"]),
+                asserts=0,
             )
             for nodeid, case in self.nunitxml.cases.items()
         ]
@@ -67,54 +94,57 @@ class NunitTestRun(object):
                 methodname="test",
                 classname="testClass",
                 test_suite=None,
-                properties=PropertyBagType(property=[PropertyType(name="test_property", value="test value")]), 
+                properties=PropertyBagType(
+                    property=[PropertyType(name="test_property", value="test value")]
+                ),
                 environment=self.environment,
-                settings=None, 
-                failure=None, 
-                reason=None, 
+                settings=None,
+                failure=None,
+                reason=None,
                 output=None,
                 assertions=None,
                 test_case=self.test_cases,
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.Assembly,
-                testcasecount=self.nunitxml.stats['total'],
+                testcasecount=self.nunitxml.stats["total"],
                 result=TestStatusType.Passed,
                 label="",
                 site=None,
                 start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
                 end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
                 duration=int(self.nunitxml.suite_time_delta),
-                asserts=self.nunitxml.stats['asserts'],
-                total=self.nunitxml.stats['total'],
-                passed=self.nunitxml.stats['passed'],
-                failed=self.nunitxml.stats['failure'],
+                asserts=self.nunitxml.stats["asserts"],
+                total=self.nunitxml.stats["total"],
+                passed=self.nunitxml.stats["passed"],
+                failed=self.nunitxml.stats["failure"],
                 warnings=0,
                 inconclusive=0,
-                skipped=self.nunitxml.stats['skipped']
+                skipped=self.nunitxml.stats["skipped"],
             )
         ]
 
     def as_test_run(self):
         return TestRunType(
             id_="2",
-            testcasecount=self.nunitxml.stats['total'],
+            testcasecount=self.nunitxml.stats["total"],
             result=TestResultType.Passed,
             start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S"),
             end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S"),
             duration=int(self.nunitxml.suite_time_delta),
-            total=self.nunitxml.stats['total'],
-            passed=self.nunitxml.stats['passed'],
-            failed=self.nunitxml.stats['failure'],
+            total=self.nunitxml.stats["total"],
+            passed=self.nunitxml.stats["passed"],
+            failed=self.nunitxml.stats["failure"],
             inconclusive=0,
-            skipped=self.nunitxml.stats['skipped'],
-            asserts=self.nunitxml.stats['asserts'],
-            command_line=' '.join(sys.argv),
+            skipped=self.nunitxml.stats["skipped"],
+            asserts=self.nunitxml.stats["asserts"],
+            command_line=" ".join(sys.argv),
             filter_=None,
             test_case=None,
             test_suite=self.test_suites,
-            engine_version="3.6.2",  # Nunit version this was based on 
-            clr_version="4.5.1")  # Equivalent .NET CLR runtime version
+            engine_version=FRAMEWORK_VERSION,
+            clr_version=CLR_VERSION,
+        )
 
     def generate_xml(self):
         tr = self.as_test_run()
-        return AttrsXmlRenderer.render(tr, 'test-run')
+        return AttrsXmlRenderer.render(tr, "test-run")
