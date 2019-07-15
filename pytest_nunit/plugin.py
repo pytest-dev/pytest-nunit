@@ -107,7 +107,6 @@ class _NunitNodeReporter:
                     r['error'] = testreport.longrepr
         elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
-            r["start"] = datetime.utcnow()
             r["call-report"] = testreport
             r['error'] = testreport.longreprtext
             r['stack-trace'] = self.nunit_xml._getcrashline(testreport)
