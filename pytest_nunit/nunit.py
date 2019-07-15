@@ -87,7 +87,7 @@ class NunitTestRun(object):
                 id_=str(case["idref"]),
                 name=nodeid,
                 fullname=nodeid,
-                methodname=nodeid,
+                methodname=nodeid,  # TODO : Use actual function name
                 properties=PropertyBagType(
                     property=[
                         PropertyType(name=k, value=v)
@@ -95,24 +95,24 @@ class NunitTestRun(object):
                     ]
                 ),
                 environment=self.environment,
-                settings=None,
+                settings=None,  # TODO : Add settings as optional fixture
                 failure=FailureType(message=CdataComment(text=case['error']), stack_trace=CdataComment(text=case['stack-trace'])),
                 reason=ReasonType(message=CdataComment(text=case['reason'])),
                 output=CdataComment(text=case['reason']),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case),
-                classname="",
+                classname="",  # TODO: Use host TestSuite or class if exists
                 runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
                     case["outcome"], TestStatusType.Inconclusive
                 ),
-                label="",
+                label="",  # TODO : Add docstring
                 site=None,
                 start_time=case["start"].strftime("%Y-%m-%d %H:%M:%S.%f"),
                 end_time=case["stop"].strftime("%Y-%m-%d %H:%M:%S.%f"),
                 duration=case["duration"],
-                asserts=0,
+                asserts=0,  # TODO : Add assert count
             )
             for nodeid, case in self.nunitxml.cases.items()
         ]
@@ -123,9 +123,9 @@ class NunitTestRun(object):
             TestSuiteElementType(
                 id_="3",  # TODO : Suite numbers
                 name=self.nunitxml.suite_name,
-                fullname="example",
-                methodname="test",
-                classname="testClass",
+                fullname="pytest",
+                methodname="",
+                classname="",
                 test_suite=None,
                 properties=PropertyBagType(
                     property=[PropertyType(name="python_version", value=sys.version)]
