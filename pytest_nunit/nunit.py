@@ -87,7 +87,7 @@ class NunitTestRun(object):
                 id_=str(case["idref"]),
                 name=nodeid,
                 fullname=nodeid,
-                methodname=case["setup-report"].head_line,
+                methodname=nodeid,
                 properties=PropertyBagType(
                     property=[
                         PropertyType(name=k, value=v)
