@@ -2,7 +2,7 @@ trigger:
 - master
 name: $(Year:yy)$(DayOfYear)$(Rev:r)
 variables:
-  majorVer: '0.0.5'
+  majorVer: '0.0.6'
 
 stages:
   - stage: Unit_Test
@@ -55,7 +55,7 @@ stages:
     - job: 'Test_Linux'
       pool:
         vmImage: 'Ubuntu-16.04'
-            strategy:
+      strategy:
         matrix:
           Python27_Pytest_Latest:
             python.version: '2.7'
