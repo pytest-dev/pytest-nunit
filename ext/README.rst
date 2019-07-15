@@ -14,3 +14,21 @@ The ``nunit-src`` directory contains a copy of the Nunit3 XSD files from the Nun
 The Nunit3 documentation is the closest thing to a reference, however they don't provide a master XSD.
 
 The src XSD files are used by the integration tests to validate any XML files produced by the plugin and prove very useful.
+
+``generate-models.py``
+----------------------
+
+This script is used for generating Python models from an XSD document.
+
+It looks at an XSD document to find complexType's and creates attrs classes for each corresponding type.
+
+- ``xs:choice`` elements will be marked as optional,
+- ``xs:sequence`` will be marked as required, unless they have ``minOccurs=0``
+- Atomic types will be mapped to Python builtin types
+- Simple Types will be mapped to their inherited atomic type
+- Enumeration types will be created as ``enum`` classes
+
+To regenerate the models for the nunit-models:
+
+   python ext/generate-models.py ext/nunit-model/TestResult.xsd pytest_nunit/models/nunit.py
+
