@@ -84,7 +84,9 @@ Skipped Tests
 
 Skipped tests will have the ``reason`` attribute (if provided) included in the results.
 
-.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_skip.png
+.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_skips.png
+   :width: 70%
+
 
 Attachments
 ~~~~~~~~~~~
@@ -92,6 +94,7 @@ Attachments
 Using the ``add_nunit_attachment`` fixture will render any attachments in the "attachments" tab inside the Tests console:
 
 .. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_attachments.png
+   :width: 70%
 
 Failures and xfails
 ~~~~~~~~~~~~~~~~~~~
@@ -99,3 +102,4 @@ Failures and xfails
 Any failed tests, whether as xpass or xfail, will have the error output and comparison, as well as the failing line in the stack trace.
 
 .. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
+   :width: 70%
