@@ -16,7 +16,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return "0.2.0"
+        return "0.2.1"
 
 
 setup(
@@ -42,6 +42,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
