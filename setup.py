@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
 import codecs
 from setuptools import setup
 
@@ -16,7 +15,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return "0.0.5"
+        return "0.0.6"
 
 
 setup(
