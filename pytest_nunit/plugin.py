@@ -39,7 +39,7 @@ def pytest_addoption(parser):
         "--nunit-prefix",
         action="store",
         metavar="str",
-        default=None,
+        default='',
         help="prepend prefix to classnames in nunit-xml output",
     )
     parser.addini(
@@ -94,7 +94,8 @@ class _NunitNodeReporter:
                 "properties": {"python-version": sys.version},
                 "attachments": None,
                 "error": '',
-                "stack-trace": ''
+                "stack-trace": '',
+                "name": self.nunit_xml.prefix + testreport.nodeid
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
