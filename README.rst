@@ -21,12 +21,17 @@ pytest-nunit
 
 A pytest plugin for generating Nunit3 test result XML output
 
-This plugin is an early alpha release!
+This plugin is an early beta release!
 
 Configuration
 -------------
 
+--nunit-xml
+~~~~~~~~~~~
+
 Use ``--nunit-xml=output.xml`` to create an Nunit3-compatible file called ``output.xml``
+
+Argument takes a path to the output file, either relative, or absolute.
 
 Fixtures
 --------
