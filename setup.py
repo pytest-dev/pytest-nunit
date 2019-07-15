@@ -16,7 +16,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return "0.2.0"
+        return "0.2.1"
 
 
 setup(
@@ -28,11 +28,14 @@ setup(
     maintainer_email='anthonyshaw@apache.org',
     license='MIT',
     url='https://github.com/tonybaloney/pytest-nunit',
-    description='A pytest plugin for generating Nunit3 test result XML output',
+    description='A pytest plugin for generating NUnit3 test result XML output',
     long_description=read('README.rst'),
     packages=find_packages(exclude=('test*',)),
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=['pytest>=3.5.0', 'enum34==1.1.6', 'attrs'],
+    install_requires=['pytest>=3.5.0', 'attrs'],
+    extras_require={
+        ':python_version=="2.7"': ['enum34>=1.1.6'],
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Pytest',
@@ -42,6 +45,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
