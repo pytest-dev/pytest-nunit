@@ -3,6 +3,7 @@
 
 import os
 import codecs
+from setuptools import find_packages
 from setuptools import setup
 
 
@@ -29,7 +30,7 @@ setup(
     url='https://github.com/tonybaloney/pytest-nunit',
     description='A pytest plugin for generating Nunit3 test result XML output',
     long_description=read('README.rst'),
-    py_modules=['pytest_nunit'],
+    packages=find_packages(exclude=('test*',)),
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
     install_requires=['pytest>=3.5.0', 'enum34==1.1.6; python_version <= "3.4"', 'attrs'],
     classifiers=[
