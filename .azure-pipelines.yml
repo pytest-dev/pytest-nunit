@@ -181,18 +181,12 @@ stages:
           architecture: 'x64'
 
       - script: |
-          echo "Installing Pytest - $PYTEST_VERSION"
+          echo "Installing Pytest - %PYTEST_VERSION%"
           python -m pip install --upgrade pip
-          pip install pytest$PYTEST_VERSION
+          pip install pytest%PYTEST_VERSION%
         env:
           PYTEST_VERSION: $(pytest_version)
 
-      - script: |
-          echo "Installing Pytest - $PYTEST_VERSION"
-          python -m pip install --upgrade pip
-          pip install pytest$PYTEST_VERSION
-        env:
-          PYTEST_VERSION: $(pytest_version)
       - script: |
           pip install -e .
           pip install xmlschema==1.0.13
