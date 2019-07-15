@@ -78,3 +78,10 @@ Add the following steps to your build job to publish the results to Azure Pipeli
         inputs:
           testResultsFormat: NUnit
           testResultsFiles: '**/test-results*.xml'
+
+Skipped Tests
+~~~~~~~~~~~~~
+
+Skipped tests will have the ``reason`` attribute (if provided) included in the results.
+
+.. image:: http
