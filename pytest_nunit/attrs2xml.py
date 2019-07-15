@@ -4,11 +4,9 @@ import enum
 
 class CdataComment(ET.Element):
     def __init__(self, text):
-        self._cdata = '!CDATA'
         self.text = text
         self.attrib = {}
-        self._children = []
-        super(CdataComment)
+        super(CdataComment, self).__init__('CDATA!', text=text)
 
 
 ET._original_serialize_xml = ET._serialize_xml
@@ -18,7 +16,7 @@ def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
     """
     Custom serializer to handle CdataComment classes
     """
-    if hasattr(elem, '_cdata'):
+    if isinstance(elem, CdataComment):
         write("<%s><%s%s]]></%s>" % (
                 elem.tag, '![CDATA[', elem.text, elem.tag))
         return

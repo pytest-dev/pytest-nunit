@@ -111,7 +111,6 @@ class _NunitNodeReporter:
             r["call-report"] = testreport
             r['error'] = testreport.longreprtext
             r['stack-trace'] = self.nunit_xml._getcrashline(testreport)
-            # TODO : Extra data
         elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["stop"] = datetime.utcnow()
