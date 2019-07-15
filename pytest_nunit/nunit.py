@@ -1,6 +1,5 @@
 import sys
 import os
-import locale
 import platform
 from .models.nunit import (
     TestRunType,
@@ -13,9 +12,6 @@ from .models.nunit import (
     PropertyBagType,
     PropertyType,
     EnvironmentType,
-    AssertionStatusType,
-    AssertionsType,
-    AssertionType,
     AttachmentsType,
     AttachmentType,
     ReasonType,
