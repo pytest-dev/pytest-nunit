@@ -27,6 +27,7 @@ It looks at an XSD document to find complexType's and creates attrs classes for 
 - Atomic types will be mapped to Python builtin types
 - Simple Types will be mapped to their inherited atomic type
 - Enumeration types will be created as ``enum`` classes
+- Output will be formatting using the black 19.0 API
 
 To regenerate the models for the nunit-models:
 

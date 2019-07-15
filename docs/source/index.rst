@@ -10,7 +10,12 @@ Welcome to pytest-nunit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. include:: ../../README.rst
 
+Model Generation
+================
+
+.. include:: ../../ext/README.rst
 
 Indices and tables
 ==================
