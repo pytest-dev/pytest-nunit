@@ -4,9 +4,8 @@ import enum
 
 class CdataComment(ET.Element):
     def __init__(self, text):
+        super(CdataComment, self).__init__('CDATA!')
         self.text = text
-        self.attrib = {}
-        super(CdataComment, self).__init__('CDATA!', text=text)
 
 
 ET._original_serialize_xml = ET._serialize_xml
