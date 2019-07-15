@@ -2,6 +2,11 @@ XSD schemas copied from https://github.com/nunit/nunit/tree/master/src/NUnitFram
 
 The properties type has a Unique Particle Violation ( minOccurs="0") so the constraint has been modified from the original source to make it XSD 1.1 compatible.
 
+Also, the attachments elements were in the wrong place.
+
+License
+-------
+
 Nunit is licensed under the MIT license.
 
 Copyright (c) 2019 Charlie Poole, Rob Prouse
