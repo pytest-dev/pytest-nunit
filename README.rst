@@ -2,7 +2,7 @@
 pytest-nunit
 ============
 
-.. image:: https://dev.azure.com/AnthonyShaw/pytest-nunit/_apis/build/status/tonybaloney.pytest-nunit?branchName=master
+.. image:: https://dev.azure.com/AnthonyShaw/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
    :target: https://dev.azure.com/AnthonyShaw/pytest-nunit/_build/latest?definitionId=3?branchName=master
    :alt: Build status
 
@@ -84,7 +84,7 @@ Skipped Tests
 
 Skipped tests will have the ``reason`` attribute (if provided) included in the results.
 
-.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_skips.png
+.. image:: https://github.com/pytest-dev/pytest-nunit/raw/master/docs/source/_static/screen_skips.png
    :width: 70%
 
 
@@ -93,7 +93,7 @@ Attachments
 
 Using the ``add_nunit_attachment`` fixture will render any attachments in the "attachments" tab inside the Tests console:
 
-.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_attachments.png
+.. image:: https://github.com/pytest-dev/pytest-nunit/raw/master/docs/source/_static/screen_attachments.png
    :width: 70%
 
 Failures and xfails
@@ -101,5 +101,5 @@ Failures and xfails
 
 Any failed tests, whether as xpass or xfail, will have the error output and comparison, as well as the failing line in the stack trace.
 
-.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
+.. image:: https://github.com/pytest-dev/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
    :width: 70%

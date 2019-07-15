@@ -27,7 +27,7 @@ setup(
     maintainer='Anthony Shaw',
     maintainer_email='anthonyshaw@apache.org',
     license='MIT',
-    url='https://github.com/tonybaloney/pytest-nunit',
+    url='https://github.com/pytest-dev/pytest-nunit',
     description='A pytest plugin for generating NUnit3 test result XML output',
     long_description=read('README.rst'),
     packages=find_packages(exclude=('test*',)),
