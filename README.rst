@@ -52,7 +52,7 @@ Calling `record_nunit_property(key: str, value: str)` will result in `Property` 
 add_nunit_attachment
 ~~~~~~~~~~~~~~~~~~~~
 
-Add an attachment to a node test-case by calling the `add_nunit_attachment()` function with the filepath and a description.
+Add an attachment to a node test-case by calling the `add_nunit_attachment(path: str, description: str)` function with the filepath and a description.
 
 .. code-block:: python
 
@@ -71,17 +71,31 @@ Add the following steps to your build job to publish the results to Azure Pipeli
       - script: "pip install pytest-nunit"
 
       - script: |
-          python -m pytest tests -v --nunit-xml=test-results-integration.xml
+          python -m pytest tests -v --nunit-xml=test-results.xml
         continueOnError: true
 
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: NUnit
-          testResultsFiles: '**/test-results*.xml'
+          testResultsFiles: '**/test-results.xml'
 
 Skipped Tests
 ~~~~~~~~~~~~~
 
 Skipped tests will have the ``reason`` attribute (if provided) included in the results.
 
-.. image:: http
+.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_skip.png
+
+Attachments
+~~~~~~~~~~~
+
+Using the ``add_nunit_attachment`` fixture will render any attachments in the "attachments" tab inside the Tests console:
+
+.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_attachments.png
+
+Failures and xfails
+~~~~~~~~~~~~~~~~~~~
+
+Any failed tests, whether as xpass or xfail, will have the error output and comparison, as well as the failing line in the stack trace.
+
+.. image:: https://github.com/tonybaloney/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
