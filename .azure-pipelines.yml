@@ -36,7 +36,6 @@ stages:
       - script: |
           python -m pytest tests/unit -v --nunit-xml=test-results-unit.xml
         displayName: 'pytest with nunit-xml flag - passes'
-        continueOnError: true
       - task: CopyFiles@2
         inputs:
           contents: '**/test-results*.xml'
@@ -119,7 +118,6 @@ stages:
       - script: |
           python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml
         displayName: 'pytest with nunit-xml flag - passes'
-        continueOnError: true
 
       - task: CopyFiles@2
         inputs:
