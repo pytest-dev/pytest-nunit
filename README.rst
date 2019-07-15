@@ -114,11 +114,11 @@ History
 -------
 
 0.3.0 (15th July)
-=================
+~~~~~~~~~~~~~~~~~
 
 - Added ``--nunit-prefix`` option.
 
 0.2.1 (15th July)
-=================
+~~~~~~~~~~~~~~~~~
 
 - First stable release
