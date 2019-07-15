@@ -81,7 +81,7 @@ class NunitTestRun(object):
         return [
             TestCaseElementType(
                 id_=str(case["idref"]),
-                name=nodeid,
+                name=case['name'],
                 fullname=nodeid,
                 methodname=nodeid,  # TODO : Use actual function name
                 properties=PropertyBagType(

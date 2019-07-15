@@ -19,7 +19,7 @@ pytest-nunit
      :alt: PyPI download month
 
 
-A pytest plugin for generating Nunit3 test result XML output
+A pytest plugin for generating NUnit3 test result XML output
 
 This plugin is an early beta release!
 
@@ -29,9 +29,15 @@ Configuration
 --nunit-xml
 ~~~~~~~~~~~
 
-Use ``--nunit-xml=output.xml`` to create an Nunit3-compatible file called ``output.xml``
+Use ``--nunit-xml=output.xml`` to create an NUnit3-compatible file called ``output.xml``
 
 Argument takes a path to the output file, either relative, or absolute.
+
+--nunit-prefix
+~~~~~~~~~~~~~~
+
+Use ``--nunit-prefix=example-`` to prefix all test case names with ``"example-"``
+
 
 Fixtures
 --------
@@ -103,3 +109,16 @@ Any failed tests, whether as xpass or xfail, will have the error output and comp
 
 .. image:: https://github.com/pytest-dev/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
    :width: 70%
+
+History
+-------
+
+0.3.0 (15th July)
+=================
+
+- Added ``--nunit-prefix`` option.
+
+0.2.1 (15th July)
+=================
+
+- First stable release
