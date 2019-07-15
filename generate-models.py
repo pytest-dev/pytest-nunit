@@ -8,10 +8,14 @@ Written by Anthony Shaw.
 """
 
 import logging
-import click
 import xmlschema
 import xmlschema.qnames
-import black
+
+try:
+    import black
+    import click
+except ImportError:
+    print("Install black and click before use.")
 
 
 logging.basicConfig()
