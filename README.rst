@@ -55,3 +55,21 @@ Add an attachment to a node test-case by calling the `add_nunit_attachment()` fu
         pth = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'fixture.gif')
         add_nunit_attachment(path, "peanut butter jelly time")
         assert 1 == 1
+
+Usage with Azure Pipelines
+--------------------------
+
+Add the following steps to your build job to publish the results to Azure Pipelines:
+
+.. code-block:: yaml
+
+      - script: "pip install pytest-nunit"
+
+      - script: |
+          python -m pytest tests -v --nunit-xml=test-results-integration.xml
+        continueOnError: true
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: NUnit
+          testResultsFiles: '**/test-results*.xml'
