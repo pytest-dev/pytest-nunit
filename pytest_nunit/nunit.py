@@ -1,5 +1,6 @@
 import sys
 import os
+import locale
 import platform
 from .models.nunit import (
     TestRunType,
@@ -48,7 +49,9 @@ def _format_attachments(case):
 
 
 def _getlocale():
-    # TODO: Come up with a Python 2/3 friendly way of doing this
+    language_code = locale.getdefaultlocale()[0]
+    if language_code:
+        return language_code
     return 'en-US'
 
 
