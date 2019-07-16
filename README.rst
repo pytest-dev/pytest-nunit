@@ -2,8 +2,8 @@
 pytest-nunit
 ============
 
-.. image:: https://dev.azure.com/AnthonyShaw/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
-   :target: https://dev.azure.com/AnthonyShaw/pytest-nunit/_build/latest?definitionId=3?branchName=master
+.. image:: https://pytest-dev.visualstudio.com/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
+   :target: https://pytest-dev.visualstudio.com/pytest-nunit/_build/latest?definitionId=7&branchName=master
    :alt: Build status
 
 .. image:: https://img.shields.io/pypi/v/pytest-nunit.svg
