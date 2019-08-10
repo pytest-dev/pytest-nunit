@@ -141,7 +141,7 @@ class NunitTestRun(object):
                 type_=TestSuiteTypeType.Assembly,
                 testcasecount=self.nunitxml.stats["total"],
                 result=TestStatusType.Passed,
-                label="",
+                label=self.__doc__ if self.__doc__ != None else "",
                 site=None,
                 start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
