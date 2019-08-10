@@ -105,3 +105,65 @@ def test_slow_test(testdir, tmpdir):
     assert out['test-suite']['@failed'] == 0
     assert out['test-suite']['@skipped'] == 0
     assert out['test-suite']['test-case']['@duration'] > 3.0
+
+
+def test_docstring(testdir, tmpdir):
+    testdir.makepyfile("""
+        def test_docstring(record_nunit_property):
+            '''Hello'''
+            record_nunit_property("test", "value")
+            assert 1 == 1  
+    """)
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
+    result = testdir.runpytest(
+        '-v', '--nunit-xml='+outfile_pth
+    )
+    result.stdout.fnmatch_lines([
+        '*test_docstring PASSED*',
+    ])
+    assert result.ret == 0
+    os.path.exists(outfile_pth)
+    xs = xmlschema.XMLSchema(os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../ext/nunit-src/TestResult.xsd'), validation='lax')
+    out = xs.to_dict(outfile_pth)
+    assert out['@total'] == 1, out
+    assert out['@passed'] == 1, out
+    assert out['@failed'] == 0, out
+    assert out['@skipped'] == 0, out
+    assert out['test-suite']['@total'] == 1
+    assert out['test-suite']['@passed'] == 1
+    assert out['test-suite']['@failed'] == 0
+    assert out['test-suite']['@skipped'] == 0
+    assert out['test-suite']['test-case']['@label'] == "Hello"
+
+
+def test_no_docstring(testdir, tmpdir):
+    testdir.makepyfile("""
+        def test_no_docstring(record_nunit_property):
+            record_nunit_property("test", "value")
+            assert 1 == 1  
+    """)
+    outfile = tmpdir.join('out.xml')
+    outfile_pth = str(outfile)
+
+    result = testdir.runpytest('-v', '--nunit-xml=' + outfile_pth)
+    result.stdout.fnmatch_lines([
+        '*test_no_docstring PASSED*',
+    ])
+    assert result.ret == 0
+    os.path.exists(outfile_pth)
+    xs = xmlschema.XMLSchema(os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        '../../ext/nunit-src/TestResult.xsd'),
+                             validation='lax')
+    out = xs.to_dict(outfile_pth)
+    assert out['@total'] == 1, out
+    assert out['@passed'] == 1, out
+    assert out['@failed'] == 0, out
+    assert out['@skipped'] == 0, out
+    assert out['test-suite']['@total'] == 1
+    assert out['test-suite']['@passed'] == 1
+    assert out['test-suite']['@failed'] == 0
+    assert out['test-suite']['@skipped'] == 0
+    assert out['test-suite']['test-case']['@label'] == ""
