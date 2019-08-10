@@ -109,7 +109,7 @@ stages:
 
       - script: |
           pip install -e .
-          pip install xmlschema==1.0.13 tox
+          pip install xmlschema==1.0.13 pytest-xdist tox
         displayName: 'Install package and dependencies'
 
       - script: |
@@ -120,6 +120,10 @@ stages:
 
       - script: |
           python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml
+        displayName: 'pytest with nunit-xml flag - passes'
+
+      - script: |
+          python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml -n 4
         displayName: 'pytest with nunit-xml flag - passes'
 
       - task: CopyFiles@2
