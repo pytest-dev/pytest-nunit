@@ -10,6 +10,7 @@ Written by Anthony Shaw.
 import logging
 import xmlschema
 import xmlschema.qnames
+import keywords
 
 try:
     import black
@@ -23,8 +24,7 @@ log = logging.getLogger("__name__")
 log.setLevel(logging.DEBUG)
 
 # Python reserved keywords. TODO : Sure this is in stdlib somewhere? maybe tokens
-KEYWORDS = ["id", "type", "class", "if", "else", "and", "for", "not", "or", "filter"]
-
+KEYWORDS = keywords.kwlist
 
 # Map XML atomic builtin types to Python std types
 XS_ATOMIC_MAP = {

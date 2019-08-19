@@ -59,36 +59,39 @@ stages:
           Python27_Pytest_Latest:
             python.version: '2.7'
             pytest_version: '>=4.1.0'
+            tox_env: 'py27-pytestlatest'
           Python34_Pytest_Latest:
             python.version: '3.4'
             pytest_version: '>=4.1.0'
+            tox_env: 'py34-pytestlatest'
           Python35_Pytest_Latest:
             python.version: '3.5'
             pytest_version: '>=4.1.0'
+            tox_env: 'py35-pytestlatest'
           Python36_Pytest_Latest:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
+            tox_env: 'py36-pytestlatest'
           Python37:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
+            tox_env: 'py37-pytestlatest'
           Python37_Pytest_50:
             python.version: '3.7'
             pytest_version: '>=5.0.0'
+            tox_env: 'py37-pytest50'
           Python37_Pytest_41:
             python.version: '3.7'
             pytest_version: '>=4.1.0,<4.2.0'
+            tox_env: 'py37-pytest41'
           Python37_Pytest_40:
             python.version: '3.7'
             pytest_version: '>=4.0.0,<4.1.0'
-          Python37_Pytest_37:
+            tox_env: 'py37-pytest40'
+          Python37_Pytest_38:
             python.version: '3.7'
             pytest_version: '>=3.8.0,<4.0.0'
-          Python37_Pytest_28:
-            python.version: '3.7'
-            pytest_version: '>=2.8.0,<3.4.0'
-          Python37_Pytest_1:
-            python.version: '3.7'
-            pytest_version: '>=1.0.0,<2.8.0'
+            tox_env: 'py37-pytest38'
         maxParallel: 8
 
       steps:
@@ -105,18 +108,22 @@ stages:
           PYTEST_VERSION: $(pytest_version)
 
       - script: |
-          echo "Installing Pytest - $PYTEST_VERSION"
-          python -m pip install --upgrade pip
-          pip install pytest$PYTEST_VERSION
-        env:
-          PYTEST_VERSION: $(pytest_version)
-      - script: |
           pip install -e .
-          pip install xmlschema==1.0.13
+          pip install xmlschema==1.0.13 pytest-xdist tox
         displayName: 'Install package and dependencies'
 
       - script: |
+          python -m tox -e $TOXENV -v
+        displayName: 'tox env'
+        env:
+          TOXENV: $(tox_env)
+
+      - script: |
           python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml
+        displayName: 'pytest with nunit-xml flag - passes'
+
+      - script: |
+          python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml -n 4
         displayName: 'pytest with nunit-xml flag - passes'
 
       - task: CopyFiles@2
@@ -140,30 +147,39 @@ stages:
           Python27_Pytest_Latest:
             python.version: '2.7'
             pytest_version: '>=4.1.0'
+            tox_env: 'py27-pytestlatest'
           Python34_Pytest_Latest:
             python.version: '3.4'
             pytest_version: '>=4.1.0'
+            tox_env: 'py34-pytestlatest'
           Python35_Pytest_Latest:
             python.version: '3.5'
             pytest_version: '>=4.1.0'
+            tox_env: 'py35-pytestlatest'
           Python36_Pytest_Latest:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
+            tox_env: 'py36-pytestlatest'
           Python37:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
+            tox_env: 'py37-pytestlatest'
           Python37_Pytest_50:
             python.version: '3.7'
             pytest_version: '>=5.0.0'
+            tox_env: 'py37-pytest50'
           Python37_Pytest_41:
             python.version: '3.7'
             pytest_version: '>=4.1.0,<4.2.0'
+            tox_env: 'py37-pytest41'
           Python37_Pytest_40:
             python.version: '3.7'
             pytest_version: '>=4.0.0,<4.1.0'
-          Python37_Pytest_37:
+            tox_env: 'py37-pytest40'
+          Python37_Pytest_38:
             python.version: '3.7'
             pytest_version: '>=3.8.0,<4.0.0'
+            tox_env: 'py37-pytest38'
         maxParallel: 8
 
       steps:
@@ -181,13 +197,19 @@ stages:
 
       - script: |
           pip install -e .
-          pip install xmlschema==1.0.13
+          pip install xmlschema==1.0.13 tox
         displayName: 'Install package and dependencies'
 
       - script: |
           python -m pytest tests\integration -v --nunit-xml=test-results-integration.xml
-        displayName: 'pytest with nunit-xml flag - passes'
+        displayName: 'pytest with nunit-xml flag'
         continueOnError: true
+
+      - script: |
+          python -m tox -e %TOXENV% -v
+        displayName: 'tox env'
+        env:
+          TOXENV: $(tox_env)
 
       - task: CopyFiles@2
         inputs:

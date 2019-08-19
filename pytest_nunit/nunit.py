@@ -1,5 +1,6 @@
 import sys
 import os
+import locale
 import platform
 from .models.nunit import (
     TestRunType,
@@ -35,6 +36,14 @@ def _format_assertions(case):
     return None
 
 
+def get_node_names(nodeid):
+    parts = nodeid.split('::')
+    if len(parts) >= 2:
+        return tuple(parts[-2:])
+    else:
+        return ("", "")
+
+
 def _format_attachments(case):
     if case['attachments']:
         return AttachmentsType(
@@ -48,7 +57,9 @@ def _format_attachments(case):
 
 
 def _getlocale():
-    # TODO: Come up with a Python 2/3 friendly way of doing this
+    language_code = locale.getdefaultlocale()[0]
+    if language_code:
+        return language_code
     return 'en-US'
 
 
@@ -83,7 +94,7 @@ class NunitTestRun(object):
                 id_=str(case["idref"]),
                 name=case['name'],
                 fullname=nodeid,
-                methodname=nodeid,  # TODO : Use actual function name
+                methodname= get_node_names(nodeid)[1],
                 properties=PropertyBagType(
                     property=[
                         PropertyType(name=k, value=v)
@@ -97,7 +108,7 @@ class NunitTestRun(object):
                 output=CdataComment(text=case['reason']),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case),
-                classname="",  # TODO: Use host TestSuite or class if exists
+                classname=get_node_names(nodeid)[0],
                 runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
