@@ -2,8 +2,8 @@
 pytest-nunit
 ============
 
-.. image:: https://dev.azure.com/AnthonyShaw/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
-   :target: https://dev.azure.com/AnthonyShaw/pytest-nunit/_build/latest?definitionId=3?branchName=master
+.. image:: https://pytest-dev.visualstudio.com/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
+   :target: https://pytest-dev.visualstudio.com/pytest-nunit/_build/latest?definitionId=7&branchName=master
    :alt: Build status
 
 .. image:: https://img.shields.io/pypi/v/pytest-nunit.svg
@@ -109,6 +109,22 @@ Any failed tests, whether as xpass or xfail, will have the error output and comp
 
 .. image:: https://github.com/pytest-dev/pytest-nunit/raw/master/docs/source/_static/screen_fails.png
    :width: 70%
+
+
+Compatibility with other plugins
+--------------------------------
+
+x-dist
+~~~~~~
+
+When running with `-f`, make sure to add in your pytest config file (setup.cfg etc)
+`looponfailroots = testdir` to exclude xml report files from being watched for changes.
+
+Check looponfails_
+
+
+.. _looponfails: https://docs.pytest.org/en/3.0.1/xdist.html#running-tests-in-looponfailing-mode
+
 
 History
 -------
