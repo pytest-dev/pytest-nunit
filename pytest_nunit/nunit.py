@@ -88,7 +88,7 @@ class NunitTestRun(object):
             platform=platform.system(),
             cwd=os.getcwd(),
             machine_name=platform.machine(),
-            user=_get_user_id()[0] if self.nunitxml.show_user else '',
+            user=_get_user_id()[0] if self.nunitxml.show_username else '',
             user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
             culture=_getlocale(),
             uiculture=_getlocale(),  # TODO: Get UI? Locale
