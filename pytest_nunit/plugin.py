@@ -53,18 +53,18 @@ def pytest_addoption(parser):
     )  # choices=['no', 'stdout', 'stderr'])
 
     parser.addini(
-        "nunit_show_username",  # name
-        "Display username  ",  # Description
-        "yes/no",  # options
-        default="no",  # default value
-    )  # choices=['no', 'yes', ])
+        "nunit_show_username",
+        "Display username in results",
+        "bool",
+        default=False,
+    )
 
     parser.addini(
-        "nunit_show_user_domain",  # name
-        "Display user domain ",  # Description
-        "yes/no",  # options
-        default="no",  # default value
-    )  # choices=['no', 'yes', ])
+        "nunit_show_user_domain",
+        "Display computer domain in results",
+        "bool",
+        default=False,
+    )
 
 
 def pytest_configure(config):
@@ -222,8 +222,8 @@ class NunitXML:
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.cases = dict()
-        self.show_username = True if show_username == "yes" else False
-        self.show_user_domain = True if show_user_domain == "yes" else False
+        self.show_username = show_username
+        self.show_user_domain = show_user_domain
 
         self.idrefindex = 100  # Create a unique ID counter
 
