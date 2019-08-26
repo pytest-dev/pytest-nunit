@@ -2,10 +2,7 @@ import sys
 import os
 import locale
 import platform
-try:
-    import pwd
-except ImportError:
-    import winpwd as pwd
+import getpass
 from .models.nunit import (
     TestRunType,
     TestResultType,
@@ -36,7 +33,12 @@ PYTEST_TO_NUNIT = {
 
 
 def _get_user_id():
-    return (pwd.getpwuid(os.getuid()).pw_name, platform.node())
+    try:
+        username = getpass.getuser()
+    except ImportError:  # Windows
+        username = "UNKNOWN"
+
+    return (username, platform.node())
 
 
 def _format_assertions(case):
