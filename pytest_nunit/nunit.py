@@ -2,7 +2,10 @@ import sys
 import os
 import locale
 import platform
-import getpass
+try:
+    import pwd
+except ImportError:
+    import winpwd as pwd
 from .models.nunit import (
     TestRunType,
     TestResultType,
@@ -30,6 +33,10 @@ PYTEST_TO_NUNIT = {
     "failed": TestStatusType.Failed,
     "skipped": TestStatusType.Skipped,
 }
+
+
+def _get_user_id():
+    return (pwd.getpwuid(os.getuid()).pw_name, platform.node())
 
 
 def _format_assertions(case):
@@ -81,8 +88,8 @@ class NunitTestRun(object):
             platform=platform.system(),
             cwd=os.getcwd(),
             machine_name=platform.machine(),
-            user=getpass.getuser(),
-            user_domain=platform.node(),
+            user=_get_user_id()[0] if self.nunitxml.show_user else '',
+            user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
             culture=_getlocale(),
             uiculture=_getlocale(),  # TODO: Get UI? Locale
             os_architecture=platform.architecture()[0],
