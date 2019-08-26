@@ -208,8 +208,8 @@ class NunitXML:
         prefix,
         suite_name="pytest",
         logging="no",
-        show_username="no",
-        show_user_domain="no",
+        show_username=False,
+        show_user_domain=False,
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
