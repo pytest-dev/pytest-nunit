@@ -112,10 +112,13 @@ def test_attachment_attach_on_any(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 1
     assert out['test-suite']['@skipped'] == 0
-    assert out['test-suite']['test-case'][0]['attachments']['attachment'][0]['description'] == "desc"
-    assert out['test-suite']['test-case'][0]['attachments']['attachment'][0]['filePath'] == "pass.pth"
-    assert out['test-suite']['test-case'][1]['attachments']['attachment'][0]['description'] == "desc"
-    assert out['test-suite']['test-case'][1]['attachments']['attachment'][0]['filePath'] == "fail.pth"
+    for case in out['test-suite']['test-case']:
+        if case['@name'] == 'test_attachment_attach_on_any.py::test_pass':
+            assert case['attachments']['attachment'][0]['description'] == "desc"
+            assert case['attachments']['attachment'][0]['filePath'] == "pass.pth"
+        else:
+            assert case['attachments']['attachment'][0]['description'] == "desc"
+            assert case['attachments']['attachment'][0]['filePath'] == "fail.pth"
 
 
 def test_attachment_attach_on_fail(testdir, tmpdir):
