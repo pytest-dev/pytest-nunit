@@ -127,7 +127,7 @@ class NunitTestRun(object):
             user=_get_user_id()[0] if self.nunitxml.show_username else '',
             user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
             culture=_getlocale(),
-            uiculture=_getlocale(),  # TODO: Get UI? Locale
+            uiculture=_getlocale(),
             os_architecture=platform.architecture()[0],
         )
 
