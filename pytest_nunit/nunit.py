@@ -18,6 +18,8 @@ from .models.nunit import (
     AttachmentType,
     ReasonType,
     FailureType,
+    TestFilterType,
+    ValueMatchFilterType
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
 
@@ -86,6 +88,17 @@ def _format_attachments(case, attach_on):
             )
     return None
 
+
+def _format_filters(filters_):
+    """
+    Create a filter list
+
+    :param filters_: The runtime filters
+    :type  filters_: `pytest_nunit.plugin.PytestFilter`
+    """
+    test_filters = []
+    if filters_.keyword:
+        test_filters.append(TestFilterType(ValueMatchFilterType(re=filters_.keyword)))
 
 def _getlocale():
     language_code = locale.getdefaultlocale()[0]
@@ -215,7 +228,7 @@ class NunitTestRun(object):
             skipped=self.nunitxml.stats["skipped"],
             asserts=self.nunitxml.stats["asserts"],
             command_line=" ".join(sys.argv),
-            filter_=None,
+            filter_=_format_filters(self.nunitxml.filters),
             test_case=None,
             test_suite=self.test_suites,
             engine_version=FRAMEWORK_VERSION,

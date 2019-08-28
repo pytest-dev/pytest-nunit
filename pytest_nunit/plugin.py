@@ -12,6 +12,7 @@ import os
 import sys
 from datetime import datetime
 import functools
+from collections import namedtuple
 
 from .nunit import NunitTestRun
 
@@ -20,6 +21,9 @@ import pytest
 
 logging.basicConfig()
 log = logging.getLogger("__name__")
+
+
+PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
 
 
 def pytest_addoption(parser):
@@ -71,13 +75,21 @@ def pytest_configure(config):
     nunit_xmlpath = config.option.nunit_xmlpath
     # prevent opening xmllog on slave nodes (xdist)
     if nunit_xmlpath and not hasattr(config, "slaveinput"):
+
+        filters = PytestFilters(
+            keyword=config.known_args_namespace.keyword.strip(),
+            markers=config.known_args_namespace.markexpr.strip(),
+            file_or_dir=config.known_args_namespace.file_or_dir,
+        )
+
         config._nunitxml = NunitXML(
             logfile=nunit_xmlpath,
             prefix=config.option.nunitprefix,
             suite_name=config.getini("nunit_suite_name"),
             show_username=config.getini("nunit_show_username"),
             show_user_domain=config.getini("nunit_show_user_domain"),
-            attach_on=config.getini("nunit_attach_on")
+            attach_on=config.getini("nunit_attach_on"),
+            filters=filters
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -211,7 +223,8 @@ class NunitXML:
         suite_name="pytest",
         show_username=False,
         show_user_domain=False,
-        attach_on="any"
+        attach_on="any",
+        filters=None
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
@@ -228,6 +241,7 @@ class NunitXML:
         self.attach_on = attach_on
         logging.debug("Attach on criteria : {0}".format(attach_on))
         self.idrefindex = 100  # Create a unique ID counter
+        self.filters = filters
 
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)
