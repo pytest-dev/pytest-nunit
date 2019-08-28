@@ -68,7 +68,6 @@ def pytest_configure(config):
             nunit_xmlpath,
             config.option.nunitprefix,
             config.getini("nunit_suite_name"),
-            config.getini("nunit_logging"),
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -200,7 +199,6 @@ class NunitXML:
         logfile,
         prefix,
         suite_name="pytest",
-        logging="no",
         show_username=False,
         show_user_domain=False,
     ):
@@ -208,7 +206,6 @@ class NunitXML:
         self.logfile = os.path.normpath(os.path.abspath(logfile))
         self.prefix = prefix
         self.suite_name = suite_name
-        self.logging = logging
         self.stats = dict.fromkeys(
             ["error", "passed", "failure", "skipped", "total", "asserts"], 0
         )
