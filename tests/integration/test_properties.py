@@ -154,10 +154,12 @@ def test_attachment_attach_on_fail(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 1
     assert out['test-suite']['@skipped'] == 0
-    assert 'attachments' not in out['test-suite']['test-case'][0]
-    assert out['test-suite']['test-case'][1]['attachments']['attachment'][0]['description'] == "desc"
-    assert out['test-suite']['test-case'][1]['attachments']['attachment'][0]['filePath'] == "fail.pth"
-
+    for case in out['test-suite']['test-case']:
+        if case['@name'] == 'test_attachment_attach_on_fail.py::test_fail':
+            assert case['attachments']['attachment'][0]['description'] == "desc"
+            assert case['attachments']['attachment'][0]['filePath'] == "fail.pth"
+        else:
+            assert 'attachments' not in case
 
 def test_attachment_attach_on_pass(testdir, tmpdir):
     """
@@ -195,9 +197,12 @@ def test_attachment_attach_on_pass(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 1
     assert out['test-suite']['@skipped'] == 0
-    assert out['test-suite']['test-case'][0]['attachments']['attachment'][0]['description'] == "desc"
-    assert out['test-suite']['test-case'][0]['attachments']['attachment'][0]['filePath'] == "pass.pth"
-    assert 'attachments' not in out['test-suite']['test-case'][1]
+    for case in out['test-suite']['test-case']:
+        if case['@name'] == 'test_attachment_attach_on_pass.py::test_pass':
+            assert case['attachments']['attachment'][0]['description'] == "desc"
+            assert case['attachments']['attachment'][0]['filePath'] == "pass.pth"
+        else:
+            assert 'attachments' not in case, case['attachments']
 
 
 def test_slow_test(testdir, tmpdir):
