@@ -59,15 +59,25 @@ def pytest_addoption(parser):
         default=False,
     )
 
+    parser.addini(	
+        "nunit_attach_on",	
+        "Set test attachments for certain test results: "	
+        "one of any|pass|fail",	
+        default="any",	
+    )  # choices=['any', 'pass', 'fail'])
+
 
 def pytest_configure(config):
     nunit_xmlpath = config.option.nunit_xmlpath
     # prevent opening xmllog on slave nodes (xdist)
     if nunit_xmlpath and not hasattr(config, "slaveinput"):
         config._nunitxml = NunitXML(
-            nunit_xmlpath,
-            config.option.nunitprefix,
-            config.getini("nunit_suite_name"),
+            logfile=nunit_xmlpath,
+            prefix=config.option.nunitprefix,
+            suite_name=config.getini("nunit_suite_name"),
+            show_username=config.getini("nunit_show_username"),
+            show_user_domain=config.getini("nunit_show_user_domain"),
+            attach_on=config.getini("nunit_attach_on")
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -201,6 +211,7 @@ class NunitXML:
         suite_name="pytest",
         show_username=False,
         show_user_domain=False,
+        attach_on="any"
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
@@ -214,7 +225,8 @@ class NunitXML:
         self.cases = dict()
         self.show_username = show_username
         self.show_user_domain = show_user_domain
-
+        self.attach_on = attach_on
+        logging.debug("Attach on criteria : {0}".format(attach_on))
         self.idrefindex = 100  # Create a unique ID counter
 
     def finalize(self, report):
