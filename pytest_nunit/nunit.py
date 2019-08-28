@@ -54,16 +54,37 @@ def get_node_names(nodeid):
         return ("", "")
 
 
-def _format_attachments(case):
+def _format_attachments(case, attach_on):
+    """
+    Format an attachment list for a test case
+
+    :param case: The test case
+    :type  case: :class:`pytest.TestCase`
+    
+    :param attach_on: Attach-on criteria, one of any|pass|fail
+    :type  attach_on: ``str``
+
+    :returns: a formatted attachment list
+    :rtype: :class:`AttachmentsType`
+    """
     if case["attachments"]:
-        return AttachmentsType(
-            attachment=[
-                AttachmentType(filePath=k, description=v)
-                for k, v in case["attachments"].items()
-            ]
-        )
-    else:
-        return None
+        result = PYTEST_TO_NUNIT.get(case["outcome"], TestStatusType.Inconclusive)
+        # Guard clauses
+        include_attachments = (attach_on == 'any')
+
+        if attach_on == 'pass' and result == TestStatusType.Passed:
+            include_attachments = True
+        if attach_on == 'fail' and result == TestStatusType.Failed:
+            include_attachments = True
+
+        if include_attachments:
+            return AttachmentsType(
+                attachment=[
+                    AttachmentType(filePath=k, description=v)
+                    for k, v in case["attachments"].items()
+                ]
+            )
+    return None
 
 
 def _getlocale():
@@ -120,7 +141,7 @@ class NunitTestRun(object):
                 reason=ReasonType(message=CdataComment(text=case["reason"])),
                 output=CdataComment(text=case["reason"]),
                 assertions=_format_assertions(case),
-                attachments=_format_attachments(case),
+                attachments=_format_attachments(case, self.nunitxml.attach_on),
                 classname=get_node_names(nodeid)[0],
                 runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),

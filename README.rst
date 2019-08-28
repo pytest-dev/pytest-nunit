@@ -41,11 +41,37 @@ Use ``--nunit-prefix=example-`` to prefix all test case names with ``"example-"`
 INI Options
 -----------
 
-Use ``nunit_show_username=true`` to include the system username in the test run properties.
+``nunit_show_username``
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Use ``nunit_show_user_domain=true`` to include the system domain in the test run properties.
+Boolean value to include the system username in the test run properties.
 
-Use ``nunit_suite_name='...'`` to set the test suite name (defaults to 'pytest').
+Defaults to ``false``
+
+``nunit_show_user_domain``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Boolean value to include the system user domain in the test run properties.
+
+Defaults to ``false``
+
+``nunit_suite_name``
+~~~~~~~~~~~~~~~~~~~~
+
+String value to set the test suite name.
+
+Defaults to ``'pytest'``
+
+``nunit_attach_on``
+~~~~~~~~~~~~~~~~~~~~
+
+Enumeration to control whether the attachments property is set on all test cases when the ``add_nunit_attachment`` is used.
+
+Can be one of:
+
+- ``any`` - Include test attachments for all outcomes (**Default**)
+- ``pass`` - Include test attachments for only passed test cases
+- ``fail`` - Include test attachments for only failed test cases
 
 Fixtures
 --------
