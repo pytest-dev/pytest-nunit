@@ -51,7 +51,7 @@ Boolean value to include the system username in the test run properties.
 Defaults to ``false``
 
 ``nunit_show_user_domain``
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Boolean value to include the system user domain in the test run properties.
 
