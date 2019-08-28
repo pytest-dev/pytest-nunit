@@ -107,4 +107,4 @@ def test_slow_test(testdir, tmpdir):
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 0
     assert out['test-suite']['@skipped'] == 0
-    assert out['test-suite']['test-case']['@duration'] > 3.0
+    assert out['test-suite']['test-case']['@duration'] >= 3.0
