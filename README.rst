@@ -21,10 +21,10 @@ pytest-nunit
 
 A pytest plugin for generating NUnit3 test result XML output
 
-This plugin is an early beta release!
+This plugin is in **beta**.
 
-Configuration
--------------
+Command-line options
+--------------------
 
 --nunit-xml
 ~~~~~~~~~~~
@@ -38,6 +38,14 @@ Argument takes a path to the output file, either relative, or absolute.
 
 Use ``--nunit-prefix=example-`` to prefix all test case names with ``"example-"``
 
+INI Options
+-----------
+
+Use ``nunit_show_username=true`` to include the system username in the test run properties.
+
+Use ``nunit_show_user_domain=true`` to include the system domain in the test run properties.
+
+Use ``nunit_suite_name='...'`` to set the test suite name (defaults to 'pytest').
 
 Fixtures
 --------
@@ -128,6 +136,15 @@ Check looponfails_
 
 History
 -------
+
+0.4.0 (TBD)
+~~~~~~~~~~~
+
+- Added user domain (contribution by @williano)
+- Added tests and help for xdist execution (contribution by @mei-li)
+- Dynamically use the keyword list when generating schema to avoid reserved word collision (contribution by @gerhardtdatsomor)
+- Add method names, classnames and module names to output (contribution by @adekanyetomie)
+- Added locale and uiculture properties to runtime output (contribution by @terrameijar)
 
 0.3.0 (15th July)
 ~~~~~~~~~~~~~~~~~

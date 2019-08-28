@@ -46,13 +46,6 @@ def pytest_addoption(parser):
         "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
     )
     parser.addini(
-        "nunit_logging",
-        "Write captured log messages to NUnit report: "
-        "one of no|system-out|system-err",
-        default="no",
-    )  # choices=['no', 'stdout', 'stderr'])
-
-    parser.addini(
         "nunit_show_username",
         "Display username in results",
         "bool",
