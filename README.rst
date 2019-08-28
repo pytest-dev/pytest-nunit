@@ -171,6 +171,7 @@ History
 - Dynamically use the keyword list when generating schema to avoid reserved word collision (contribution by @gerhardtdatsomor)
 - Add method names, classnames and module names to output (contribution by @adekanyetomie)
 - Added locale and uiculture properties to runtime output (contribution by @terrameijar)
+- Added ``nunit_attach_on`` INI option to control when attachments are included in test cases.
 
 0.3.0 (15th July)
 ~~~~~~~~~~~~~~~~~
