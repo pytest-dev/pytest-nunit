@@ -16,7 +16,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return "0.3.0"
+        return "0.4.0"
 
 
 setup(

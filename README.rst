@@ -26,17 +26,19 @@ This plugin is in **beta**.
 Command-line options
 --------------------
 
---nunit-xml
-~~~~~~~~~~~
+``--nunit-xml``
+~~~~~~~~~~~~~~~
 
-Use ``--nunit-xml=output.xml`` to create an NUnit3-compatible file called ``output.xml``
+A string value to set the file name of the generated XML file.
 
 Argument takes a path to the output file, either relative, or absolute.
 
---nunit-prefix
-~~~~~~~~~~~~~~
+``--nunit-prefix``
+~~~~~~~~~~~~~~~~~~
 
-Use ``--nunit-prefix=example-`` to prefix all test case names with ``"example-"``
+A string value to prefix all test case names the string provided.
+
+Defaults to an empty string.
 
 INI Options
 -----------
@@ -78,8 +80,8 @@ Fixtures
 
 The following fixtures are made available by this plugin.
 
-record_nunit_property
-~~~~~~~~~~~~~~~~~~~~~
+``record_nunit_property``
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Calling `record_nunit_property(key: str, value: str)` will result in `Property` tags being added to the `test-case` for the related node. 
 
@@ -89,8 +91,8 @@ Calling `record_nunit_property(key: str, value: str)` will result in `Property` 
         record_nunit_property("test", "value")
         assert 1 == 1
 
-add_nunit_attachment
-~~~~~~~~~~~~~~~~~~~~
+``add_nunit_attachment``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Add an attachment to a node test-case by calling the `add_nunit_attachment(path: str, description: str)` function with the filepath and a description.
 
@@ -163,8 +165,8 @@ Check looponfails_
 History
 -------
 
-0.4.0 (TBD)
-~~~~~~~~~~~
+0.4.0 (28th August 2019)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Added user domain (contribution by @williano)
 - Added tests and help for xdist execution (contribution by @mei-li)
@@ -173,12 +175,12 @@ History
 - Added locale and uiculture properties to runtime output (contribution by @terrameijar)
 - Added ``nunit_attach_on`` INI option to control when attachments are included in test cases.
 
-0.3.0 (15th July)
-~~~~~~~~~~~~~~~~~
+0.3.0 (15th July 2019)
+~~~~~~~~~~~~~~~~~~~~~~
 
 - Added ``--nunit-prefix`` option.
 
-0.2.1 (15th July)
-~~~~~~~~~~~~~~~~~
+0.2.1 (15th July 2019)
+~~~~~~~~~~~~~~~~~~~~~~
 
 - First stable release
