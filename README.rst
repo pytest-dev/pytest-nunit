@@ -165,6 +165,14 @@ Check looponfails_
 History
 -------
 
+0.5.0 (master)
+~~~~~~~~~~~~~~
+
+- Docstrings of nodes (functions) are set as the label for TestCase elements (contribution by @mikeattara)
+- Pytest -k keyword filters are added to the test run filter element under ``name``.
+- Pytest -m marker filters are added to the test run filter element under ``namespace``.
+- Any path filters are added to the test run filter element under ``test``.
+
 0.4.0 (28th August 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
