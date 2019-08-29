@@ -98,7 +98,48 @@ def _format_filters(filters_):
     """
     test_filters = []
     if filters_.keyword:
-        test_filters.append(TestFilterType(ValueMatchFilterType(re=filters_.keyword)))
+        test_filters.append(TestFilterType(
+            test=None,
+            not_=None,
+            and_=None,
+            or_=None,
+            cat=None,
+            class_=None,
+            id_=None,
+            method=None,
+            namespace=None,
+            prop=None,
+            name=ValueMatchFilterType(name=filters_.keyword, re=0)))
+    if filters_.markers:
+        test_filters.append(TestFilterType(
+            test=None,
+            not_=None,
+            and_=None,
+            or_=None,
+            cat=None,
+            class_=None,
+            id_=None,
+            method=None,
+            namespace=ValueMatchFilterType(name=filters_.markers, re=0),
+            prop=None,
+            name=None))
+    if filters_.file_or_dir:
+        for path in filters_.file_or_dir:
+            test_filters.append(TestFilterType(
+                test=ValueMatchFilterType(name=path, re=0),
+                not_=None,
+                and_=None,
+                or_=None,
+                cat=None,
+                class_=None,
+                id_=None,
+                method=None,
+                namespace=None,
+                prop=None,
+                name=None))
+
+    return test_filters
+
 
 def _getlocale():
     language_code = locale.getdefaultlocale()[0]

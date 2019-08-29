@@ -10,7 +10,7 @@ Written by Anthony Shaw.
 import logging
 import xmlschema
 import xmlschema.qnames
-import keywords
+import keyword
 
 try:
     import black
@@ -23,8 +23,8 @@ logging.basicConfig()
 log = logging.getLogger("__name__")
 log.setLevel(logging.DEBUG)
 
-# Python reserved keywords. TODO : Sure this is in stdlib somewhere? maybe tokens
-KEYWORDS = keywords.kwlist
+# Python reserved keywords
+KEYWORDS = keyword.kwlist + ['filter', 'type', 'id']
 
 # Map XML atomic builtin types to Python std types
 XS_ATOMIC_MAP = {
@@ -126,8 +126,13 @@ def main(xsd_path, output_path):
         # Write complex types as new attrs classes
         elif isinstance(type_, xmlschema.validators.XsdComplexType):
             log.info("Name %s" % name)
+
             out += "@attr.s\nclass {0}(object):\n".format(name)
             attribs = {}
+
+            if type_.has_simple_content():
+                attribs['@value'] = "    {0}\n".format(make_attrib(elem, "content", optional=True))
+
             # Write element groups and sequences
             for group in type_.iter_components(xmlschema.validators.XsdGroup):
                 log.info("Suite %s : %s" % (name, group))
