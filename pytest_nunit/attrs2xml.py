@@ -4,7 +4,7 @@ import enum
 
 class CdataComment(ET.Element):
     def __init__(self, text):
-        super(CdataComment, self).__init__('CDATA!')
+        super(CdataComment, self).__init__("CDATA!")
         self.text = text
 
 
@@ -16,11 +16,9 @@ def _serialize_xml(write, elem, qnames, namespaces, *args, **kwargs):
     Custom serializer to handle CdataComment classes
     """
     if isinstance(elem, CdataComment):
-        write("<%s><%s%s]]></%s>" % (
-                elem.tag, '![CDATA[', elem.text, elem.tag))
+        write("<%s><%s%s]]></%s>" % (elem.tag, "![CDATA[", elem.text, elem.tag))
         return
-    return ET._original_serialize_xml(
-        write, elem, qnames, namespaces, *args, **kwargs)
+    return ET._original_serialize_xml(write, elem, qnames, namespaces, *args, **kwargs)
 
 
 class AttrsXmlRenderer(object):
@@ -63,6 +61,6 @@ class AttrsXmlRenderer(object):
     @staticmethod
     def render(instance, node_name):
         root = AttrsXmlRenderer.as_element(instance, node_name)
-        ET._serialize_xml = ET._serialize['xml'] = _serialize_xml
+        ET._serialize_xml = ET._serialize["xml"] = _serialize_xml
         s = ET.tostring(root, encoding="UTF-8", method="xml")
         return s

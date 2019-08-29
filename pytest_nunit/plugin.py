@@ -50,10 +50,7 @@ def pytest_addoption(parser):
         "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
     )
     parser.addini(
-        "nunit_show_username",
-        "Display username in results",
-        "bool",
-        default=False,
+        "nunit_show_username", "Display username in results", "bool", default=False
     )
 
     parser.addini(
@@ -63,11 +60,10 @@ def pytest_addoption(parser):
         default=False,
     )
 
-    parser.addini(	
-        "nunit_attach_on",	
-        "Set test attachments for certain test results: "	
-        "one of any|pass|fail",	
-        default="any",	
+    parser.addini(
+        "nunit_attach_on",
+        "Set test attachments for certain test results: " "one of any|pass|fail",
+        default="any",
     )  # choices=['any', 'pass', 'fail'])
 
 
@@ -89,7 +85,7 @@ def pytest_configure(config):
             show_username=config.getini("nunit_show_username"),
             show_user_domain=config.getini("nunit_show_user_domain"),
             attach_on=config.getini("nunit_attach_on"),
-            filters=filters
+            filters=filters,
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -120,7 +116,10 @@ class _NunitNodeReporter:
                 "teardown-report": None,
                 "idref": self.nunit_xml.idrefindex,
                 "path": testreport.fspath,
-                "properties": {"python-version": sys.version, "fspath": testreport.fspath},
+                "properties": {
+                    "python-version": sys.version,
+                    "fspath": testreport.fspath,
+                },
                 "attachments": None,
                 "error": "",
                 "stack-trace": "",
@@ -225,7 +224,7 @@ class NunitXML:
         show_username=False,
         show_user_domain=False,
         attach_on="any",
-        filters=None
+        filters=None,
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
@@ -304,7 +303,6 @@ class NunitXML:
                 self.module_descriptions[item.parent.nodeid] = item.parent.obj.__doc__
             if item.obj:
                 self.node_descriptions[item.nodeid] = item.obj.__doc__
-
 
     def pytest_sessionfinish(self, session, *args):
         # Build output file

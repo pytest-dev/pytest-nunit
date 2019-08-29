@@ -19,7 +19,7 @@ from .models.nunit import (
     ReasonType,
     FailureType,
     TestFilterType,
-    ValueMatchFilterType
+    ValueMatchFilterType,
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
 
@@ -49,7 +49,7 @@ def _format_assertions(case):
 
 
 def get_node_names(nodeid):
-    parts = nodeid.split('::')
+    parts = nodeid.split("::")
     if len(parts) >= 2:
         return tuple(parts[-2:])
     else:
@@ -72,11 +72,11 @@ def _format_attachments(case, attach_on):
     if case["attachments"]:
         result = PYTEST_TO_NUNIT.get(case["outcome"], TestStatusType.Inconclusive)
         # Guard clauses
-        include_attachments = (attach_on == 'any')
+        include_attachments = attach_on == "any"
 
-        if attach_on == 'pass' and result == TestStatusType.Passed:
+        if attach_on == "pass" and result == TestStatusType.Passed:
             include_attachments = True
-        if attach_on == 'fail' and result == TestStatusType.Failed:
+        if attach_on == "fail" and result == TestStatusType.Failed:
             include_attachments = True
 
         if include_attachments:
@@ -96,12 +96,17 @@ def _format_filters(filters_):
     :param filters_: The runtime filters
     :type  filters_: `pytest_nunit.plugin.PytestFilter`
     """
-    if filters_.keyword is None and filters_.file_or_dir \
-            is None and filters_.markers is None:
+    if (
+        filters_.keyword is None
+        and filters_.file_or_dir is None
+        and filters_.markers is None
+    ):
         return None
 
     return TestFilterType(
-        test=[ValueMatchFilterType(name=path, re=0) for path in filters_.file_or_dir] if filters_.file_or_dir else None,
+        test=[ValueMatchFilterType(name=path, re=0) for path in filters_.file_or_dir]
+        if filters_.file_or_dir
+        else None,
         not_=None,
         and_=None,
         or_=None,
@@ -109,9 +114,13 @@ def _format_filters(filters_):
         class_=None,
         id_=None,
         method=None,
-        namespace=ValueMatchFilterType(name=filters_.markers, re=0) if filters_.markers else None,
+        namespace=ValueMatchFilterType(name=filters_.markers, re=0)
+        if filters_.markers
+        else None,
         prop=None,
-        name=ValueMatchFilterType(name=filters_.keyword, re=0) if filters_.keyword else None
+        name=ValueMatchFilterType(name=filters_.keyword, re=0)
+        if filters_.keyword
+        else None,
     )
 
 
@@ -139,8 +148,8 @@ class NunitTestRun(object):
             platform=platform.system(),
             cwd=os.getcwd(),
             machine_name=platform.machine(),
-            user=_get_user_id()[0] if self.nunitxml.show_username else '',
-            user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
+            user=_get_user_id()[0] if self.nunitxml.show_username else "",
+            user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else "",
             culture=_getlocale(),
             uiculture=_getlocale(),
             os_architecture=platform.architecture()[0],
@@ -153,7 +162,7 @@ class NunitTestRun(object):
                 id_=str(case["idref"]),
                 name=case["name"],
                 fullname=nodeid,
-                methodname= get_node_names(nodeid)[1],
+                methodname=get_node_names(nodeid)[1],
                 properties=PropertyBagType(
                     property=[
                         PropertyType(name=k, value=v)
@@ -171,7 +180,9 @@ class NunitTestRun(object):
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case, self.nunitxml.attach_on),
                 classname=get_node_names(nodeid)[0],
-                runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
+                runstate=TestRunStateType.Skipped
+                if case["outcome"] == "skipped"
+                else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
                     case["outcome"], TestStatusType.Inconclusive
