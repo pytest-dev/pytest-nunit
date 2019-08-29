@@ -201,8 +201,8 @@ def test_path_filter_complex(testdir, tmpdir):
     assert out['test-suite']['@skipped'] == 0
 
     assert 'filter' in out
-    assert out['filter']['test'][0]['$'] == 'test_path_filter.py'
+    assert out['filter']['test'][0]['$'] == 'test_path_filter_complex.py'
     assert out['filter']['test'][0]['@re'] == 0
 
-    assert out['filter']['test'][1]['$'] == 'test_path_filter.py'
+    assert out['filter']['test'][1]['$'] == '.'
     assert out['filter']['test'][1]['@re'] == 0
