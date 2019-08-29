@@ -12,6 +12,7 @@ import os
 import sys
 from datetime import datetime
 import functools
+from collections import namedtuple, defaultdict
 
 from .nunit import NunitTestRun
 
@@ -20,6 +21,9 @@ import pytest
 
 logging.basicConfig()
 log = logging.getLogger("__name__")
+
+
+PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
 
 
 def pytest_addoption(parser):
@@ -39,29 +43,53 @@ def pytest_addoption(parser):
         "--nunit-prefix",
         action="store",
         metavar="str",
-        default='',
+        default="",
         help="prepend prefix to classnames in nunit-xml output",
     )
     parser.addini(
         "nunit_suite_name", "Test suite name for NUnit report", default="pytest"
     )
     parser.addini(
-        "nunit_logging",
-        "Write captured log messages to NUnit report: "
-        "one of no|system-out|system-err",
-        default="no",
-    )  # choices=['no', 'stdout', 'stderr'])
+        "nunit_show_username",
+        "Display username in results",
+        "bool",
+        default=False,
+    )
+
+    parser.addini(
+        "nunit_show_user_domain",
+        "Display computer domain in results",
+        "bool",
+        default=False,
+    )
+
+    parser.addini(	
+        "nunit_attach_on",	
+        "Set test attachments for certain test results: "	
+        "one of any|pass|fail",	
+        default="any",	
+    )  # choices=['any', 'pass', 'fail'])
 
 
 def pytest_configure(config):
     nunit_xmlpath = config.option.nunit_xmlpath
     # prevent opening xmllog on slave nodes (xdist)
     if nunit_xmlpath and not hasattr(config, "slaveinput"):
+
+        filters = PytestFilters(
+            keyword=config.known_args_namespace.keyword.strip(),
+            markers=config.known_args_namespace.markexpr.strip(),
+            file_or_dir=config.known_args_namespace.file_or_dir,
+        )
+
         config._nunitxml = NunitXML(
-            nunit_xmlpath,
-            config.option.nunitprefix,
-            config.getini("nunit_suite_name"),
-            config.getini("nunit_logging"),
+            logfile=nunit_xmlpath,
+            prefix=config.option.nunitprefix,
+            suite_name=config.getini("nunit_suite_name"),
+            show_username=config.getini("nunit_show_username"),
+            show_user_domain=config.getini("nunit_show_user_domain"),
+            attach_on=config.getini("nunit_attach_on"),
+            filters=filters
         )
         config.pluginmanager.register(config._nunitxml)
 
@@ -84,33 +112,36 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
-        
+
         if testreport.when == "setup":
             r = self.nunit_xml.cases[testreport.nodeid] = {
                 "setup-report": testreport,
                 "call-report": None,
                 "teardown-report": None,
                 "idref": self.nunit_xml.idrefindex,
-                "properties": {"python-version": sys.version},
+                "path": testreport.fspath,
+                "properties": {"python-version": sys.version, "fspath": testreport.fspath},
                 "attachments": None,
-                "error": '',
-                "stack-trace": '',
-                "name": self.nunit_xml.prefix + testreport.nodeid
+                "error": "",
+                "stack-trace": "",
+                "name": self.nunit_xml.prefix + testreport.nodeid,
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
-            if testreport.outcome == 'skipped':
+            if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
                 if len(testreport.longrepr) > 2:
-                    r['error'] = testreport.longrepr[2]
-                    r['stack-trace'] = "{0}::{1}".format(testreport.longrepr[0], testreport.longrepr[1])
+                    r["error"] = testreport.longrepr[2]
+                    r["stack-trace"] = "{0}::{1}".format(
+                        testreport.longrepr[0], testreport.longrepr[1]
+                    )
                 else:
-                    r['error'] = testreport.longrepr
+                    r["error"] = testreport.longrepr
         elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["call-report"] = testreport
-            r['error'] = testreport.longreprtext
-            r['stack-trace'] = self.nunit_xml._getcrashline(testreport)
+            r["error"] = testreport.longreprtext
+            r["stack-trace"] = self.nunit_xml._getcrashline(testreport)
         elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["stop"] = datetime.utcnow()
@@ -122,29 +153,26 @@ class _NunitNodeReporter:
             if r["setup-report"].outcome == "skipped":
                 r["outcome"] = "skipped"
             elif r["setup-report"].outcome == "failed":
-                r["outcome"] = "failed" 
-            elif "failed" in [
-                r["call-report"].outcome,
-                testreport.outcome,
-            ]:
+                r["outcome"] = "failed"
+            elif "failed" in [r["call-report"].outcome, testreport.outcome]:
                 r["outcome"] = "failed"
             else:
                 r["outcome"] = "passed"
-            r['stdout'] = testreport.capstdout
-            r['stderr'] = testreport.capstderr
-            r['reason'] = testreport.caplog
+            r["stdout"] = testreport.capstdout
+            r["stderr"] = testreport.capstderr
+            r["reason"] = testreport.caplog
         else:
             log.debug(testreport)
 
     def add_property(self, name, value):
         r = self.nunit_xml.cases[self.id]
-        r['properties'][name] = value
-    
+        r["properties"][name] = value
+
     def add_attachment(self, file, description):
         r = self.nunit_xml.cases[self.id]
-        if r['attachments'] is None:
-            r['attachments'] = {}  
-        r['attachments'][file] = description
+        if r["attachments"] is None:
+            r["attachments"] = {}
+        r["attachments"][file] = description
 
     def finalize(self):
         log.debug("finalize")
@@ -194,21 +222,30 @@ class NunitXML:
         logfile,
         prefix,
         suite_name="pytest",
-        logging="no",
+        show_username=False,
+        show_user_domain=False,
+        attach_on="any",
+        filters=None
     ):
         logfile = os.path.expanduser(os.path.expandvars(logfile))
         self.logfile = os.path.normpath(os.path.abspath(logfile))
         self.prefix = prefix
         self.suite_name = suite_name
-        self.logging = logging
         self.stats = dict.fromkeys(
             ["error", "passed", "failure", "skipped", "total", "asserts"], 0
         )
         self.node_reporters = {}  # nodeid -> _NodeReporter
         self.node_reporters_ordered = []
         self.cases = dict()
-
+        self.show_username = show_username
+        self.show_user_domain = show_user_domain
+        self.attach_on = attach_on
+        logging.debug("Attach on criteria : {0}".format(attach_on))
         self.idrefindex = 100  # Create a unique ID counter
+        self.filters = filters
+
+        self.node_descriptions = defaultdict(str)
+        self.module_descriptions = defaultdict(str)
 
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)
@@ -261,6 +298,14 @@ class NunitXML:
             except AttributeError:
                 return ""
 
+    def pytest_collection_modifyitems(self, session, config, items, *args):
+        for item in items:
+            if item.parent and item.parent.obj:
+                self.module_descriptions[item.parent.nodeid] = item.parent.obj.__doc__
+            if item.obj:
+                self.node_descriptions[item.nodeid] = item.obj.__doc__
+
+
     def pytest_sessionfinish(self, session, *args):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
@@ -271,7 +316,7 @@ class NunitXML:
             self.suite_stop_time - self.suite_start_time
         ).total_seconds()
 
-        self.stats["total"] = session.testscollected
+        self.stats["total"] = len(self.cases)
         self.stats["passed"] = len(
             list(case for case in self.cases.values() if case["outcome"] == "passed")
         )

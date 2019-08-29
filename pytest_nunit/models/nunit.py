@@ -424,6 +424,11 @@ class CompositeFilterType(object):
 
 @attr.s
 class ValueMatchFilterType(object):
+    name = attr.ib(
+        metadata={"name": 'name', "type": 'content', "optional": True},
+        type='ValueMatchFilterType',
+        default=attr.NOTHING,
+    )
     re = attr.ib(
         metadata={"name": 're', "type": 'attrib', "optional": True}, type=bool, default=attr.NOTHING
     )
