@@ -305,7 +305,7 @@ class NunitXML:
             self.suite_stop_time - self.suite_start_time
         ).total_seconds()
 
-        self.stats["total"] = session.testscollected
+        self.stats["total"] = len(self.cases)
         self.stats["passed"] = len(
             list(case for case in self.cases.values() if case["outcome"] == "passed")
         )
