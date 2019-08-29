@@ -12,7 +12,7 @@ import os
 import sys
 from datetime import datetime
 import functools
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 from .nunit import NunitTestRun
 
@@ -244,6 +244,9 @@ class NunitXML:
         self.idrefindex = 100  # Create a unique ID counter
         self.filters = filters
 
+        self.node_descriptions = defaultdict(str)
+        self.module_descriptions = defaultdict(str)
+
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)
         # local hack to handle xdist report order
@@ -294,6 +297,14 @@ class NunitXML:
                 return str(rep.longrepr)[:50]
             except AttributeError:
                 return ""
+
+    def pytest_collection_modifyitems(self, session, config, items, *args):
+        for item in items:
+            if item.parent and item.parent.obj:
+                self.module_descriptions[item.parent.nodeid] = item.parent.obj.__doc__
+            if item.obj:
+                self.node_descriptions[item.nodeid] = item.obj.__doc__
+
 
     def pytest_sessionfinish(self, session, *args):
         # Build output file
