@@ -2,7 +2,7 @@ trigger:
 - master
 name: $(Year:yy)$(DayOfYear)$(Rev:r)
 variables:
-  majorVer: '0.3.0'
+  majorVer: '0.4.0'
 
 stages:
   - stage: Unit_Test
@@ -50,6 +50,30 @@ stages:
           testResultsFiles: '**/test-results*.xml'
   - stage: Integration_Test
     jobs:
+
+    - job: 'Linter'
+      pool:
+        vmImage: 'Ubuntu-16.04'
+      strategy:
+        matrix:
+          Linter:
+            python.version: '3.6'
+        maxParallel: 8
+
+      steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+
+      - script: |
+          pip install -e .
+          pip install tox
+        displayName: 'Install package and dependencies'
+
+      - script: |
+          python -m tox -e lint -v
+        displayName: 'tox env'
 
     - job: 'Test_Linux'
       pool:
@@ -109,7 +133,7 @@ stages:
 
       - script: |
           pip install -e .
-          pip install xmlschema==1.0.13 tox
+          pip install xmlschema==1.0.13 pytest-xdist tox
         displayName: 'Install package and dependencies'
 
       - script: |
@@ -120,6 +144,10 @@ stages:
 
       - script: |
           python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml
+        displayName: 'pytest with nunit-xml flag - passes'
+
+      - script: |
+          python -m pytest tests/integration -v --nunit-xml=test-results-integration.xml -n 4
         displayName: 'pytest with nunit-xml flag - passes'
 
       - task: CopyFiles@2

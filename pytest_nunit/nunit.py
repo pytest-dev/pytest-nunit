@@ -2,6 +2,7 @@ import sys
 import os
 import locale
 import platform
+import getpass
 from .models.nunit import (
     TestRunType,
     TestResultType,
@@ -16,7 +17,7 @@ from .models.nunit import (
     AttachmentsType,
     AttachmentType,
     ReasonType,
-    FailureType
+    FailureType,
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
 
@@ -31,28 +32,66 @@ PYTEST_TO_NUNIT = {
 }
 
 
+def _get_user_id():
+    try:
+        username = getpass.getuser()
+    except ImportError:  # Windows
+        username = "UNKNOWN"
+
+    return (username, platform.node())
+
+
 def _format_assertions(case):
     # TODO
     return None
 
 
-def _format_attachments(case):
-    if case['attachments']:
-        return AttachmentsType(
+def get_node_names(nodeid):
+    parts = nodeid.split('::')
+    if len(parts) >= 2:
+        return tuple(parts[-2:])
+    else:
+        return ("", "")
+
+
+def _format_attachments(case, attach_on):
+    """
+    Format an attachment list for a test case
+
+    :param case: The test case
+    :type  case: :class:`pytest.TestCase`
+    
+    :param attach_on: Attach-on criteria, one of any|pass|fail
+    :type  attach_on: ``str``
+
+    :returns: a formatted attachment list
+    :rtype: :class:`AttachmentsType`
+    """
+    if case["attachments"]:
+        result = PYTEST_TO_NUNIT.get(case["outcome"], TestStatusType.Inconclusive)
+        # Guard clauses
+        include_attachments = (attach_on == 'any')
+
+        if attach_on == 'pass' and result == TestStatusType.Passed:
+            include_attachments = True
+        if attach_on == 'fail' and result == TestStatusType.Failed:
+            include_attachments = True
+
+        if include_attachments:
+            return AttachmentsType(
                 attachment=[
                     AttachmentType(filePath=k, description=v)
                     for k, v in case["attachments"].items()
                 ]
             )
-    else:
-        return None
+    return None
 
 
 def _getlocale():
     language_code = locale.getdefaultlocale()[0]
     if language_code:
         return language_code
-    return 'en-US'
+    return "en-US"
 
 
 class NunitTestRun(object):
@@ -72,8 +111,8 @@ class NunitTestRun(object):
             platform=platform.system(),
             cwd=os.getcwd(),
             machine_name=platform.machine(),
-            user="",  # TODO: Get sys user but only with a toggle to hide this
-            user_domain="",  # TODO: Get sys user but only with a toggle to hide this
+            user=_get_user_id()[0] if self.nunitxml.show_username else '',
+            user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
             culture=_getlocale(),
             uiculture=_getlocale(),  # TODO: Get UI? Locale
             os_architecture=platform.architecture()[0],
@@ -84,9 +123,9 @@ class NunitTestRun(object):
         return [
             TestCaseElementType(
                 id_=str(case["idref"]),
-                name=case['name'],
+                name=case["name"],
                 fullname=nodeid,
-                methodname=nodeid,  # TODO : Use actual function name
+                methodname= get_node_names(nodeid)[1],
                 properties=PropertyBagType(
                     property=[
                         PropertyType(name=k, value=v)
@@ -95,12 +134,15 @@ class NunitTestRun(object):
                 ),
                 environment=self.environment,
                 settings=None,  # TODO : Add settings as optional fixture
-                failure=FailureType(message=CdataComment(text=case['error']), stack_trace=CdataComment(text=case['stack-trace'])),
-                reason=ReasonType(message=CdataComment(text=case['reason'])),
-                output=CdataComment(text=case['reason']),
+                failure=FailureType(
+                    message=CdataComment(text=case["error"]),
+                    stack_trace=CdataComment(text=case["stack-trace"]),
+                ),
+                reason=ReasonType(message=CdataComment(text=case["reason"])),
+                output=CdataComment(text=case["reason"]),
                 assertions=_format_assertions(case),
-                attachments=_format_attachments(case),
-                classname="",  # TODO: Use host TestSuite or class if exists
+                attachments=_format_attachments(case, self.nunitxml.attach_on),
+                classname=get_node_names(nodeid)[0],
                 runstate=TestRunStateType.Skipped if case['outcome'] == 'skipped' else TestRunStateType.Runnable,
                 seed=str(sys.flags.hash_randomization),
                 result=PYTEST_TO_NUNIT.get(
@@ -143,7 +185,9 @@ class NunitTestRun(object):
                 result=TestStatusType.Passed,
                 label="",
                 site=None,
-                start_time=self.nunitxml.suite_start_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                start_time=self.nunitxml.suite_start_time.strftime(
+                    "%Y-%m-%d %H:%M:%S.%f"
+                ),
                 end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 duration=self.nunitxml.suite_time_delta,
                 asserts=self.nunitxml.stats["asserts"],

@@ -4,12 +4,10 @@ import xmlschema
 
 def test_prefix(testdir, tmpdir):
     """
-    Test a test that takes 3 seconds
+    Test that prefixes are set on the suite name
     """
     testdir.makepyfile("""
-        import time
         def test_basic():
-            time.sleep(3)
             assert 1 == 1
     """)
     outfile = tmpdir.join('out.xml')
