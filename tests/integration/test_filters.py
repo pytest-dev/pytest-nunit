@@ -195,7 +195,7 @@ def test_path_filter_complex(testdir, tmpdir):
     assert out['@passed'] == 1, out
     assert out['@failed'] == 0, out
     assert out['@skipped'] == 0, out
-    assert out['test-suite']['@total'] == 1
+    assert out['test-suite']['@total'] == 2
     assert out['test-suite']['@passed'] == 1
     assert out['test-suite']['@failed'] == 0
     assert out['test-suite']['@skipped'] == 0
