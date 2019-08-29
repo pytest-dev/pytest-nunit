@@ -34,6 +34,8 @@ class AttrsXmlRenderer(object):
                         el.set(a.metadata["name"], getattr(i, a.name).name)
                     else:
                         el.set(a.metadata["name"], str(getattr(i, a.name)))
+                if a.metadata["type"] == "content" and getattr(i, a.name) is not None:
+                    el.text = str(getattr(i, a.name))
                 if a.metadata["type"] == "element":
                     attrib = getattr(i, a.name)
                     if attrib is None and not a.metadata["optional"]:

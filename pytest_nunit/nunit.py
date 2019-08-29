@@ -18,6 +18,8 @@ from .models.nunit import (
     AttachmentType,
     ReasonType,
     FailureType,
+    TestFilterType,
+    ValueMatchFilterType
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
 
@@ -87,6 +89,32 @@ def _format_attachments(case, attach_on):
     return None
 
 
+def _format_filters(filters_):
+    """
+    Create a filter list
+
+    :param filters_: The runtime filters
+    :type  filters_: `pytest_nunit.plugin.PytestFilter`
+    """
+    if filters_.keyword is None and filters_.file_or_dir \
+            is None and filters_.markers is None:
+        return None
+
+    return TestFilterType(
+        test=[ValueMatchFilterType(name=path, re=0) for path in filters_.file_or_dir] if filters_.file_or_dir else None,
+        not_=None,
+        and_=None,
+        or_=None,
+        cat=None,
+        class_=None,
+        id_=None,
+        method=None,
+        namespace=ValueMatchFilterType(name=filters_.markers, re=0) if filters_.markers else None,
+        prop=None,
+        name=ValueMatchFilterType(name=filters_.keyword, re=0) if filters_.keyword else None
+    )
+
+
 def _getlocale():
     language_code = locale.getdefaultlocale()[0]
     if language_code:
@@ -114,7 +142,7 @@ class NunitTestRun(object):
             user=_get_user_id()[0] if self.nunitxml.show_username else '',
             user_domain=_get_user_id()[1] if self.nunitxml.show_user_domain else '',
             culture=_getlocale(),
-            uiculture=_getlocale(),  # TODO: Get UI? Locale
+            uiculture=_getlocale(),
             os_architecture=platform.architecture()[0],
         )
 
@@ -215,7 +243,7 @@ class NunitTestRun(object):
             skipped=self.nunitxml.stats["skipped"],
             asserts=self.nunitxml.stats["asserts"],
             command_line=" ".join(sys.argv),
-            filter_=None,
+            filter_=_format_filters(self.nunitxml.filters),
             test_case=None,
             test_suite=self.test_suites,
             engine_version=FRAMEWORK_VERSION,
