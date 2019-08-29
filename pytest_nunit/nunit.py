@@ -148,7 +148,7 @@ class NunitTestRun(object):
                 result=PYTEST_TO_NUNIT.get(
                     case["outcome"], TestStatusType.Inconclusive
                 ),
-                label="",  # TODO : Add docstring
+                label=self.nunitxml.node_descriptions[nodeid],
                 site=None,
                 start_time=case["start"].strftime("%Y-%m-%d %H:%M:%S.%f"),
                 end_time=case["stop"].strftime("%Y-%m-%d %H:%M:%S.%f"),
