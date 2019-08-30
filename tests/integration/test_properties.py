@@ -287,6 +287,7 @@ def test_slow_test(testdir, tmpdir):
 def test_docstring(testdir, tmpdir):
     testdir.makepyfile(
         """
+        '''Module description'''
         def test_docstring(record_nunit_property):
             '''Hello'''
             record_nunit_property("test", "value")
@@ -316,6 +317,7 @@ def test_docstring(testdir, tmpdir):
     assert out["test-suite"]["@passed"] == 1
     assert out["test-suite"]["@failed"] == 0
     assert out["test-suite"]["@skipped"] == 0
+    assert out["test-suite"]["@label"] == "Module description"
     assert out["test-suite"]["test-case"]["@label"] == "Hello"
 
 
@@ -350,4 +352,5 @@ def test_no_docstring(testdir, tmpdir):
     assert out["test-suite"]["@passed"] == 1
     assert out["test-suite"]["@failed"] == 0
     assert out["test-suite"]["@skipped"] == 0
-    assert "@label" not in out["test-suite"]["test-case"]
+    assert out["test-suite"]["@label"] == ""
+    assert out["test-suite"]["test-case"]["@label"] == ""

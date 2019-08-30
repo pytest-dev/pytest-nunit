@@ -139,6 +139,7 @@ class NunitTestRun(object):
     def __init__(self, nunitxml):
         self.nunitxml = nunitxml
 
+
     @property
     def environment(self):
         return EnvironmentType(
@@ -155,8 +156,7 @@ class NunitTestRun(object):
             os_architecture=platform.architecture()[0],
         )
 
-    @property
-    def test_cases(self):
+    def test_cases(self, module):
         return [
             TestCaseElementType(
                 id_=str(case["idref"]),
@@ -194,16 +194,16 @@ class NunitTestRun(object):
                 duration=case["duration"],
                 asserts=0,  # TODO : Add assert count
             )
-            for nodeid, case in self.nunitxml.cases.items()
+            for nodeid, case in self.nunitxml.modules[module].cases.items()
         ]
 
     @property
     def test_suites(self):
         return [
             TestSuiteElementType(
-                id_="3",  # TODO : Suite numbers
-                name=self.nunitxml.suite_name,
-                fullname="pytest",
+                id_=nodeid,
+                name=nodeid,
+                fullname=nodeid,
                 methodname="",
                 classname="",
                 test_suite=None,
@@ -217,26 +217,25 @@ class NunitTestRun(object):
                 output=None,
                 assertions=None,
                 attachments=None,
-                test_case=self.test_cases,
+                test_case=self.test_cases(nodeid),
                 runstate=TestRunStateType.Runnable,
                 type_=TestSuiteTypeType.Assembly,
-                testcasecount=self.nunitxml.stats["total"],
-                result=TestStatusType.Passed,
-                label="",
+                testcasecount=module.stats["total"],
+                result=TestStatusType.Passed,  # TODO: Determine suite status
+                label=self.nunitxml.module_descriptions[nodeid],
                 site=None,
-                start_time=self.nunitxml.suite_start_time.strftime(
-                    "%Y-%m-%d %H:%M:%S.%f"
-                ),
-                end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
-                duration=self.nunitxml.suite_time_delta,
-                asserts=self.nunitxml.stats["asserts"],
-                total=self.nunitxml.stats["total"],
-                passed=self.nunitxml.stats["passed"],
-                failed=self.nunitxml.stats["failure"],
+                start_time=module.start.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                end_time=module.stop.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                duration=module.duration,
+                asserts=module.stats["asserts"],
+                total=module.stats["total"],
+                passed=module.stats["passed"],
+                failed=module.stats["failure"],
                 warnings=0,
                 inconclusive=0,
-                skipped=self.nunitxml.stats["skipped"],
+                skipped=module.stats["skipped"],
             )
+            for nodeid, module in self.nunitxml.modules.items()
         ]
 
     def as_test_run(self):
