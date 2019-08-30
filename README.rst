@@ -167,6 +167,11 @@ Check looponfails_
 History
 -------
 
+0.5.1 (30th August 2019)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Bugfix - Fixed cause of crash for tests that could be discovered but never executed
+
 0.5.0 (30th August 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

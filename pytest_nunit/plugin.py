@@ -337,7 +337,7 @@ class NunitXML:
             cases = {
                 nodeid: self.cases[nodeid]
                 for nodeid, m_id in self.node_to_module_map.items()
-                if module_id == m_id
+                if module_id == m_id and nodeid in self.cases
             }
             stats = dict.fromkeys(
                 ["error", "passed", "failure", "skipped", "total", "asserts"], 0
