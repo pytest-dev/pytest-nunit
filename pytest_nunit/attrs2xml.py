@@ -1,11 +1,12 @@
 import xml.etree.ElementTree as ET
+from xml.sax.saxutils import escape
 import enum
 
 
 class CdataComment(ET.Element):
     def __init__(self, text):
         super(CdataComment, self).__init__("CDATA!")
-        self.text = text
+        self.text = escape(text, {'\x1b': "&#x1b;"})
 
 
 ET._original_serialize_xml = ET._serialize_xml
