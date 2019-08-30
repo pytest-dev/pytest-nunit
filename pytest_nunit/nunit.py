@@ -224,11 +224,9 @@ class NunitTestRun(object):
                 result=TestStatusType.Passed,  # TODO: Determine suite status
                 label=self.nunitxml.module_descriptions[nodeid],
                 site=None,
-                start_time=self.nunitxml.suite_start_time.strftime(  # TODO: Determine suite-level times
-                    "%Y-%m-%d %H:%M:%S.%f"
-                ),
-                end_time=self.nunitxml.suite_stop_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
-                duration=self.nunitxml.suite_time_delta,
+                start_time=module.start.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                end_time=module.stop.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                duration=module.duration,
                 asserts=module.stats["asserts"],
                 total=module.stats["total"],
                 passed=module.stats["passed"],
