@@ -167,6 +167,11 @@ Check looponfails_
 History
 -------
 
+0.5.2 (30th August 2019)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Bugfix - Escape tabbed unicode characters from stdout feed from being in CDATA output
+
 0.5.1 (30th August 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
