@@ -24,6 +24,8 @@ log = logging.getLogger("__name__")
 
 
 PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
+ModuleReport = namedtuple("ModuleReport", "stats cases")
+ParentlessNode = 'PARENTLESS_NODE'
 
 
 def pytest_addoption(parser):
@@ -101,10 +103,6 @@ class _NunitNodeReporter:
     def __init__(self, nodeid, nunit_xml):
         self.id = nodeid
         self.nunit_xml = nunit_xml
-
-    def append(self, node):
-        self.nunit_xml.add_stats(type(node).__name__)
-        self.nodes.append(node)
 
     def record_testreport(self, testreport):
         log.debug("record_test_report:{0}".format(testreport))
@@ -245,6 +243,8 @@ class NunitXML:
 
         self.node_descriptions = defaultdict(str)
         self.module_descriptions = defaultdict(str)
+        self.node_to_module_map = {}
+        self.modules = {}
 
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)
@@ -304,6 +304,11 @@ class NunitXML:
             if item.obj:
                 self.node_descriptions[item.nodeid] = item.obj.__doc__
 
+            if item.parent:
+                self.node_to_module_map[item.nodeid] = item.parent.nodeid
+            else:  # A parent-less node could happen with some custom test-collection plugins.
+                self.node_to_module_map[item.nodeid] = ParentlessNode
+
     def pytest_sessionfinish(self, session, *args):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
@@ -324,6 +329,24 @@ class NunitXML:
         self.stats["skipped"] = len(
             list(case for case in self.cases.values() if case["outcome"] == "skipped")
         )
+
+        # Sort nodes into modules
+        for module_id in set(self.node_to_module_map.values()):
+            cases = {nodeid: self.cases[nodeid] for nodeid, m_id in self.node_to_module_map.items() if module_id == m_id}
+            stats = dict.fromkeys(
+                ["error", "passed", "failure", "skipped", "total", "asserts"], 0
+            )
+            stats["total"] = len(cases)
+            stats["passed"] = len(
+                list(case for case in cases.values() if case["outcome"] == "passed")
+            )
+            stats["failure"] = len(
+                list(case for case in cases.values() if case["outcome"] == "failed")
+            )
+            stats["skipped"] = len(
+                list(case for case in cases.values() if case["outcome"] == "skipped")
+            )
+            self.modules[module_id] = ModuleReport(stats=stats, cases=cases)
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             result = NunitTestRun(self).generate_xml()
