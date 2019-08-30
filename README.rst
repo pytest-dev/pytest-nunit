@@ -60,6 +60,8 @@ Defaults to ``false``
 ``nunit_suite_name``
 ~~~~~~~~~~~~~~~~~~~~
 
+(Deprecated, value ignored)
+
 String value to set the test suite name.
 
 Defaults to ``'pytest'``
@@ -165,13 +167,15 @@ Check looponfails_
 History
 -------
 
-0.5.0 (master)
-~~~~~~~~~~~~~~
+0.5.0 (30th August 2019)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Docstrings of nodes (functions) are set as the label for TestCase elements (contribution by @mikeattara)
 - Pytest -k keyword filters are added to the test run filter element under ``name``.
 - Pytest -m marker filters are added to the test run filter element under ``namespace``.
 - Any path filters are added to the test run filter element under ``test``.
+- Each Python module containing tests is now a separate ``test-suite`` element, instead of having one large suite
+- Docstrings of modules are set as the label for TestSuite elements
 
 0.4.0 (28th August 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~

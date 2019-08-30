@@ -25,7 +25,7 @@ log = logging.getLogger("__name__")
 
 PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
 ModuleReport = namedtuple("ModuleReport", "stats cases start stop duration")
-ParentlessNode = 'PARENTLESS_NODE'
+ParentlessNode = "PARENTLESS_NODE"
 
 
 def pytest_addoption(parser):
@@ -300,10 +300,10 @@ class NunitXML:
     def pytest_collection_modifyitems(self, session, config, items, *args):
         for item in items:
             if item.parent and item.parent.obj:
-                doc = item.parent.obj.__doc__.strip() if item.parent.obj.__doc__ else ''
+                doc = item.parent.obj.__doc__.strip() if item.parent.obj.__doc__ else ""
                 self.module_descriptions[item.parent.nodeid] = doc
             if item.obj:
-                doc = item.obj.__doc__.strip() if item.obj.__doc__ else ''
+                doc = item.obj.__doc__.strip() if item.obj.__doc__ else ""
                 self.node_descriptions[item.nodeid] = doc
 
             if item.parent:
@@ -334,7 +334,11 @@ class NunitXML:
 
         # Sort nodes into modules
         for module_id in set(self.node_to_module_map.values()):
-            cases = {nodeid: self.cases[nodeid] for nodeid, m_id in self.node_to_module_map.items() if module_id == m_id}
+            cases = {
+                nodeid: self.cases[nodeid]
+                for nodeid, m_id in self.node_to_module_map.items()
+                if module_id == m_id
+            }
             stats = dict.fromkeys(
                 ["error", "passed", "failure", "skipped", "total", "asserts"], 0
             )
@@ -351,7 +355,9 @@ class NunitXML:
             start = min([case["start"] for case in cases.values()])
             stop = max([case["stop"] for case in cases.values()])
             duration = (stop - start).total_seconds()
-            self.modules[module_id] = ModuleReport(stats=stats, cases=cases, start=start, stop=stop, duration=duration)
+            self.modules[module_id] = ModuleReport(
+                stats=stats, cases=cases, start=start, stop=stop, duration=duration
+            )
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             result = NunitTestRun(self).generate_xml()

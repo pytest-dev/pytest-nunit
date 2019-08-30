@@ -139,7 +139,6 @@ class NunitTestRun(object):
     def __init__(self, nunitxml):
         self.nunitxml = nunitxml
 
-
     @property
     def environment(self):
         return EnvironmentType(
