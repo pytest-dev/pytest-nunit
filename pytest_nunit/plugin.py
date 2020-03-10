@@ -12,7 +12,7 @@ import os
 import sys
 from datetime import datetime
 import functools
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, Counter
 
 from .nunit import NunitTestRun
 
@@ -311,6 +311,34 @@ class NunitXML:
             else:  # A parent-less node could happen with some custom test-collection plugins.
                 self.node_to_module_map[item.nodeid] = ParentlessNode
 
+    @classmethod
+    def _create_module_report(cls, cases):
+        """
+        Produces a report with stats and timing information.
+        
+        *cases* is a dict of dicts with all the recorded data. Keys are not
+        relevant to this method, but will be retained in the cases attribute
+        of the returned object.
+        """
+        stats = dict.fromkeys(
+            ["error", "passed", "failure", "skipped", "total", "asserts"], 0
+        )
+        stats["total"] = len(cases)
+        outcomes = Counter(case.get("outcome") for case in cases.values())
+        stats["passed"] = outcomes.get("passed", 0)
+        stats["failure"] = outcomes.get("failed", 0)
+        stats["skipped"] = outcomes.get("skipped", 0)
+        start = min(
+            [case["start"] for case in cases.values()], default=datetime.min
+        )
+        stop = max(
+            [case["stop"] for case in cases.values()], default=datetime.min
+        )
+        duration = (stop - start).total_seconds()
+        return ModuleReport(
+            stats=stats, cases=cases, start=start, stop=stop, duration=duration
+        )
+
     def pytest_sessionfinish(self, session, *args):
         # Build output file
         dirname = os.path.dirname(os.path.abspath(self.logfile))
@@ -321,16 +349,8 @@ class NunitXML:
             self.suite_stop_time - self.suite_start_time
         ).total_seconds()
 
-        self.stats["total"] = len(self.cases)
-        self.stats["passed"] = len(
-            list(case for case in self.cases.values() if case["outcome"] == "passed")
-        )
-        self.stats["failure"] = len(
-            list(case for case in self.cases.values() if case["outcome"] == "failed")
-        )
-        self.stats["skipped"] = len(
-            list(case for case in self.cases.values() if case["outcome"] == "skipped")
-        )
+        full_report = self._create_module_report(self.cases)
+        self.stats.update(full_report.stats)
 
         # Sort nodes into modules
         for module_id in set(self.node_to_module_map.values()):
@@ -339,29 +359,7 @@ class NunitXML:
                 for nodeid, m_id in self.node_to_module_map.items()
                 if module_id == m_id and nodeid in self.cases
             }
-            stats = dict.fromkeys(
-                ["error", "passed", "failure", "skipped", "total", "asserts"], 0
-            )
-            stats["total"] = len(cases)
-            stats["passed"] = len(
-                list(case for case in cases.values() if case["outcome"] == "passed")
-            )
-            stats["failure"] = len(
-                list(case for case in cases.values() if case["outcome"] == "failed")
-            )
-            stats["skipped"] = len(
-                list(case for case in cases.values() if case["outcome"] == "skipped")
-            )
-            start = min(
-                [case["start"] for case in cases.values()], default=datetime.min
-            )
-            stop = max(
-                [case["stop"] for case in cases.values()], default=datetime.min
-            )
-            duration = (stop - start).total_seconds()
-            self.modules[module_id] = ModuleReport(
-                stats=stats, cases=cases, start=start, stop=stop, duration=duration
-            )
+            self.modules[module_id] = self._create_module_report(cases)
 
         with open(self.logfile, "w", encoding="utf-8") as logfile:
             result = NunitTestRun(self).generate_xml()
