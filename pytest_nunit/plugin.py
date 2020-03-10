@@ -352,8 +352,12 @@ class NunitXML:
             stats["skipped"] = len(
                 list(case for case in cases.values() if case["outcome"] == "skipped")
             )
-            start = min([case["start"] for case in cases.values()])
-            stop = max([case["stop"] for case in cases.values()])
+            start = min(
+                [case["start"] for case in cases.values()], default=datetime.min
+            )
+            stop = max(
+                [case["stop"] for case in cases.values()], default=datetime.min
+            )
             duration = (stop - start).total_seconds()
             self.modules[module_id] = ModuleReport(
                 stats=stats, cases=cases, start=start, stop=stop, duration=duration
