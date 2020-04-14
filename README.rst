@@ -167,6 +167,11 @@ Check looponfails_
 History
 -------
 
+0.5.3 (15th April 2020)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Bugfix - Fix time taken for tests under certain scenarios causing crash on pytest_sessionfinish
+
 0.5.2 (30th August 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
