@@ -84,10 +84,6 @@ stages:
             python.version: '2.7'
             pytest_version: '>=4.1.0'
             tox_env: 'py27-pytestlatest'
-          Python34_Pytest_Latest:
-            python.version: '3.4'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py34-pytestlatest'
           Python35_Pytest_Latest:
             python.version: '3.5'
             pytest_version: '>=4.1.0'
@@ -96,26 +92,30 @@ stages:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
             tox_env: 'py36-pytestlatest'
-          Python37:
+          Python37_Pytest_Latest:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
             tox_env: 'py37-pytestlatest'
-          Python37_Pytest_50:
-            python.version: '3.7'
+          Python38_Pytest_Latest:
+            python.version: '3.8'
+            pytest_version: '>=4.1.0'
+            tox_env: 'py38-pytestlatest'
+          Python38_Pytest_50:
+            python.version: '3.8'
             pytest_version: '>=5.0.0'
-            tox_env: 'py37-pytest50'
-          Python37_Pytest_41:
-            python.version: '3.7'
+            tox_env: 'py38-pytest50'
+          Python38_Pytest_41:
+            python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py37-pytest41'
-          Python37_Pytest_40:
-            python.version: '3.7'
+            tox_env: 'py38-pytest41'
+          Python38_Pytest_40:
+            python.version: '3.8'
             pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py37-pytest40'
-          Python37_Pytest_38:
-            python.version: '3.7'
+            tox_env: 'py38-pytest40'
+          Python38_Pytest_38:
+            python.version: '3.8'
             pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py37-pytest38'
+            tox_env: 'py38-pytest38'
         maxParallel: 8
 
       steps:
@@ -172,10 +172,6 @@ stages:
             python.version: '2.7'
             pytest_version: '>=4.1.0'
             tox_env: 'py27-pytestlatest'
-          Python34_Pytest_Latest:
-            python.version: '3.4'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py34-pytestlatest'
           Python35_Pytest_Latest:
             python.version: '3.5'
             pytest_version: '>=4.1.0'
@@ -184,26 +180,30 @@ stages:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
             tox_env: 'py36-pytestlatest'
-          Python37:
+          Python37_Pytest_Latest:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
             tox_env: 'py37-pytestlatest'
-          Python37_Pytest_50:
-            python.version: '3.7'
+          Python38_Pytest_Latest:
+            python.version: '3.8'
+            pytest_version: '>=4.1.0'
+            tox_env: 'py38-pytestlatest'
+          Python38_Pytest_50:
+            python.version: '3.8'
             pytest_version: '>=5.0.0'
-            tox_env: 'py37-pytest50'
-          Python37_Pytest_41:
-            python.version: '3.7'
+            tox_env: 'py38-pytest50'
+          Python38_Pytest_41:
+            python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py37-pytest41'
-          Python37_Pytest_40:
-            python.version: '3.7'
+            tox_env: 'py38-pytest41'
+          Python38_Pytest_40:
+            python.version: '3.8'
             pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py37-pytest40'
-          Python37_Pytest_38:
-            python.version: '3.7'
+            tox_env: 'py38-pytest40'
+          Python38_Pytest_38:
+            python.version: '3.8'
             pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py37-pytest38'
+            tox_env: 'py38-pytest38'
         maxParallel: 8
 
       steps:
