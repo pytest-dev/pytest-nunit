@@ -51,7 +51,7 @@ def test_keyword_filter_complex(testdir, tmpdir):
     outfile = tmpdir.join("out.xml")
     outfile_pth = str(outfile)
 
-    result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth, '-k "test or basic"')
+    result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth, '-k', 'test or basic')
     result.stdout.fnmatch_lines(["*test_basic PASSED*"])
     assert result.ret == 0
     os.path.exists(outfile_pth)
@@ -73,7 +73,7 @@ def test_keyword_filter_complex(testdir, tmpdir):
     assert out["test-suite"]["@skipped"] == 0
 
     assert "filter" in out
-    assert out["filter"]["name"][0]["$"] == '"test or basic"'
+    assert out["filter"]["name"][0]["$"] == 'test or basic'
     assert out["filter"]["name"][0]["@re"] == 0
 
 
@@ -130,7 +130,7 @@ def test_marker_filter_complex(testdir, tmpdir):
     outfile = tmpdir.join("out.xml")
     outfile_pth = str(outfile)
 
-    result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth, '-m "foo or baz"')
+    result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth, '-m', 'foo or baz')
     result.stdout.fnmatch_lines(["*test_basic PASSED*"])
     assert result.ret == 0
     os.path.exists(outfile_pth)
@@ -152,7 +152,7 @@ def test_marker_filter_complex(testdir, tmpdir):
     assert out["test-suite"]["@skipped"] == 0
 
     assert "filter" in out
-    assert out["filter"]["namespace"][0]["$"] == '"foo or baz"'
+    assert out["filter"]["namespace"][0]["$"] == 'foo or baz'
     assert out["filter"]["namespace"][0]["@re"] == 0
 
 

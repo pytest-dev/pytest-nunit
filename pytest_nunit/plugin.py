@@ -27,6 +27,22 @@ PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
 ModuleReport = namedtuple("ModuleReport", "stats cases start stop duration")
 ParentlessNode = "PARENTLESS_NODE"
 
+if sys.version_info < (3,):
+    def min_with_default(seq, default):
+        try:
+            return min(seq)
+        except ValueError:
+            return default
+
+    def max_with_default(seq, default):
+        try:
+            return max(seq)
+        except ValueError:
+            return default
+else:
+    min_with_default = min
+    max_with_default = max
+
 
 def pytest_addoption(parser):
     group = parser.getgroup("terminal reporting")
@@ -328,10 +344,10 @@ class NunitXML:
         stats["passed"] = outcomes.get("passed", 0)
         stats["failure"] = outcomes.get("failed", 0)
         stats["skipped"] = outcomes.get("skipped", 0)
-        start = min(
+        start = min_with_default(
             [case["start"] for case in cases.values()], default=datetime.min
         )
-        stop = max(
+        stop = max_with_default(
             [case["stop"] for case in cases.values()], default=datetime.min
         )
         duration = (stop - start).total_seconds()
