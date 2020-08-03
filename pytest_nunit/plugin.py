@@ -87,8 +87,8 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     nunit_xmlpath = config.option.nunit_xmlpath
-    # prevent opening xmllog on slave nodes (xdist)
-    if nunit_xmlpath and not hasattr(config, "slaveinput"):
+    # prevent opening xmllog on worker nodes (xdist)
+    if nunit_xmlpath and not hasattr(config, "workerinput"):
 
         filters = PytestFilters(
             keyword=config.known_args_namespace.keyword.strip(),
@@ -265,17 +265,17 @@ class NunitXML:
     def finalize(self, report):
         nodeid = getattr(report, "nodeid", report)
         # local hack to handle xdist report order
-        slavenode = getattr(report, "node", None)
-        reporter = self.node_reporters.pop((nodeid, slavenode))
+        workernode = getattr(report, "node", None)
+        reporter = self.node_reporters.pop((nodeid, workernode))
         if reporter is not None:
             reporter.finalize()
 
     def node_reporter(self, report):
         nodeid = getattr(report, "nodeid", report)
         # local hack to handle xdist report order
-        slavenode = getattr(report, "node", None)
+        workernode = getattr(report, "node", None)
 
-        key = nodeid, slavenode
+        key = nodeid, workernode
 
         if key in self.node_reporters:
             # TODO: breaks for --dist=each
