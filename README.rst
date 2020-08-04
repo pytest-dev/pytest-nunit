@@ -167,6 +167,14 @@ Check looponfails_
 History
 -------
 
+0.6.0 (4th August 2020)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- fix unicode escapes in cdata (#39)
+- fix start/stop time calculation (#42)
+- dropping support for python3.4 (#45)
+- dropping support for old xdist versions (#44)
+
 0.5.3 (15th April 2020)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
