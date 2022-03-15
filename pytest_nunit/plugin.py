@@ -45,6 +45,7 @@ else:
 
 
 def pytest_addoption(parser):
+    """Allow export settings on CLI."""
     group = parser.getgroup("terminal reporting")
     group.addoption(
         "--nunitxml",
@@ -85,8 +86,13 @@ def pytest_addoption(parser):
     )  # choices=['any', 'pass', 'fail'])
 
 
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
+    """
+    Configure XML export paths and settings.
+    """
     nunit_xmlpath = config.option.nunit_xmlpath
+
     # prevent opening xmllog on worker nodes (xdist)
     if nunit_xmlpath and not hasattr(config, "workerinput"):
 
@@ -109,6 +115,7 @@ def pytest_configure(config):
 
 
 def pytest_unconfigure(config):
+    """Unregister plugin and settings."""
     nunitxml = getattr(config, "_nunitxml", None)
     if nunitxml:
         del config._nunitxml
@@ -121,6 +128,7 @@ class _NunitNodeReporter:
         self.nunit_xml = nunit_xml
 
     def record_testreport(self, testreport):
+        """Export to XML."""
         log.debug("record_test_report:{0}".format(testreport))
 
         if testreport.when == "setup":
@@ -178,16 +186,19 @@ class _NunitNodeReporter:
             log.debug(testreport)
 
     def add_property(self, name, value):
+        """Add custom property."""
         r = self.nunit_xml.cases[self.id]
         r["properties"][name] = value
 
     def add_attachment(self, file, description):
+        """Add test attachment."""
         r = self.nunit_xml.cases[self.id]
         if r["attachments"] is None:
             r["attachments"] = {}
         r["attachments"][file] = description
 
     def finalize(self):
+        """Capture finalize stage (required)."""
         log.debug("finalize")
 
 
@@ -230,6 +241,8 @@ def add_nunit_attachment(request):
 
 
 class NunitXML:
+    """NUnit XML exporter."""
+
     def __init__(
         self,
         logfile,
@@ -263,6 +276,7 @@ class NunitXML:
         self.modules = {}
 
     def finalize(self, report):
+        """Finalize report (required.)"""
         nodeid = getattr(report, "nodeid", report)
         # local hack to handle xdist report order
         workernode = getattr(report, "node", None)
@@ -271,6 +285,7 @@ class NunitXML:
             reporter.finalize()
 
     def node_reporter(self, report):
+        """Report node result."""
         nodeid = getattr(report, "nodeid", report)
         # local hack to handle xdist report order
         workernode = getattr(report, "node", None)
@@ -289,19 +304,23 @@ class NunitXML:
         return reporter
 
     def pytest_runtest_logreport(self, report):
+        """Get Log report."""
         reporter = self.node_reporter(report)
         reporter.record_testreport(report)
         return reporter
 
     def update_testcase_duration(self, report):
+        """Set test case duration time."""
         reporter = self.node_reporter(report)
         reporter.duration += getattr(report, "duration", 0.0)
 
     def pytest_internalerror(self, excrepr):
+        """Capture PyTest failures."""
         reporter = self.node_reporter("internal")
         # TODO: Mark tests as failed and produce stack
 
     def pytest_sessionstart(self, *args):
+        """Mark test session start time."""
         self.suite_start_time = datetime.utcnow()
 
     def _getcrashline(self, rep):
@@ -314,6 +333,7 @@ class NunitXML:
                 return ""
 
     def pytest_collection_modifyitems(self, session, config, items, *args):
+        """Map items and test cases to make the XML output easier to read."""
         for item in items:
             if item.parent and hasattr(item.parent, "obj") and item.parent.obj:
                 doc = item.parent.obj.__doc__.strip() if item.parent.obj.__doc__ else ""
@@ -331,7 +351,7 @@ class NunitXML:
     def _create_module_report(cls, cases):
         """
         Produces a report with stats and timing information.
-        
+
         *cases* is a dict of dicts with all the recorded data. Keys are not
         relevant to this method, but will be retained in the cases attribute
         of the returned object.
@@ -356,7 +376,7 @@ class NunitXML:
         )
 
     def pytest_sessionfinish(self, session, *args):
-        # Build output file
+        """Wrap up test report and build output file."""
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
@@ -382,4 +402,5 @@ class NunitXML:
             logfile.write(result.decode(encoding="utf-8"))
 
     def pytest_terminal_summary(self, terminalreporter):
+        """Notify XML report path."""
         terminalreporter.write_sep("-", "generated Nunit xml file: %s" % (self.logfile))
