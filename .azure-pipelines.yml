@@ -13,8 +13,8 @@ stages:
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python37:
-            python.version: '3.7'
+          Python39:
+            python.version: '3.9'
             pytest_version: '>=4.1.0'
         maxParallel: 8
 
@@ -57,7 +57,7 @@ stages:
       strategy:
         matrix:
           Linter:
-            python.version: '3.6'
+            python.version: '3.9'
         maxParallel: 8
 
       steps:
@@ -80,10 +80,6 @@ stages:
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python36_Pytest_Latest:
-            python.version: '3.6'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py36-pytestlatest'
           Python37_Pytest_Latest:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
@@ -172,10 +168,6 @@ stages:
         vmImage: 'windows-latest'
       strategy:
         matrix:
-          Python36_Pytest_Latest:
-            python.version: '3.6'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py36-pytestlatest'
           Python37_Pytest_Latest:
             python.version: '3.7'
             pytest_version: '>=4.1.0'
