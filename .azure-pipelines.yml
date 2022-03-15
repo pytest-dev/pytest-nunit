@@ -80,14 +80,6 @@ stages:
         vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python27_Pytest_Latest:
-            python.version: '2.7'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py27-pytestlatest'
-          Python35_Pytest_Latest:
-            python.version: '3.5'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py35-pytestlatest'
           Python36_Pytest_Latest:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
@@ -104,6 +96,14 @@ stages:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
             tox_env: 'py38-pytest50'
+          Python39_Pytest_60:
+            python.version: '3.9'
+            pytest_version: '>=6.0.0'
+            tox_env: 'py39-pytest90'
+          Python39_Pytest_70:
+            python.version: '3.9'
+            pytest_version: '>=7.0.0'
+            tox_env: 'py39-pytest90'
           Python38_Pytest_41:
             python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
@@ -168,14 +168,6 @@ stages:
         vmImage: 'windows-latest'
       strategy:
         matrix:
-          Python27_Pytest_Latest:
-            python.version: '2.7'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py27-pytestlatest'
-          Python35_Pytest_Latest:
-            python.version: '3.5'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py35-pytestlatest'
           Python36_Pytest_Latest:
             python.version: '3.6'
             pytest_version: '>=4.1.0'
@@ -192,6 +184,14 @@ stages:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
             tox_env: 'py38-pytest50'
+          Python39_Pytest_60:
+            python.version: '3.9'
+            pytest_version: '>=6.0.0'
+            tox_env: 'py39-pytest90'
+          Python39_Pytest_70:
+            python.version: '3.9'
+            pytest_version: '>=7.0.0'
+            tox_env: 'py39-pytest90'
           Python38_Pytest_41:
             python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
