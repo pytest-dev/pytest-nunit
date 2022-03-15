@@ -10,7 +10,7 @@ stages:
 
     - job: 'Test_Linux'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
           Python37:
@@ -53,7 +53,7 @@ stages:
 
     - job: 'Linter'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
           Linter:
@@ -77,7 +77,7 @@ stages:
 
     - job: 'Test_Linux'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
           Python27_Pytest_Latest:
@@ -165,7 +165,7 @@ stages:
 
     - job: 'Test_Windows'
       pool:
-        vmImage: 'vs2017-win2016'
+        vmImage: 'windows-latest'
       strategy:
         matrix:
           Python27_Pytest_Latest:
@@ -252,7 +252,7 @@ stages:
     jobs:
     - job: 'Test_Packages'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       steps:
         - task: UsePythonVersion@0
           inputs:
@@ -279,7 +279,7 @@ stages:
     - job: "Test_suite_Jinja2"
       dependsOn: "Test_Packages"
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
 
       steps:
         - task: UsePythonVersion@0
