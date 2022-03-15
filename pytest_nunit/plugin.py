@@ -315,10 +315,10 @@ class NunitXML:
 
     def pytest_collection_modifyitems(self, session, config, items, *args):
         for item in items:
-            if item.parent and item.parent.obj:
+            if item.parent and hasattr(item.parent, "obj") and item.parent.obj:
                 doc = item.parent.obj.__doc__.strip() if item.parent.obj.__doc__ else ""
                 self.module_descriptions[item.parent.nodeid] = doc
-            if item.obj:
+            if hasattr(item, "obj") and item.obj:
                 doc = item.obj.__doc__.strip() if item.obj.__doc__ else ""
                 self.node_descriptions[item.nodeid] = doc
 
