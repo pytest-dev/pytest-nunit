@@ -99,11 +99,15 @@ stages:
           Python39_Pytest_60:
             python.version: '3.9'
             pytest_version: '>=6.0.0'
-            tox_env: 'py39-pytest90'
+            tox_env: 'py39-pytest60'
           Python39_Pytest_70:
             python.version: '3.9'
             pytest_version: '>=7.0.0'
-            tox_env: 'py39-pytest90'
+            tox_env: 'py39-pytest70'
+          Python39_Pytest_latest:
+            python.version: '3.9'
+            pytest_version: '>=7.0.0'
+            tox_env: 'py39-pytestlatest'
           Python38_Pytest_41:
             python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
@@ -187,11 +191,11 @@ stages:
           Python39_Pytest_60:
             python.version: '3.9'
             pytest_version: '>=6.0.0'
-            tox_env: 'py39-pytest90'
+            tox_env: 'py39-pytest60'
           Python39_Pytest_70:
             python.version: '3.9'
             pytest_version: '>=7.0.0'
-            tox_env: 'py39-pytest90'
+            tox_env: 'py39-pytest70'
           Python38_Pytest_41:
             python.version: '3.8'
             pytest_version: '>=4.1.0,<4.2.0'
