@@ -300,9 +300,9 @@ stages:
             BUILD_VERSION: $(majorVer).dev$(Build.BuildNumber)
         
         - script: |
-            wget https://github.com/pallets/jinja/archive/c4813e51ad664bca17773517462610c1578a6850.zip
-            unzip c4813e51ad664bca17773517462610c1578a6850.zip -d jinja2
-            cd jinja2/jinja-c4813e51ad664bca17773517462610c1578a6850/
+            wget https://github.com/pallets/jinja/archive/ede0f98725786911031e33b70fcfbb802ae0c825.zip
+            unzip ede0f98725786911031e33b70fcfbb802ae0c825.zip -d jinja2
+            cd jinja2/jinja-ede0f98725786911031e33b70fcfbb802ae0c825/
             python -m pytest tests --nunit-xml=test-results-jinja.xml
           displayName: "Test jinja2 pinned revision"
         - task: CopyFiles@2
