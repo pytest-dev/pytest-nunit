@@ -2,7 +2,7 @@ trigger:
 - master
 name: $(Year:yy)$(DayOfYear)$(Rev:r)
 variables:
-  majorVer: '0.5.3'
+  majorVer: '1.0.0'
 
 stages:
   - stage: Unit_Test
@@ -15,7 +15,7 @@ stages:
         matrix:
           Python39:
             python.version: '3.9'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
         maxParallel: 8
 
       steps:
@@ -82,12 +82,16 @@ stages:
         matrix:
           Python37_Pytest_Latest:
             python.version: '3.7'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py37-pytestlatest'
           Python38_Pytest_Latest:
             python.version: '3.8'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py38-pytestlatest'
+          Python37_Pytest_46:
+            python.version: '3.7'
+            pytest_version: '>=4.6.0,<5.0.0'
+            tox_env: 'py37-pytest46'
           Python38_Pytest_50:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
@@ -100,22 +104,6 @@ stages:
             python.version: '3.9'
             pytest_version: '>=7.0.0'
             tox_env: 'py39-pytest70'
-          Python39_Pytest_latest:
-            python.version: '3.9'
-            pytest_version: '>=7.0.0'
-            tox_env: 'py39-pytestlatest'
-          Python38_Pytest_41:
-            python.version: '3.8'
-            pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py38-pytest41'
-          Python38_Pytest_40:
-            python.version: '3.8'
-            pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py38-pytest40'
-          Python38_Pytest_38:
-            python.version: '3.8'
-            pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py38-pytest38'
         maxParallel: 8
 
       steps:
@@ -170,12 +158,16 @@ stages:
         matrix:
           Python37_Pytest_Latest:
             python.version: '3.7'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py37-pytestlatest'
           Python38_Pytest_Latest:
             python.version: '3.8'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py38-pytestlatest'
+          Python37_Pytest_46:
+            python.version: '3.7'
+            pytest_version: '>=4.6.0,<5.0.0'
+            tox_env: 'py37-pytest46'
           Python38_Pytest_50:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
@@ -188,18 +180,6 @@ stages:
             python.version: '3.9'
             pytest_version: '>=7.0.0'
             tox_env: 'py39-pytest70'
-          Python38_Pytest_41:
-            python.version: '3.8'
-            pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py38-pytest41'
-          Python38_Pytest_40:
-            python.version: '3.8'
-            pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py38-pytest40'
-          Python38_Pytest_38:
-            python.version: '3.8'
-            pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py38-pytest38'
         maxParallel: 8
 
       steps:
