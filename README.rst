@@ -21,7 +21,9 @@ pytest-nunit
 
 A pytest plugin for generating NUnit3 test result XML output
 
-This plugin is in **beta**.
+Requires:
+- Pytest 4.6+
+- Python 3.6+
 
 Command-line options
 --------------------

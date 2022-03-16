@@ -2,7 +2,7 @@ trigger:
 - master
 name: $(Year:yy)$(DayOfYear)$(Rev:r)
 variables:
-  majorVer: '0.5.3'
+  majorVer: '1.0.0'
 
 stages:
   - stage: Unit_Test
@@ -10,12 +10,12 @@ stages:
 
     - job: 'Test_Linux'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python37:
-            python.version: '3.7'
-            pytest_version: '>=4.1.0'
+          Python39:
+            python.version: '3.9'
+            pytest_version: '>=4.6.0'
         maxParallel: 8
 
       steps:
@@ -53,11 +53,11 @@ stages:
 
     - job: 'Linter'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
           Linter:
-            python.version: '3.6'
+            python.version: '3.9'
         maxParallel: 8
 
       steps:
@@ -77,45 +77,33 @@ stages:
 
     - job: 'Test_Linux'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       strategy:
         matrix:
-          Python27_Pytest_Latest:
-            python.version: '2.7'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py27-pytestlatest'
-          Python35_Pytest_Latest:
-            python.version: '3.5'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py35-pytestlatest'
-          Python36_Pytest_Latest:
-            python.version: '3.6'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py36-pytestlatest'
           Python37_Pytest_Latest:
             python.version: '3.7'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py37-pytestlatest'
           Python38_Pytest_Latest:
             python.version: '3.8'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py38-pytestlatest'
+          Python37_Pytest_46:
+            python.version: '3.7'
+            pytest_version: '>=4.6.0,<5.0.0'
+            tox_env: 'py37-pytest46'
           Python38_Pytest_50:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
             tox_env: 'py38-pytest50'
-          Python38_Pytest_41:
-            python.version: '3.8'
-            pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py38-pytest41'
-          Python38_Pytest_40:
-            python.version: '3.8'
-            pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py38-pytest40'
-          Python38_Pytest_38:
-            python.version: '3.8'
-            pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py38-pytest38'
+          Python39_Pytest_60:
+            python.version: '3.9'
+            pytest_version: '>=6.0.0'
+            tox_env: 'py39-pytest60'
+          Python39_Pytest_70:
+            python.version: '3.9'
+            pytest_version: '>=7.0.0'
+            tox_env: 'py39-pytest70'
         maxParallel: 8
 
       steps:
@@ -165,45 +153,33 @@ stages:
 
     - job: 'Test_Windows'
       pool:
-        vmImage: 'vs2017-win2016'
+        vmImage: 'windows-latest'
       strategy:
         matrix:
-          Python27_Pytest_Latest:
-            python.version: '2.7'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py27-pytestlatest'
-          Python35_Pytest_Latest:
-            python.version: '3.5'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py35-pytestlatest'
-          Python36_Pytest_Latest:
-            python.version: '3.6'
-            pytest_version: '>=4.1.0'
-            tox_env: 'py36-pytestlatest'
           Python37_Pytest_Latest:
             python.version: '3.7'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py37-pytestlatest'
           Python38_Pytest_Latest:
             python.version: '3.8'
-            pytest_version: '>=4.1.0'
+            pytest_version: '>=4.6.0'
             tox_env: 'py38-pytestlatest'
+          Python37_Pytest_46:
+            python.version: '3.7'
+            pytest_version: '>=4.6.0,<5.0.0'
+            tox_env: 'py37-pytest46'
           Python38_Pytest_50:
             python.version: '3.8'
             pytest_version: '>=5.0.0'
             tox_env: 'py38-pytest50'
-          Python38_Pytest_41:
-            python.version: '3.8'
-            pytest_version: '>=4.1.0,<4.2.0'
-            tox_env: 'py38-pytest41'
-          Python38_Pytest_40:
-            python.version: '3.8'
-            pytest_version: '>=4.0.0,<4.1.0'
-            tox_env: 'py38-pytest40'
-          Python38_Pytest_38:
-            python.version: '3.8'
-            pytest_version: '>=3.8.0,<4.0.0'
-            tox_env: 'py38-pytest38'
+          Python39_Pytest_60:
+            python.version: '3.9'
+            pytest_version: '>=6.0.0'
+            tox_env: 'py39-pytest60'
+          Python39_Pytest_70:
+            python.version: '3.9'
+            pytest_version: '>=7.0.0'
+            tox_env: 'py39-pytest70'
         maxParallel: 8
 
       steps:
@@ -252,7 +228,7 @@ stages:
     jobs:
     - job: 'Test_Packages'
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
       steps:
         - task: UsePythonVersion@0
           inputs:
@@ -279,7 +255,7 @@ stages:
     - job: "Test_suite_Jinja2"
       dependsOn: "Test_Packages"
       pool:
-        vmImage: 'Ubuntu-16.04'
+        vmImage: 'ubuntu-latest'
 
       steps:
         - task: UsePythonVersion@0
@@ -304,9 +280,10 @@ stages:
             BUILD_VERSION: $(majorVer).dev$(Build.BuildNumber)
         
         - script: |
-            wget https://github.com/pallets/jinja/archive/c4813e51ad664bca17773517462610c1578a6850.zip
-            unzip c4813e51ad664bca17773517462610c1578a6850.zip -d jinja2
-            cd jinja2/jinja-c4813e51ad664bca17773517462610c1578a6850/
+            wget https://github.com/pallets/jinja/archive/ede0f98725786911031e33b70fcfbb802ae0c825.zip
+            unzip ede0f98725786911031e33b70fcfbb802ae0c825.zip -d jinja2
+            cd jinja2/jinja-ede0f98725786911031e33b70fcfbb802ae0c825/
+            pip install .
             python -m pytest tests --nunit-xml=test-results-jinja.xml
           displayName: "Test jinja2 pinned revision"
         - task: CopyFiles@2
