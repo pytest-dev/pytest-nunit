@@ -368,10 +368,10 @@ class NunitXML:
         stats["failure"] = outcomes.get("failed", 0)
         stats["skipped"] = outcomes.get("skipped", 0)
         start = min_with_default(
-            [case["start"] for case in cases.values()], default=datetime.min
+            [case["start"] for case in cases.values() if "start" in case], default=datetime.min
         )
         stop = max_with_default(
-            [case["stop"] for case in cases.values()], default=datetime.min
+            [case["stop"] for case in cases.values() if "stop" in case], default=datetime.min
         )
         duration = (stop - start).total_seconds()
         return ModuleReport(
