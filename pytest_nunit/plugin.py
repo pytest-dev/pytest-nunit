@@ -151,11 +151,14 @@ class _NunitNodeReporter:
             r["start"] = datetime.utcnow()  # Will be overridden if called
             if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
-                if len(testreport.longrepr) > 2:
+                if isinstance(testreport.longrepr, tuple) and len(testreport.longrepr) > 2:
                     r["error"] = testreport.longrepr[2]
                     r["stack-trace"] = "{0}::{1}".format(
                         testreport.longrepr[0], testreport.longrepr[1]
                     )
+                elif hasattr(testreport.longrepr, "traceback"): # Catches internal ExceptionInfo type
+                    r["error"] = str(testreport.longrepr)
+                    r["stack-trace"] = str(testreport.longrepr.traceback)
                 else:
                     r["error"] = testreport.longrepr
         elif testreport.when == "call":
@@ -365,10 +368,10 @@ class NunitXML:
         stats["failure"] = outcomes.get("failed", 0)
         stats["skipped"] = outcomes.get("skipped", 0)
         start = min_with_default(
-            [case["start"] for case in cases.values()], default=datetime.min
+            [case["start"] for case in cases.values() if "start" in case], default=datetime.min
         )
         stop = max_with_default(
-            [case["stop"] for case in cases.values()], default=datetime.min
+            [case["stop"] for case in cases.values() if "stop" in case], default=datetime.min
         )
         duration = (stop - start).total_seconds()
         return ModuleReport(
