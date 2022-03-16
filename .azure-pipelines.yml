@@ -303,6 +303,7 @@ stages:
             wget https://github.com/pallets/jinja/archive/ede0f98725786911031e33b70fcfbb802ae0c825.zip
             unzip ede0f98725786911031e33b70fcfbb802ae0c825.zip -d jinja2
             cd jinja2/jinja-ede0f98725786911031e33b70fcfbb802ae0c825/
+            pip install .
             python -m pytest tests --nunit-xml=test-results-jinja.xml
           displayName: "Test jinja2 pinned revision"
         - task: CopyFiles@2
