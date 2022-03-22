@@ -19,8 +19,7 @@ from .nunit import NunitTestRun
 import logging
 import pytest
 
-logging.basicConfig()
-log = logging.getLogger("__name__")
+log = logging.getLogger(__name__)
 
 
 PytestFilters = namedtuple("PytestFilters", "keyword markers file_or_dir")
