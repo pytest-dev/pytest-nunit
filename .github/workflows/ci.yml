@@ -38,3 +38,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: pytest with nunit-xml flag - passes
+      run: |
+          python -m pytest tests/unit -v --nunit-xml=test-results-unit.xml
