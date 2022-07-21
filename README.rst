@@ -2,10 +2,10 @@
 pytest-nunit
 ============
 
-.. image:: https://pytest-dev.visualstudio.com/pytest-nunit/_apis/build/status/pytest-dev.pytest-nunit?branchName=master
-   :target: https://pytest-dev.visualstudio.com/pytest-nunit/_build/latest?definitionId=7&branchName=master
-   :alt: Build status
-
+.. image:: https://github.com/pytest-dev/pytest-nunit/actions/workflows/ci.yml/badge.svg
+    :target: https://pypi.org/project/pytest-nunit
+    :alt: PyPI version
+    
 .. image:: https://img.shields.io/pypi/v/pytest-nunit.svg
     :target: https://pypi.org/project/pytest-nunit
     :alt: PyPI version
@@ -22,8 +22,8 @@ pytest-nunit
 A pytest plugin for generating NUnit3 test result XML output
 
 Requires:
-- Pytest 4.6+
-- Python 3.6+
+- Pytest 5.1.0+
+- Python 3.7+
 
 Command-line options
 --------------------
