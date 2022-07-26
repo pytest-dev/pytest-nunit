@@ -41,3 +41,8 @@ jobs:
     - name: pytest with nunit-xml flag - passes
       run: |
           python -m pytest tests/unit -v --nunit-xml=test-results-unit.xml
+    - name: pytest with xdist
+      run: |
+        python -m pip install pytest-xdist
+        python -m pytest tests/unit -v --nunit-xml=test-results-xdist.xml -n 2
+        grep "test-suite" test-results-xdist.xml | true
