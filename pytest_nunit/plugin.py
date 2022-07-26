@@ -390,6 +390,15 @@ class NunitXML:
         full_report = self._create_module_report(self.cases)
         self.stats.update(full_report.stats)
 
+        # pytest-xdist collection is done on workers, 
+        # so node_to_module_map is empty
+        if not self.node_to_module_map and self.cases:
+            for case_name, case in self.cases.items():
+                if 'path' in case:
+                    self.node_to_module_map[case_name] = case['path']
+                else:
+                    self.node_to_module_map[case_name] = ParentlessNode
+
         # Sort nodes into modules
         for module_id in set(self.node_to_module_map.values()):
             cases = {
