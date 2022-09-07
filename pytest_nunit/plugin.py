@@ -165,6 +165,7 @@ class _NunitNodeReporter:
             r["call-report"] = testreport
             r["error"] = testreport.longreprtext
             r["stack-trace"] = self.nunit_xml._getcrashline(testreport)
+            r["properties"].update(testreport.user_properties)
         elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["stop"] = datetime.utcnow()
@@ -390,7 +391,7 @@ class NunitXML:
         full_report = self._create_module_report(self.cases)
         self.stats.update(full_report.stats)
 
-        # pytest-xdist collection is done on workers, 
+        # pytest-xdist collection is done on workers,
         # so node_to_module_map is empty
         if not self.node_to_module_map and self.cases:
             for case_name, case in self.cases.items():
