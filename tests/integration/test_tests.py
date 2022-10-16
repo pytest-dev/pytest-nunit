@@ -211,6 +211,6 @@ def test_failing_fixture(testdir, tmpdir):
     outfile_pth = str(outfile)
 
     result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth)
-    assert result.ret == 0
+    assert int(result.ret) == 0
     result.stdout.fnmatch_lines(["*test_one PASSED*"])
     result.stdout.fnmatch_lines(["*test_two PASSED*"])
