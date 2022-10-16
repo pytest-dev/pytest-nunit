@@ -38,7 +38,6 @@ jobs:
     - name: Test with pytest
       run: |
         COV_CORE_SOURCE=pytest_nunit COV_CORE_CONFIG=.coveragerc COV_CORE_DATAFILE=.coverage.eager pytest --cov=pytest_nunit --cov-append
-        coverage combine
         coverage report -m
         coverage xml -o coverage.xml
     - name: pytest with nunit-xml flag - passes
