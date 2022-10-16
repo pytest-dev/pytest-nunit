@@ -35,6 +35,10 @@ setup(
     install_requires=['pytest>=4.6.0', 'attrs'],
     extras_require={
         ':python_version=="2.7"': ['enum34>=1.1.6'],
+        'dev': [
+            'xmlschema==1.0.13',
+            'pytest',
+        ],
     },
     classifiers=[
         'Development Status :: 4 - Beta',
