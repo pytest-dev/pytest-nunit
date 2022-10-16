@@ -62,7 +62,7 @@ def _format_attachments(case, attach_on):
 
     :param case: The test case
     :type  case: :class:`pytest.TestCase`
-    
+
     :param attach_on: Attach-on criteria, one of any|pass|fail
     :type  attach_on: ``str``
 
