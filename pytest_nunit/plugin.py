@@ -27,6 +27,7 @@ ModuleReport = namedtuple("ModuleReport", "stats cases start stop duration")
 ParentlessNode = "PARENTLESS_NODE"
 
 if sys.version_info < (3,):
+
     def min_with_default(seq, default):
         try:
             return min(seq)
@@ -38,6 +39,7 @@ if sys.version_info < (3,):
             return max(seq)
         except ValueError:
             return default
+
 else:
     min_with_default = min
     max_with_default = max
@@ -150,12 +152,17 @@ class _NunitNodeReporter:
             r["start"] = datetime.utcnow()  # Will be overridden if called
             if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
-                if isinstance(testreport.longrepr, tuple) and len(testreport.longrepr) > 2:
+                if (
+                    isinstance(testreport.longrepr, tuple)
+                    and len(testreport.longrepr) > 2
+                ):
                     r["error"] = testreport.longrepr[2]
                     r["stack-trace"] = "{0}::{1}".format(
                         testreport.longrepr[0], testreport.longrepr[1]
                     )
-                elif hasattr(testreport.longrepr, "traceback"): # Catches internal ExceptionInfo type
+                elif hasattr(
+                    testreport.longrepr, "traceback"
+                ):  # Catches internal ExceptionInfo type
                     r["error"] = str(testreport.longrepr)
                     r["stack-trace"] = str(testreport.longrepr.traceback)
                 else:
@@ -177,7 +184,9 @@ class _NunitNodeReporter:
                 r["outcome"] = "skipped"
             elif r["setup-report"].outcome == "failed":
                 r["outcome"] = "failed"
-            elif "failed" in [r["call-report"].outcome, testreport.outcome]:
+            elif r["call-report"] and r["call-report"].outcome == "failed":
+                r["outcome"] = "failed"
+            elif testreport.outcome == "failed":
                 r["outcome"] = "failed"
             else:
                 r["outcome"] = "passed"
@@ -367,10 +376,12 @@ class NunitXML:
         stats["failure"] = outcomes.get("failed", 0)
         stats["skipped"] = outcomes.get("skipped", 0)
         start = min_with_default(
-            [case["start"] for case in cases.values() if "start" in case], default=datetime.min
+            [case["start"] for case in cases.values() if "start" in case],
+            default=datetime.min,
         )
         stop = max_with_default(
-            [case["stop"] for case in cases.values() if "stop" in case], default=datetime.min
+            [case["stop"] for case in cases.values() if "stop" in case],
+            default=datetime.min,
         )
         duration = (stop - start).total_seconds()
         return ModuleReport(
@@ -390,12 +401,12 @@ class NunitXML:
         full_report = self._create_module_report(self.cases)
         self.stats.update(full_report.stats)
 
-        # pytest-xdist collection is done on workers, 
+        # pytest-xdist collection is done on workers,
         # so node_to_module_map is empty
         if not self.node_to_module_map and self.cases:
             for case_name, case in self.cases.items():
-                if 'path' in case:
-                    self.node_to_module_map[case_name] = case['path']
+                if "path" in case:
+                    self.node_to_module_map[case_name] = case["path"]
                 else:
                     self.node_to_module_map[case_name] = ParentlessNode
 
