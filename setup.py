@@ -38,6 +38,7 @@ setup(
         'dev': [
             'xmlschema==1.0.13',
             'pytest',
+            'pytest-cov',
         ],
     },
     classifiers=[
