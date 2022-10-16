@@ -33,11 +33,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install flake8 pytest==${{ matrix.pytest-version }}
+        python -m pip install flake8 pytest==${{ matrix.pytest-version }} pytest-cov
         python -m pip install -e .[dev]
     - name: Test with pytest
       run: |
-        pytest
+        COV_CORE_SOURCE=pytest_nunit COV_CORE_CONFIG=.coveragerc COV_CORE_DATAFILE=.coverage.eager pytest --cov=pytest_nunit --cov-append
+        coverage combine
+        coverage report -m
+        coverage xml -o coverage.xml
     - name: pytest with nunit-xml flag - passes
       run: |
           python -m pytest tests/unit -v --nunit-xml=test-results-unit.xml
@@ -46,3 +49,7 @@ jobs:
         python -m pip install pytest-xdist
         python -m pytest tests/unit -v --nunit-xml=test-results-xdist.xml -n 2
         grep "test-suite" test-results-xdist.xml | true
+    - uses: codecov/codecov-action@v3
+      with:
+        verbose: true
+        files: ./coverage.xml
