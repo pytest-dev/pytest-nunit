@@ -191,7 +191,12 @@ def test_error_test(testdir, tmpdir):
 
 
 def test_failing_fixture(testdir, tmpdir):
-    testdir.makepyfile("""
+    """
+    Test resolving issue # 55
+    https://github.com/pytest-dev/pytest-nunit/issues/55
+    """
+    testdir.makepyfile(
+        """
     import pytest
     
     @pytest.fixture(scope="class")
@@ -206,12 +211,13 @@ def test_failing_fixture(testdir, tmpdir):
         @pytest.mark.xfail(reason="No reason")
         def test_two(self):
             pytest.fail()
-    """)
+    """
+    )
     outfile = tmpdir.join("out.xml")
     outfile_pth = str(outfile)
 
     result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth)
     assert int(result.ret) == 1
-    assert "".join(result.stderr.lines) == ''
+    assert "".join(result.stderr.lines) == ""
     result.stdout.fnmatch_lines(["*test_one ERROR*"])
     result.stdout.fnmatch_lines(["*test_two XFAIL*"])

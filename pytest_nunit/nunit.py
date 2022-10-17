@@ -64,7 +64,7 @@ def _format_attachments(case, attach_on):
 
     :param case: The test case
     :type  case: :class:`pytest.TestCase`
-    
+
     :param attach_on: Attach-on criteria, one of any|pass|fail
     :type  attach_on: ``str``
 
@@ -173,12 +173,16 @@ class NunitTestRun(object):
                 environment=self.environment,
                 settings=None,  # TODO : Add settings as optional fixture
                 failure=FailureType(
-                    message=CdataComment(text=str(case["error"])
-                    if isinstance(case["error"], ExceptionChainRepr)
-                    else case["error"]),
-                    stack_trace=CdataComment(text=str(case["error"].reprcrash)
-                    if isinstance(case["error"], ExceptionChainRepr)
-                    else case["stack-trace"])
+                    message=CdataComment(
+                        text=str(case["error"])
+                        if isinstance(case["error"], ExceptionChainRepr)
+                        else case["error"]
+                    ),
+                    stack_trace=CdataComment(
+                        text=str(case["error"].reprcrash)
+                        if isinstance(case["error"], ExceptionChainRepr)
+                        else case["stack-trace"]
+                    ),
                 ),
                 reason=ReasonType(message=CdataComment(text=case["reason"])),
                 output=CdataComment(text=case["reason"]),
