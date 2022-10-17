@@ -188,3 +188,36 @@ def test_error_test(testdir, tmpdir):
     assert out["test-suite"]["@passed"] == 0
     assert out["test-suite"]["@failed"] == 1
     assert out["test-suite"]["@skipped"] == 0
+
+
+def test_failing_fixture(testdir, tmpdir):
+    """
+    Test resolving issue # 55
+    https://github.com/pytest-dev/pytest-nunit/issues/55
+    """
+    testdir.makepyfile(
+        """
+    import pytest
+    
+    @pytest.fixture(scope="class")
+    def failing_fixture():
+        raise Exception("SomeException")
+    
+    @pytest.mark.usefixtures("failing_fixture")
+    class TestOne:
+        def test_one(self):
+            pass
+    
+        @pytest.mark.xfail(reason="No reason")
+        def test_two(self):
+            pytest.fail()
+    """
+    )
+    outfile = tmpdir.join("out.xml")
+    outfile_pth = str(outfile)
+
+    result = testdir.runpytest("-v", "--nunit-xml=" + outfile_pth)
+    assert int(result.ret) == 1
+    assert "".join(result.stderr.lines) == ""
+    result.stdout.fnmatch_lines(["*test_one ERROR*"])
+    result.stdout.fnmatch_lines(["*test_two XFAIL*"])
