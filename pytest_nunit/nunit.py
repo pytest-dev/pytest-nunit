@@ -175,8 +175,6 @@ class NunitTestRun(object):
                 failure=FailureType(
                     message=CdataComment(
                         text=str(case["error"])
-                        if isinstance(case["error"], ExceptionChainRepr)
-                        else case["error"]
                     ),
                     stack_trace=CdataComment(
                         text=str(case["error"].reprcrash)
