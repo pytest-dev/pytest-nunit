@@ -22,6 +22,8 @@ from .models.nunit import (
     ValueMatchFilterType,
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
+from _pytest._code.code import ExceptionChainRepr
+
 
 FRAMEWORK_VERSION = "3.6.2"  # Nunit version this was based on
 CLR_VERSION = sys.version
@@ -171,8 +173,12 @@ class NunitTestRun(object):
                 environment=self.environment,
                 settings=None,  # TODO : Add settings as optional fixture
                 failure=FailureType(
-                    message=CdataComment(text=case["error"]),
-                    stack_trace=CdataComment(text=case["stack-trace"]),
+                    message=CdataComment(text=str(case["error"])
+                    if isinstance(case["error"], ExceptionChainRepr)
+                    else case["error"]),
+                    stack_trace=CdataComment(text=str(case["error"].reprcrash)
+                    if isinstance(case["error"], ExceptionChainRepr)
+                    else case["stack-trace"])
                 ),
                 reason=ReasonType(message=CdataComment(text=case["reason"])),
                 output=CdataComment(text=case["reason"]),
