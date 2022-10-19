@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 (19th October 2022)
+
+* Don't assert that call-report exists before checking value of attribute by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/63
+* Fix crash when ExceptionReprGroup is set for trace in test case by @gh-ppolk in https://github.com/pytest-dev/pytest-nunit/pull/65
+* [minor] Add xmlschema dev dependency by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/62
+* [minor] Add plugin coverage by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/64
+
 ## 1.0.1 (26th July 2022)
 
 - Fixes a bug where the report would be empty when pytest-xdist is used [#40](https://github.com/pytest-dev/pytest-nunit/issues/40)
