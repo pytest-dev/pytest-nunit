@@ -147,9 +147,13 @@ class _NunitNodeReporter:
                 "error": "",
                 "stack-trace": "",
                 "name": self.nunit_xml.prefix + testreport.nodeid,
+                "reason": "",
+                "outcome": "",
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
+            r["stop"] = datetime.utcnow()  # Will be overridden if called
+            r["duration"] = 0  # Updated on teardown
             if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
                 if (
