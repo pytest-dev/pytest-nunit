@@ -1,8 +1,9 @@
 """
 Test adding properties to tests
 """
-import xmlschema
 import os
+
+import xmlschema
 
 
 def test_keyword_filter(testdir, tmpdir):

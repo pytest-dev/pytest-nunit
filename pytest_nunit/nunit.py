@@ -1,29 +1,18 @@
-import sys
-import os
-import locale
-import platform
 import getpass
-from .models.nunit import (
-    TestRunType,
-    TestResultType,
-    TestCaseElementType,
-    TestSuiteElementType,
-    TestStatusType,
-    TestRunStateType,
-    TestSuiteTypeType,
-    PropertyBagType,
-    PropertyType,
-    EnvironmentType,
-    AttachmentsType,
-    AttachmentType,
-    ReasonType,
-    FailureType,
-    TestFilterType,
-    ValueMatchFilterType,
-)
-from .attrs2xml import AttrsXmlRenderer, CdataComment
+import locale
+import os
+import platform
+import sys
+
 from _pytest._code.code import ExceptionChainRepr
 
+from .attrs2xml import AttrsXmlRenderer, CdataComment
+from .models.nunit import (AttachmentsType, AttachmentType, EnvironmentType,
+                           FailureType, PropertyBagType, PropertyType,
+                           ReasonType, TestCaseElementType, TestFilterType,
+                           TestResultType, TestRunStateType, TestRunType,
+                           TestStatusType, TestSuiteElementType,
+                           TestSuiteTypeType, ValueMatchFilterType)
 
 FRAMEWORK_VERSION = "3.6.2"  # Nunit version this was based on
 CLR_VERSION = sys.version

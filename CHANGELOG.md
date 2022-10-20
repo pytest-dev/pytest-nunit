@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 (20th October 2022)
+
+* Fixes bug when used with xdist extension by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/66
+
 ## 1.0.2 (19th October 2022)
 
 * Don't assert that call-report exists before checking value of attribute by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/63

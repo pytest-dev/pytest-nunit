@@ -1,6 +1,6 @@
+import enum
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
-import enum
 
 
 class CdataComment(ET.Element):

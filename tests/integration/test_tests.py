@@ -1,8 +1,9 @@
 """
 Test various scenarios
 """
-import xmlschema
 import os
+
+import xmlschema
 
 
 def test_passing_test(testdir, tmpdir):

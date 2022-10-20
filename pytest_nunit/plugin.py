@@ -5,19 +5,18 @@ Based (loosely) on the Junit XML output.
 
 Shares the same pattern of CLI options for ease of use.
 """
-from _pytest.config import filename_arg
-
-from io import open
+import functools
+import logging
 import os
 import sys
+from collections import Counter, defaultdict, namedtuple
 from datetime import datetime
-import functools
-from collections import namedtuple, defaultdict, Counter
+from io import open
+
+import pytest
+from _pytest.config import filename_arg
 
 from .nunit import NunitTestRun
-
-import logging
-import pytest
 
 log = logging.getLogger(__name__)
 
@@ -147,9 +146,13 @@ class _NunitNodeReporter:
                 "error": "",
                 "stack-trace": "",
                 "name": self.nunit_xml.prefix + testreport.nodeid,
+                "reason": "",
+                "outcome": "",
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
             r["start"] = datetime.utcnow()  # Will be overridden if called
+            r["stop"] = datetime.utcnow()  # Will be overridden if called
+            r["duration"] = 0  # Updated on teardown
             if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
                 if (
