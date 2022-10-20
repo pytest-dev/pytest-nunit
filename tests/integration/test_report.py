@@ -2,9 +2,10 @@
 Test conversion of collected results into module reports.
 """
 
+from datetime import datetime, timedelta
+
 import pytest
 
-from datetime import datetime, timedelta
 from pytest_nunit.plugin import NunitXML
 
 # This class method takes a dict of node_id->dict representing all the

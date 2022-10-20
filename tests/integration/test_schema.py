@@ -2,8 +2,9 @@
 Validate the output XML file against the schema
 """
 import os
-import xmlschema
 from xml.etree import ElementTree
+
+import xmlschema
 
 
 def test_basic_against_reference_schema(testdir, tmpdir):

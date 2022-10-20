@@ -7,10 +7,11 @@ Licensed under MIT.
 Written by Anthony Shaw.
 """
 
+import keyword
 import logging
+
 import xmlschema
 import xmlschema.qnames
-import keyword
 
 try:
     import black

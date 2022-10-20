@@ -5,19 +5,18 @@ Based (loosely) on the Junit XML output.
 
 Shares the same pattern of CLI options for ease of use.
 """
-from _pytest.config import filename_arg
-
-from io import open
+import functools
+import logging
 import os
 import sys
+from collections import Counter, defaultdict, namedtuple
 from datetime import datetime
-import functools
-from collections import namedtuple, defaultdict, Counter
+from io import open
+
+import pytest
+from _pytest.config import filename_arg
 
 from .nunit import NunitTestRun
-
-import logging
-import pytest
 
 log = logging.getLogger(__name__)
 

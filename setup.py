@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import codecs
-from setuptools import find_packages
-from setuptools import setup
+import os
+
+from setuptools import find_packages, setup
 
 
 def read(fname):
@@ -16,7 +16,7 @@ def getversion():
     if 'BUILD_VERSION' in os.environ:
         return os.environ['BUILD_VERSION']
     else:
-        return "1.0.2"
+        return "1.0.3"
 
 
 setup(

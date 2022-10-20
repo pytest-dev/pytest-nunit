@@ -1,5 +1,6 @@
-import attr
 import enum
+
+import attr
 
 
 class TestDurationType(float):

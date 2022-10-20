@@ -1,8 +1,9 @@
 """
 Test adding properties to tests
 """
-import xmlschema
 import os
+
+import xmlschema
 
 
 def test_basic_property(testdir, tmpdir):
