@@ -6,7 +6,7 @@ from xml.sax.saxutils import escape
 class CdataComment(ET.Element):
     def __init__(self, text):
         super(CdataComment, self).__init__("CDATA!")
-        self.text = escape(text, {"\x1b": "&#x1b;"})
+        self.text = text.replace("\x1b","")
 
 
 ET._original_serialize_xml = ET._serialize_xml
