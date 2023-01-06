@@ -6,6 +6,8 @@ import enum
 class CdataComment(ET.Element):
     def __init__(self, text):
         super(CdataComment, self).__init__("CDATA!")
+        if type(text) is not str:
+            text = str(text)
         self.text = escape(text, {'\x1b': "&#x1b;"})
 
 
