@@ -18,6 +18,7 @@ from .nunit import NunitTestRun
 
 import logging
 import pytest
+import string
 
 log = logging.getLogger(__name__)
 
@@ -120,6 +121,8 @@ def pytest_unconfigure(config):
         del config._nunitxml
         config.pluginmanager.unregister(nunitxml)
 
+def filter_ctrl(str):
+    return "".join(filter(lambda x: x in string.printable, str))
 
 class _NunitNodeReporter:
     def __init__(self, nodeid, nunit_xml):
@@ -163,7 +166,7 @@ class _NunitNodeReporter:
         elif testreport.when == "call":
             r = self.nunit_xml.cases[testreport.nodeid]
             r["call-report"] = testreport
-            r["error"] = testreport.longreprtext
+            r["error"] = filter_ctrl(testreport.longreprtext)
             r["stack-trace"] = self.nunit_xml._getcrashline(testreport)
             r["properties"].update(testreport.user_properties)
         elif testreport.when == "teardown":
@@ -269,7 +272,7 @@ class NunitXML:
         self.show_username = show_username
         self.show_user_domain = show_user_domain
         self.attach_on = attach_on
-        logging.debug("Attach on criteria : {0}".format(attach_on))
+        #logging.debug("Attach on criteria : {0}".format(attach_on))
         self.idrefindex = 100  # Create a unique ID counter
         self.filters = filters
 
