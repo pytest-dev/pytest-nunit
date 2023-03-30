@@ -14,7 +14,7 @@ from datetime import datetime
 import functools
 from collections import namedtuple, defaultdict, Counter
 
-from .nunit import NunitTestRun
+from .nunit import NunitTestRun, filter_ctrl
 
 import logging
 import pytest
@@ -120,9 +120,6 @@ def pytest_unconfigure(config):
     if nunitxml:
         del config._nunitxml
         config.pluginmanager.unregister(nunitxml)
-
-def filter_ctrl(str):
-    return "".join(filter(lambda x: x in string.printable, str))
 
 class _NunitNodeReporter:
     def __init__(self, nodeid, nunit_xml):

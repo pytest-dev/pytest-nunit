@@ -22,6 +22,7 @@ from .models.nunit import (
     ValueMatchFilterType,
 )
 from .attrs2xml import AttrsXmlRenderer, CdataComment
+import string
 
 FRAMEWORK_VERSION = "3.6.2"  # Nunit version this was based on
 CLR_VERSION = sys.version
@@ -33,6 +34,14 @@ PYTEST_TO_NUNIT = {
     "skipped": TestStatusType.Skipped,
 }
 
+
+def filter_ctrl(str):
+    return "".join(filter(lambda x: x in string.printable, str))
+
+class CDataComment_filtered(CdataComment):
+    def __init__(self, text):
+        text = filter_ctrl(text)
+        super().__init__(text)
 
 def _get_user_id():
     try:
@@ -62,7 +71,7 @@ def _format_attachments(case, attach_on):
 
     :param case: The test case
     :type  case: :class:`pytest.TestCase`
-    
+
     :param attach_on: Attach-on criteria, one of any|pass|fail
     :type  attach_on: ``str``
 
@@ -171,11 +180,11 @@ class NunitTestRun(object):
                 environment=self.environment,
                 settings=None,  # TODO : Add settings as optional fixture
                 failure=FailureType(
-                    message=CdataComment(text=case["error"]),
-                    stack_trace=CdataComment(text=case["stack-trace"]),
+                    message=CDataComment_filtered(text=case["error"]),
+                    stack_trace=CDataComment_filtered(text=case["stack-trace"]),
                 ),
-                reason=ReasonType(message=CdataComment(text=case["reason"])),
-                output=CdataComment(text=case["reason"]),
+                reason=ReasonType(message=CDataComment_filtered(text=case["reason"])),
+                output=CDataComment_filtered(text=filter_ctrl(case["reason"])),
                 assertions=_format_assertions(case),
                 attachments=_format_attachments(case, self.nunitxml.attach_on),
                 classname=get_node_names(nodeid)[0],
