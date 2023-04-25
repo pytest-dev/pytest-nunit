@@ -36,7 +36,11 @@ PYTEST_TO_NUNIT = {
 
 
 def filter_ctrl(str):
-    return "".join(filter(lambda x: x in string.printable, str))
+    if str:
+        printable =  "".join(filter(lambda x: x in string.printable, str))
+        cwd = os.path.curdir
+        str.replace(cwd, "")
+    return str
 
 class CDataComment_filtered(CdataComment):
     def __init__(self, text):
