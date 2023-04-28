@@ -169,6 +169,10 @@ class NunitTestRun(object):
         )
 
     def test_cases(self, module):
+        for nodeid, case in self.nunitxml.modules[module].cases.items():
+            if "reason" not in case:
+                case['reason'] = 'Not set'
+
         return [
             TestCaseElementType(
                 id_=str(case["idref"]),
