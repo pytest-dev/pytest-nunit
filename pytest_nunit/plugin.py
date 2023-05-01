@@ -388,30 +388,35 @@ class NunitXML:
             self.suite_stop_time - self.suite_start_time
         ).total_seconds()
 
-        full_report = self._create_module_report(self.cases)
-        self.stats.update(full_report.stats)
+        try:
+           full_report = self._create_module_report(self.cases)
+           self.stats.update(full_report.stats)
 
-        # pytest-xdist collection is done on workers,
-        # so node_to_module_map is empty
-        if not self.node_to_module_map and self.cases:
-            for case_name, case in self.cases.items():
-                if 'path' in case:
-                    self.node_to_module_map[case_name] = case['path']
-                else:
-                    self.node_to_module_map[case_name] = ParentlessNode
+           # pytest-xdist collection is done on workers,
+           # so node_to_module_map is empty
+           if not self.node_to_module_map and self.cases:
+               for case_name, case in self.cases.items():
+                   if 'path' in case:
+                       self.node_to_module_map[case_name] = case['path']
+                   else:
+                       self.node_to_module_map[case_name] = ParentlessNode
 
-        # Sort nodes into modules
-        for module_id in set(self.node_to_module_map.values()):
-            cases = {
-                nodeid: self.cases[nodeid]
-                for nodeid, m_id in self.node_to_module_map.items()
-                if module_id == m_id and nodeid in self.cases
-            }
-            self.modules[module_id] = self._create_module_report(cases)
+           # Sort nodes into modules
+           for module_id in set(self.node_to_module_map.values()):
+               cases = {
+                   nodeid: self.cases[nodeid]
+                   for nodeid, m_id in self.node_to_module_map.items()
+                   if module_id == m_id and nodeid in self.cases
+               }
+               self.modules[module_id] = self._create_module_report(cases)
 
-        with open(self.logfile, "w", encoding="utf-8") as logfile:
-            result = NunitTestRun(self).generate_xml()
-            logfile.write(result.decode(encoding="utf-8"))
+           with open(self.logfile, "w", encoding="utf-8") as logfile:
+               result = NunitTestRun(self).generate_xml()
+               logfile.write(result.decode(encoding="utf-8"))
+
+        except BaseException:
+            # ignore errors from the report generation as it is buggy
+            pass
 
     def pytest_terminal_summary(self, terminalreporter):
         """Notify XML report path."""
