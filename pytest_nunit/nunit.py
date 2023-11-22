@@ -116,9 +116,18 @@ def _format_filters(filters_):
 
 
 def _getlocale():
-    language_code = locale.getdefaultlocale()[0]
+    language_code = locale.getlocale(locale.LC_CTYPE)[0]       # Example: 'English_United States'
     if language_code:
-        return language_code
+        try:
+            return (
+                locale
+                .locale_alias                                  # Dictionary providing reference from verbose strings to codes and subcodes   
+                .get(language_code.replace(' ', '-').lower())  # Example: .get('english_united-states) => 'en_US.ISO8859-1'  
+                .split('.')[0]                                 # Example: 'en_US'
+                .replace('_', '-')                             # Example: 'en-US'
+            )
+        except Exception:
+            pass
     return "en-US"
 
 
