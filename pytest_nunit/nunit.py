@@ -116,7 +116,7 @@ def _format_filters(filters_):
 
 
 def _getlocale():
-    language_code = locale.getdefaultlocale()[0]
+    language_code = locale.getlocale(locale.LC_CTYPE)[0]
     if language_code:
         return language_code
     return "en-US"
