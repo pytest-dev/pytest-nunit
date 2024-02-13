@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5 (13th February 2024)
+
+* Mute deprecation warning of getdefaultlocale until a better solution by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/74
+
 ## 1.0.4 (11th October 2023)
 
 * Support for Python 3.12
