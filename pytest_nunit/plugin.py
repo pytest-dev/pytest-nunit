@@ -11,6 +11,7 @@ import os
 import sys
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime
+from datetime import timezone
 from io import open
 
 import pytest
@@ -150,8 +151,8 @@ class _NunitNodeReporter:
                 "outcome": "",
             }
             self.nunit_xml.idrefindex += 1  # Inc. node id ref counter
-            r["start"] = datetime.now(datetime.UTC)  # Will be overridden if called
-            r["stop"] = datetime.now(datetime.UTC)   # Will be overridden if called
+            r["start"] = datetime.now(timezone.utc)  # Will be overridden if called
+            r["stop"] = datetime.now(timezone.utc)   # Will be overridden if called
             r["duration"] = 0  # Updated on teardown
             if testreport.outcome == "skipped":
                 log.debug("skipping : {0}".format(testreport.longrepr))
@@ -177,7 +178,7 @@ class _NunitNodeReporter:
             r["stack-trace"] = self.nunit_xml._getcrashline(testreport)
         elif testreport.when == "teardown":
             r = self.nunit_xml.cases[testreport.nodeid]
-            r["stop"] = datetime.now(datetime.UTC) 
+            r["stop"] = datetime.now(timezone.utc) 
             r["duration"] = (
                 (r["stop"] - r["start"]).total_seconds() if r["call-report"] else 0
             )  # skipped.
@@ -335,7 +336,7 @@ class NunitXML:
 
     def pytest_sessionstart(self, *args):
         """Mark test session start time."""
-        self.suite_start_time = datetime.now(datetime.UTC)
+        self.suite_start_time = datetime.now(timezone.utc)
 
     def _getcrashline(self, rep):
         try:
@@ -396,7 +397,7 @@ class NunitXML:
         dirname = os.path.dirname(os.path.abspath(self.logfile))
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
-        self.suite_stop_time = datetime.now(datetime.UTC) 
+        self.suite_stop_time = datetime.now(timezone.utc) 
         self.suite_time_delta = (
             self.suite_stop_time - self.suite_start_time
         ).total_seconds()
