@@ -3,6 +3,7 @@ import locale
 import os
 import platform
 import sys
+import warnings
 
 from _pytest._code.code import ExceptionChainRepr
 
@@ -116,7 +117,11 @@ def _format_filters(filters_):
 
 
 def _getlocale():
-    language_code = locale.getdefaultlocale()[0]
+    # See https://github.com/pytest-dev/pytest-nunit/pull/73
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        language_code = locale.getdefaultlocale()[0]
+
     if language_code:
         return language_code
     return "en-US"
