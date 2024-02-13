@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6 (13th February 2024)
+
+* replace deprecated datetime.utcnow() functionality by @dijkstrar in https://github.com/pytest-dev/pytest-nunit/pull/72
+* Backward compatible version of the datetime.UTC attribute by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/76
+
 ## 1.0.5 (13th February 2024)
 
 * Mute deprecation warning of getdefaultlocale until a better solution by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/74
