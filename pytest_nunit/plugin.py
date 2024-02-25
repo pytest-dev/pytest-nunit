@@ -130,7 +130,7 @@ class _NunitNodeReporter:
 
     def record_testreport(self, testreport):
         """Export to XML."""
-        log.debug("record_test_report:{0}".format(testreport))
+        log.debug("record_test_report:%s", testreport)
 
         if testreport.when == "setup":
             r = self.nunit_xml.cases[testreport.nodeid] = {
@@ -155,7 +155,7 @@ class _NunitNodeReporter:
             r["stop"] = datetime.now(timezone.utc)   # Will be overridden if called
             r["duration"] = 0  # Updated on teardown
             if testreport.outcome == "skipped":
-                log.debug("skipping : {0}".format(testreport.longrepr))
+                log.debug("skipping : %s", testreport.longrepr)
                 if (
                     isinstance(testreport.longrepr, tuple)
                     and len(testreport.longrepr) > 2
@@ -281,7 +281,7 @@ class NunitXML:
         self.show_username = show_username
         self.show_user_domain = show_user_domain
         self.attach_on = attach_on
-        logging.debug("Attach on criteria : {0}".format(attach_on))
+        log.debug("Attach on criteria : %s", attach_on)
         self.idrefindex = 100  # Create a unique ID counter
         self.filters = filters
 
