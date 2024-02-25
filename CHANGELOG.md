@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.7 (26th February 2024)
+
+* Use lazy string formatting for logger by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/77
+* Support for Pytest 8 series by @tonybaloney in https://github.com/pytest-dev/pytest-nunit/pull/78
+
 ## 1.0.6 (13th February 2024)
 
 * replace deprecated datetime.utcnow() functionality by @dijkstrar in https://github.com/pytest-dev/pytest-nunit/pull/72
