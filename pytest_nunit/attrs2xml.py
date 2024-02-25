@@ -1,12 +1,12 @@
 import enum
+import re
 import xml.etree.ElementTree as ET
-from xml.sax.saxutils import escape
 
 
 class CdataComment(ET.Element):
     def __init__(self, text):
         super(CdataComment, self).__init__("CDATA!")
-        self.text = escape(text, {"\x1b": "&#x1b;"})
+        self.text = re.sub("\x1b\[[0-9;]*m",'',text)
 
 
 ET._original_serialize_xml = ET._serialize_xml
